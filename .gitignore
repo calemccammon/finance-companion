@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Android and Gradle
+*.iml
+.gradle/
+.kotlin/
+**/build/
+local.properties
+.idea/
+captures/
+
+# Data built outside this repository
+*.duckdb
+!agent/tests/fixtures/*.duckdb
+
+# Secrets
+.env
+
+.DS_Store
