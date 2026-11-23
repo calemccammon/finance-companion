@@ -21,6 +21,8 @@ class ToolCall:
     name: str
     arguments: dict
     id: str = field(default_factory=lambda: uuid.uuid4().hex[:12])
+    # Opaque to the agent: Gemini signs its calls and must get the signature back with them.
+    signature: bytes | None = None
 
 
 @dataclass(frozen=True)
@@ -84,12 +86,26 @@ class GeminiClient:
                 temperature=0.2,
             ),
         )
-        calls = tuple(
-            ToolCall(name=c.name, arguments=dict(c.args or {}), id=c.id or uuid.uuid4().hex[:12])
-            for c in response.function_calls or []
+        return gemini_turn(response)
+
+
+def gemini_turn(response) -> ModelTurn:
+    """Gemini's reply as a turn: its tool calls with their signatures, and its text
+    without the model's thoughts."""
+    content = response.candidates[0].content if response.candidates else None
+    parts = (content.parts if content else None) or []
+    calls = tuple(
+        ToolCall(
+            name=p.function_call.name,
+            arguments=dict(p.function_call.args or {}),
+            id=p.function_call.id or uuid.uuid4().hex[:12],
+            signature=p.thought_signature,
         )
-        text = "".join(p.text or "" for p in response.candidates[0].content.parts if not p.function_call)
-        return ModelTurn(text=text, tool_calls=calls)
+        for p in parts
+        if p.function_call
+    )
+    text = "".join(p.text or "" for p in parts if not p.function_call and not p.thought)
+    return ModelTurn(text=text, tool_calls=calls)
 
 
 def gemini_tools(tools: list[dict]):
@@ -117,7 +133,11 @@ def gemini_contents(transcript: Sequence[Turn]) -> list[dict]:
                 contents.append({"role": "user", "parts": [{"text": text}]})
             case ModelTurn(text=text, tool_calls=calls):
                 parts = [{"text": text}] if text else []
-                parts += [{"function_call": {"id": c.id, "name": c.name, "args": c.arguments}} for c in calls]
+                parts += [
+                    {"function_call": {"id": c.id, "name": c.name, "args": c.arguments}}
+                    | ({"thought_signature": c.signature} if c.signature else {})
+                    for c in calls
+                ]
                 contents.append({"role": "model", "parts": parts})
             case ToolTurn(call=call, result=result):
                 part = {"function_response": {"id": call.id, "name": call.name, "response": result}}

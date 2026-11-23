@@ -13,6 +13,7 @@ from finance_agent.model import (
     UserTurn,
     gemini_contents,
     gemini_tools,
+    gemini_turn,
     openai_messages,
 )
 
@@ -82,3 +83,41 @@ def test_gemini_tools_send_the_parameters_as_json_schema_with_unknown_arguments_
     # Gemini rejects `additionalProperties` in `parameters`; in `parametersJsonSchema` it is kept.
     assert all("parameters" not in d for d in sent)
     assert all(d["parametersJsonSchema"]["additionalProperties"] is False for d in sent)
+
+
+def test_a_gemini_call_keeps_its_signature_and_sends_it_back():
+    from google.genai import types
+
+    response = types.GenerateContentResponse.model_validate(
+        {
+            "candidates": [
+                {
+                    "content": {
+                        "role": "model",
+                        "parts": [
+                            {"text": "Looking at what to fetch.", "thought": True},
+                            {
+                                "function_call": {"id": "c1", "name": "price_history", "args": {"ticker": "AAPL"}},
+                                "thought_signature": b"sig-1",
+                            },
+                            {"function_call": {"id": "c2", "name": "company_profile", "args": {"ticker": "AAPL"}}},
+                        ],
+                    }
+                }
+            ]
+        }
+    )
+
+    turn = gemini_turn(response)
+
+    # A thought is the model's own reasoning, never part of the answer.
+    assert turn.text == ""
+    assert [(c.name, c.signature) for c in turn.tool_calls] == [("price_history", b"sig-1"), ("company_profile", None)]
+    sent = types.Content.model_validate(gemini_contents([turn])[0]).parts
+    assert [p.thought_signature for p in sent] == [b"sig-1", None]
+
+
+def test_a_gemini_reply_with_no_content_is_an_empty_turn():
+    from google.genai import types
+
+    assert gemini_turn(types.GenerateContentResponse.model_validate({"candidates": [{}]})) == ModelTurn()
