@@ -33,12 +33,17 @@ class Question(BaseModel):
     text: str
 
 
-def _stream(messages: Iterable[dict]) -> StreamingResponse:
-    def events() -> Iterator[str]:
-        for message in messages:
+def sse_events(messages: Iterable[dict]) -> Iterator[str]:
+    """A2UI messages as `data` events; the question an answer is for as a `question` event."""
+    for message in messages:
+        if set(message) == {"question"}:
+            yield f"event: question\ndata: {json.dumps(message['question'])}\n\n"
+        else:
             yield f"data: {json.dumps(message)}\n\n"
 
-    return StreamingResponse(events(), media_type="text/event-stream")
+
+def _stream(messages: Iterable[dict]) -> StreamingResponse:
+    return StreamingResponse(sse_events(messages), media_type="text/event-stream")
 
 
 @app.post("/ask")

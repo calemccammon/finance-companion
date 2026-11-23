@@ -9,7 +9,14 @@ from finance_agent.model import ModelTurn, ToolTurn
 
 
 def kinds(messages):
-    return [next(k for k in m if k != "version") for m in messages]
+    return [next(k for k in m if k != "version") for m in messages if "question" not in m]
+
+
+def answer(agent, question):
+    """The A2UI messages of an answer, after the item naming the question."""
+    items = list(agent.answer(question))
+    assert items[0] == {"question": question}
+    return items[1:]
 
 
 APPLE_CARD = {"id": "c", "component": "MetricCard", "label": "Close", "value": {"path": "/r1/latest/close"}}
@@ -27,7 +34,7 @@ def test_a_question_becomes_a_surface_bound_to_the_tool_results(make_agent):
         ),
     )
 
-    messages = list(agent.answer("How is Apple doing?"))
+    messages = answer(agent, "How is Apple doing?")
 
     assert kinds(messages) == ["createSurface", "updateDataModel", "updateComponents"]
     data = messages[1]["updateDataModel"]["value"]
@@ -41,7 +48,7 @@ def test_the_model_sees_where_each_result_is_and_a_short_preview(make_agent):
         calls(("price_history", {"ticker": "AAPL"})),
         layout("answer-1", APPLE_CARD | {"id": "root"}),
     )
-    list(agent.answer("How is Apple doing?"))
+    answer(agent, "How is Apple doing?")
 
     tool_turn = next(t for t in model.seen[1][1] if isinstance(t, ToolTurn))
     assert tool_turn.result["storedAt"] == "/r1"
@@ -51,7 +58,7 @@ def test_the_model_sees_where_each_result_is_and_a_short_preview(make_agent):
 
 def test_the_system_prompt_carries_the_rules_and_the_catalog(make_agent):
     agent, model = make_agent(layout("answer-1", {"id": "root", "component": "Text", "text": "Hello"}))
-    list(agent.answer("Hi"))
+    answer(agent, "Hi")
 
     system = model.seen[0][0]
     assert "Never write a number yourself" in system
@@ -65,7 +72,7 @@ def test_a_tool_error_is_shown_to_the_model_which_can_try_again(make_agent):
         calls(("price_history", {"ticker": "AAPL"})),
         layout("answer-1", APPLE_CARD | {"id": "root"}),
     )
-    messages = list(agent.answer("How is Apple doing?"))
+    messages = answer(agent, "How is Apple doing?")
 
     first_result = next(t for t in model.seen[1][1] if isinstance(t, ToolTurn)).result
     assert "Unknown ticker" in first_result["error"]
@@ -79,7 +86,7 @@ def test_a_rejected_surface_goes_back_to_the_model_once_with_the_reasons(make_ag
         layout("answer-1", {"id": "root", "component": "Text", "text": "Apple closed at 342.56"}),
         layout("answer-1", APPLE_CARD | {"id": "root"}),
     )
-    messages = list(agent.answer("How is Apple doing?"))
+    messages = answer(agent, "How is Apple doing?")
 
     correction = model.seen[2][1][-1]
     assert "rejected" in correction.text and "342.56" in correction.text
@@ -90,7 +97,7 @@ def test_a_second_rejection_is_answered_with_a_plain_message(make_agent):
     bad = layout("answer-1", {"id": "root", "component": "Sparkline"})
     agent, model = make_agent(calls(("macro_snapshot", {})), bad, bad)
 
-    messages = list(agent.answer("How is the economy?"))
+    messages = answer(agent, "How is the economy?")
 
     assert messages[2]["updateComponents"]["components"] == [{"id": "root", "component": "Text", "text": FALLBACK_TEXT}]
     assert len(model.seen) == 3
@@ -102,7 +109,7 @@ def test_a_model_that_never_stops_calling_tools_is_told_to_answer(make_agent):
         loop, loop, loop, loop, layout("answer-1", {"id": "root", "component": "Text", "text": "Done"})
     )
 
-    messages = list(agent.answer("How is the economy?"))
+    messages = answer(agent, "How is the economy?")
 
     assert "do not call more tools" in model.seen[-1][1][-1].text
     assert messages[2]["updateComponents"]["components"][0]["text"] == "Done"
@@ -113,7 +120,7 @@ def test_a_layout_for_another_surface_is_corrected(make_agent):
         layout("answer-9", {"id": "root", "component": "Text", "text": "Hi"}),
         layout("answer-1", {"id": "root", "component": "Text", "text": "Hi"}),
     )
-    messages = list(agent.answer("Hi"))
+    messages = answer(agent, "Hi")
     assert "answer-9" in model.seen[1][1][-1].text
     assert messages[2]["updateComponents"]["surfaceId"] == "answer-1"
 
@@ -129,7 +136,7 @@ def test_two_layouts_in_one_answer_are_rejected(make_agent):
     twice = ModelTurn(text=f"<a2ui-json>{json.dumps([hello, hello])}</a2ui-json>")
     agent, model = make_agent(twice, layout("answer-1", {"id": "root", "component": "Text", "text": "Hi"}))
 
-    list(agent.answer("Hi"))
+    answer(agent, "Hi")
 
     assert "exactly one updateComponents" in model.seen[1][1][-1].text
 
@@ -139,7 +146,7 @@ def test_set_range_reruns_the_tool_without_the_model(make_agent):
         calls(("price_history", {"ticker": "AAPL"})),
         layout("answer-1", APPLE_CARD | {"id": "root"}),
     )
-    list(agent.answer("How is Apple doing?"))
+    answer(agent, "How is Apple doing?")
     asked = len(model.seen)
 
     action = {
@@ -161,7 +168,7 @@ def test_set_range_reruns_the_tool_without_the_model(make_agent):
 
 def test_set_range_with_a_bad_context_does_nothing(make_agent):
     agent, _ = make_agent(calls(("price_history", {"ticker": "AAPL"})), layout("answer-1", APPLE_CARD | {"id": "root"}))
-    list(agent.answer("How is Apple doing?"))
+    answer(agent, "How is Apple doing?")
 
     for context in ({"result": "/r9", "days": 30}, {"result": "/r1", "days": 9999}, {"result": "/r1", "days": "30"}):
         assert list(agent.act({"action": {"name": "set_range", "surfaceId": "answer-1", "context": context}})) == []
@@ -183,13 +190,14 @@ def test_pressing_a_ticker_asks_about_it_on_a_new_surface(make_agent):
         calls(("price_history", {"ticker": "TSLA"})),
         layout("answer-2", {"id": "root", "component": "PriceChart", "points": {"path": "/r1/points"}}),
     )
-    list(agent.answer("Which stocks are most volatile?"))
+    answer(agent, "Which stocks are most volatile?")
 
     messages = list(
         agent.act({"action": {"name": "open_ticker", "surfaceId": "answer-1", "context": {"ticker": "TSLA"}}})
     )
 
-    assert messages[0]["createSurface"]["surfaceId"] == "answer-2"
+    assert messages[0] == {"question": "How is TSLA doing?"}
+    assert messages[1]["createSurface"]["surfaceId"] == "answer-2"
     assert "TSLA" in model.seen[2][1][0].text
 
 
@@ -199,7 +207,7 @@ def test_an_error_from_the_renderer_is_corrected_once(make_agent):
         layout("answer-1", APPLE_CARD | {"id": "root"}),
         layout("answer-1", {"id": "root", "component": "Text", "text": "Fixed"}),
     )
-    list(agent.answer("How is Apple doing?"))
+    answer(agent, "How is Apple doing?")
 
     error = {
         "version": "v0.9.1",
@@ -227,7 +235,7 @@ def test_conversational_text_with_figures_is_never_sent(make_agent):
             text=layout("answer-1", APPLE_CARD | {"id": "root"}).text.replace("Here you go.", "Apple closed at 342.56.")
         ),
     )
-    messages = list(agent.answer("How is Apple doing?"))
+    messages = answer(agent, "How is Apple doing?")
     assert "342.56" not in str(messages[2])
 
 
@@ -236,7 +244,7 @@ def test_a_reply_that_is_not_json_is_corrected(make_agent):
         ModelTurn(text='<a2ui-json>[{"version": "v0.9.1", "updateComponents": </a2ui-json>'),
         layout("answer-1", {"id": "root", "component": "Text", "text": "Hi"}),
     )
-    messages = list(agent.answer("Hi"))
+    messages = answer(agent, "Hi")
     assert "rejected" in model.seen[1][1][-1].text
     assert messages[2]["updateComponents"]["components"][0]["text"] == "Hi"
 
@@ -246,5 +254,5 @@ def test_a_reply_with_no_layout_at_all_is_corrected(make_agent):
         ModelTurn(text="Apple is doing fine."),
         layout("answer-1", {"id": "root", "component": "Text", "text": "Hi"}),
     )
-    list(agent.answer("Hi"))
+    answer(agent, "Hi")
     assert "exactly one updateComponents" in model.seen[1][1][-1].text

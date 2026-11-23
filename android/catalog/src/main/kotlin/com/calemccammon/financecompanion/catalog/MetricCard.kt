@@ -55,7 +55,7 @@ object MetricCard : A2uiComponent {
         val colour =
             when {
                 format != FigureFormat.Change || figure == null -> MaterialTheme.colorScheme.onSurface
-                figure.direction() > 0 -> Gains.up
+                figure.direction() > 0 -> Gains.up()
                 figure.direction() < 0 -> MaterialTheme.colorScheme.error
                 else -> MaterialTheme.colorScheme.onSurface
             }

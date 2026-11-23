@@ -1,8 +1,10 @@
-package com.calemccammon.financecompanion
+package com.calemccammon.financecompanion.core.data.network
 
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonPrimitive
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,24 +15,36 @@ import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
 import java.io.IOException
 
+/** What the agent sends while answering. */
+sealed interface AgentEvent {
+    /** The question being answered: sent first, so an answer begun by a tap can be named. */
+    data class Question(
+        val text: String,
+    ) : AgentEvent
+
+    /** One A2UI message, as JSON. */
+    data class Message(
+        val json: String,
+    ) : AgentEvent
+}
+
 /**
  * Talks to the agent. Each request is a POST whose answer arrives on the same
- * response as Server-Sent Events, one A2UI message per event.
+ * response as Server-Sent Events: `question` events and A2UI messages.
  */
 class AgentClient(
     private val baseUrl: String,
-    private val client: OkHttpClient = OkHttpClient(),
+    private val client: OkHttpClient,
 ) {
-    /** Sends [json] to [path] and emits each A2UI message of the answer, in order. */
     fun post(
         path: String,
         json: String,
-    ): Flow<String> =
+    ): Flow<AgentEvent> =
         callbackFlow {
             val request =
                 Request
                     .Builder()
-                    .url(baseUrl + path)
+                    .url(baseUrl.trimEnd('/') + "/" + path)
                     .header("Accept", "text/event-stream")
                     .post(json.toRequestBody(JSON))
                     .build()
@@ -42,7 +56,13 @@ class AgentClient(
                         type: String?,
                         data: String,
                     ) {
-                        trySend(data)
+                        val event =
+                            if (type == "question") {
+                                AgentEvent.Question(Json.parseToJsonElement(data).jsonPrimitive.content)
+                            } else {
+                                AgentEvent.Message(data)
+                            }
+                        trySend(event)
                     }
 
                     override fun onClosed(eventSource: EventSource) {

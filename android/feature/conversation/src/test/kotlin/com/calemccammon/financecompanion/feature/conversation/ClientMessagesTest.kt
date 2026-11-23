@@ -1,4 +1,4 @@
-package com.calemccammon.financecompanion
+package com.calemccammon.financecompanion.feature.conversation
 
 import androidx.a2ui.model.protocol.A2uiClientEventMessage
 import kotlinx.serialization.json.Json
@@ -23,7 +23,7 @@ class ClientMessagesTest {
                 context = mapOf("ticker" to "AAPL"),
             )
 
-        val expected = File("../../catalog/fixtures/refresh-action.json").readText()
+        val expected = File(System.getProperty("fc.catalog"), "fixtures/refresh-action.json").readText()
 
         assertEquals(Json.parseToJsonElement(expected), Json.parseToJsonElement(tap.toJson()))
     }

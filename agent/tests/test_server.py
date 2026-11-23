@@ -10,7 +10,14 @@ from finance_agent import server
 
 
 def events(response) -> list[dict]:
-    return [json.loads(line.removeprefix("data: ")) for line in response.text.splitlines() if line.startswith("data: ")]
+    """The A2UI messages of a response: its plain `data` events."""
+    blocks = response.text.strip().split("\n\n")
+    return [json.loads(b.removeprefix("data: ")) for b in blocks if b.startswith("data: ")]
+
+
+def questions(response) -> list[str]:
+    blocks = response.text.strip().split("\n\n")
+    return [json.loads(b.split("\ndata: ")[1]) for b in blocks if b.startswith("event: question")]
 
 
 @pytest.fixture
@@ -27,6 +34,7 @@ def test_a_question_streams_a_surface(client):
     response = client.post("/ask", json={"text": "How is Apple doing?"})
 
     assert response.headers["content-type"].startswith("text/event-stream")
+    assert questions(response) == ["How is Apple doing?"]
     assert [next(k for k in m if k != "version") for m in events(response)] == [
         "createSurface",
         "updateDataModel",

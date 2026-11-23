@@ -1,0 +1,41 @@
+[
+ {
+  "tool_calls": [
+   {
+    "name": "price_history",
+    "arguments": {
+     "ticker": "AAPL"
+    }
+   }
+  ]
+ },
+ {
+  "text": "<a2ui-json>[{\"version\": \"v0.9.1\", \"updateComponents\": {\"surfaceId\": \"answer-1\", \"components\": [{\"id\": \"root\", \"component\": \"Column\", \"children\": [\"title\", \"figures\", \"chart\", \"ranges\"]}, {\"id\": \"title\", \"component\": \"Text\", \"text\": \"Apple over the last three months\", \"variant\": \"h4\"}, {\"id\": \"figures\", \"component\": \"Row\", \"children\": [\"close\", \"change\"]}, {\"id\": \"close\", \"component\": \"MetricCard\", \"label\": \"Close\", \"value\": {\"path\": \"/r1/latest/close\"}, \"format\": \"currency\", \"caption\": {\"path\": \"/r1/end\"}, \"weight\": 1}, {\"id\": \"change\", \"component\": \"MetricCard\", \"label\": \"Change over the range\", \"value\": {\"path\": \"/r1/latest/changePct\"}, \"format\": \"change\", \"weight\": 1}, {\"id\": \"chart\", \"component\": \"PriceChart\", \"title\": \"Daily close\", \"points\": {\"path\": \"/r1/points\"}}, {\"id\": \"ranges\", \"component\": \"Row\", \"children\": [\"m1\", \"m3\", \"m6\"]}, {\"id\": \"m1\", \"component\": \"Button\", \"child\": \"m1t\", \"action\": {\"event\": {\"name\": \"set_range\", \"context\": {\"result\": \"/r1\", \"days\": 30}}}}, {\"id\": \"m1t\", \"component\": \"Text\", \"text\": \"1 month\"}, {\"id\": \"m3\", \"component\": \"Button\", \"child\": \"m3t\", \"action\": {\"event\": {\"name\": \"set_range\", \"context\": {\"result\": \"/r1\", \"days\": 90}}}}, {\"id\": \"m3t\", \"component\": \"Text\", \"text\": \"3 months\"}, {\"id\": \"m6\", \"component\": \"Button\", \"child\": \"m6t\", \"action\": {\"event\": {\"name\": \"set_range\", \"context\": {\"result\": \"/r1\", \"days\": 180}}}}, {\"id\": \"m6t\", \"component\": \"Text\", \"text\": \"6 months\"}]}}]</a2ui-json>"
+ },
+ {
+  "tool_calls": [
+   {
+    "name": "volatility_rank",
+    "arguments": {
+     "window": 20
+    }
+   }
+  ]
+ },
+ {
+  "text": "<a2ui-json>[{\"version\": \"v0.9.1\", \"updateComponents\": {\"surfaceId\": \"answer-2\", \"components\": [{\"id\": \"root\", \"component\": \"Column\", \"children\": [\"title\", \"bars\"]}, {\"id\": \"title\", \"component\": \"Text\", \"text\": \"Most volatile first, over the last 20 trading days\", \"variant\": \"h4\"}, {\"id\": \"bars\", \"component\": \"RankedBars\", \"title\": \"Annualised volatility\", \"rows\": {\"path\": \"/r1/rows\"}, \"valueKey\": \"volatility\", \"format\": \"percent\", \"rowAction\": \"open_ticker\"}]}}]</a2ui-json>"
+ },
+ {
+  "tool_calls": [
+   {
+    "name": "price_history",
+    "arguments": {
+     "ticker": "TSLA"
+    }
+   }
+  ]
+ },
+ {
+  "text": "<a2ui-json>[{\"version\": \"v0.9.1\", \"updateComponents\": {\"surfaceId\": \"answer-3\", \"components\": [{\"id\": \"root\", \"component\": \"Column\", \"children\": [\"title\", \"close\", \"chart\"]}, {\"id\": \"title\", \"component\": \"Text\", \"text\": \"Tesla\", \"variant\": \"h4\"}, {\"id\": \"close\", \"component\": \"MetricCard\", \"label\": \"Close\", \"value\": {\"path\": \"/r1/latest/close\"}, \"format\": \"currency\"}, {\"id\": \"chart\", \"component\": \"PriceChart\", \"points\": {\"path\": \"/r1/points\"}}]}}]</a2ui-json>"
+ }
+]
