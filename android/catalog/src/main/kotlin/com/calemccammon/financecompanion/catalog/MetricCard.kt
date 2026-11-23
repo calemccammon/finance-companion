@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * One figure with its label: "Close $182.31". The figure is bound to a path in
@@ -40,7 +42,7 @@ object MetricCard : A2uiComponent {
     private val caption =
         A2uiProperty.dynamicString("caption", description = "A short note under the figure, such as a date.")
 
-    override val properties = listOf(label, value, format, caption)
+    override val properties: ImmutableList<A2uiProperty<*>> = persistentListOf(label, value, format, caption)
 
     @Composable
     override fun A2uiComponentScope.Content(

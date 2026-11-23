@@ -33,6 +33,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /** A line to draw: values in order, already scaled to the chart's own range by [Canvas]. */
 private class Line(
@@ -157,7 +159,7 @@ object PriceChart : A2uiComponent {
             description = "Whether to draw the 30- and 90-day moving averages.",
         )
 
-    override val properties = listOf(title, points, showAverages)
+    override val properties: ImmutableList<A2uiProperty<*>> = persistentListOf(title, points, showAverages)
 
     @Composable
     override fun A2uiComponentScope.Content(
@@ -240,7 +242,7 @@ object OverlayChart : A2uiComponent {
             description = "What the economic series is; bind it to `seriesName`.",
         )
 
-    override val properties = listOf(title, points, priceLabel, seriesLabel)
+    override val properties: ImmutableList<A2uiProperty<*>> = persistentListOf(title, points, priceLabel, seriesLabel)
 
     @Composable
     override fun A2uiComponentScope.Content(
@@ -313,7 +315,7 @@ object RankedBars : A2uiComponent {
             description = "If set, the name of the action sent when a row is pressed, with the row's ticker.",
         )
 
-    override val properties = listOf(title, rows, valueKey, format, rowAction)
+    override val properties: ImmutableList<A2uiProperty<*>> = persistentListOf(title, rows, valueKey, format, rowAction)
 
     @Composable
     override fun A2uiComponentScope.Content(
