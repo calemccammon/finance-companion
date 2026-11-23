@@ -117,6 +117,11 @@ def test_openai_messages_carry_call_ids_and_json_arguments():
     assert messages[2]["tool_call_id"] == "a"
 
 
+def test_openai_messages_leave_out_an_empty_reply():
+    messages = openai_messages([UserTurn("hi"), ModelTurn(), UserTurn("again")])
+    assert messages == [{"role": "user", "content": "hi"}, {"role": "user", "content": "again"}]
+
+
 def test_the_openai_compatible_client_reads_tool_calls_and_text():
     sent = []
 

@@ -190,6 +190,9 @@ def openai_messages(transcript: Sequence[Turn]) -> list[dict]:
             case UserTurn(text=text):
                 messages.append({"role": "user", "content": text})
             case ModelTurn(text=text, tool_calls=calls):
+                # A turn with nothing in it cannot be sent (Ollama refuses its null content).
+                if not text and not calls:
+                    continue
                 message: dict = {"role": "assistant", "content": text or None}
                 if calls:
                     message["tool_calls"] = [
