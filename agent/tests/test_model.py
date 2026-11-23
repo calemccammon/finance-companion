@@ -1,17 +1,23 @@
 """The model clients' translation of the conversation, without calling any model."""
 
 import json
+from collections import Counter
 
 import httpx
+import httpx2
+from anthropic import Anthropic, DefaultHttpxClient
+from anthropic.types import Message
 
 from finance_agent.model import (
+    ClaudeClient,
     ModelTurn,
     OpenAICompatibleClient,
     ScriptedClient,
     ToolCall,
     ToolTurn,
     UserTurn,
-    gemini_contents,
+    claude_messages,
+    claude_turn,
     openai_messages,
 )
 
@@ -26,11 +32,82 @@ TRANSCRIPT = [
 ]
 
 
-def test_gemini_contents_group_the_responses_to_one_turn_of_calls():
-    contents = gemini_contents(TRANSCRIPT)
-    assert [c["role"] for c in contents] == ["user", "model", "user", "model"]
-    assert [p["function_call"]["name"] for p in contents[1]["parts"]] == ["price_history", "macro_snapshot"]
-    assert [p["function_response"]["id"] for p in contents[2]["parts"]] == ["a", "b"]
+def test_claude_messages_put_one_turns_results_and_what_follows_in_one_user_message():
+    correction = UserTurn("That layout was rejected.")
+    messages = claude_messages([*TRANSCRIPT[:4], correction])
+
+    assert [m["role"] for m in messages] == ["user", "assistant", "user"]
+    assert [b["type"] for b in messages[1]["content"]] == ["tool_use", "tool_use"]
+    results = messages[2]["content"]
+    assert [b.get("tool_use_id") for b in results] == ["a", "b", None]
+    assert json.loads(results[0]["content"]) == {"storedAt": "/r1"}
+    assert results[2] == {"type": "text", "text": "That layout was rejected."}
+
+
+def test_a_failed_tool_is_marked_as_an_error_for_claude():
+    failed = ToolTurn(CALL_A, {"error": "Unknown ticker"})
+    assert claude_messages([TRANSCRIPT[0], TRANSCRIPT[1], failed])[2]["content"][0]["is_error"] is True
+
+
+def test_an_empty_reply_is_left_out_rather_than_sent_empty():
+    messages = claude_messages([UserTurn("hi"), ModelTurn(), UserTurn("again")])
+    assert messages == [
+        {"role": "user", "content": [{"type": "text", "text": "hi"}, {"type": "text", "text": "again"}]}
+    ]
+
+
+def message(*content, stop_reason="tool_use"):
+    return {
+        "id": "msg_1",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-haiku-5-5",
+        "stop_reason": stop_reason,
+        "stop_sequence": None,
+        "usage": {"input_tokens": 900, "output_tokens": 40, "cache_read_input_tokens": 7000},
+        "content": list(content),
+    }
+
+
+THINKING = {"type": "thinking", "thinking": "", "signature": "sig-1"}
+CALL = {"type": "tool_use", "id": "toolu_1", "name": "price_history", "input": {"ticker": "AAPL"}}
+
+
+def test_claude_turn_reads_calls_and_text_and_keeps_every_block():
+    turn = claude_turn(Message.model_validate(message(THINKING, {"type": "text", "text": "Fetching."}, CALL)))
+
+    assert turn.text == "Fetching."
+    assert turn.tool_calls == (ToolCall(name="price_history", arguments={"ticker": "AAPL"}, id="toolu_1"),)
+    assert [b.type for b in turn.raw] == ["thinking", "text", "tool_use"]
+
+
+def test_the_claude_client_sends_its_thinking_back_unchanged_and_counts_tokens():
+    sent = []
+
+    def handler(request: httpx2.Request) -> httpx2.Response:
+        sent.append(json.loads(request.content))
+        return httpx2.Response(200, json=message(THINKING, CALL))
+
+    http = DefaultHttpxClient(transport=httpx2.MockTransport(handler))
+    client = ClaudeClient(client=Anthropic(api_key="test", http_client=http, max_retries=0))
+    tools = [
+        {"name": "price_history", "description": "d", "parameters": {"type": "object", "additionalProperties": False}}
+    ]
+
+    first = client.reply("rules", [UserTurn("How is Apple doing?")], tools)
+    client.reply(
+        "rules", [UserTurn("How is Apple doing?"), first, ToolTurn(first.tool_calls[0], {"storedAt": "/r1"})], tools
+    )
+
+    body = sent[1]
+    assert body["model"] == "claude-haiku-5-5" and body["system"] == "rules"
+    assert body["tools"] == [{"name": "price_history", "description": "d", "input_schema": tools[0]["parameters"]}]
+    assert body["cache_control"] == {"type": "ephemeral"}
+    assert "temperature" not in body
+    # The thinking block and its signature go back exactly as they came.
+    assert body["messages"][1] == {"role": "assistant", "content": [THINKING, CALL]}
+    assert body["messages"][2]["content"][0]["tool_use_id"] == "toolu_1"
+    assert client.usage == Counter(input_tokens=1800, output_tokens=80, cache_read_input_tokens=14000)
 
 
 def test_openai_messages_carry_call_ids_and_json_arguments():

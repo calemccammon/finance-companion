@@ -98,8 +98,8 @@ Java 21 and the Android SDK.
 ```sh
 cd agent
 uv sync
-# A model: Gemini (needs GEMINI_API_KEY), any OpenAI-compatible endpoint, or a script.
-FC_MODEL=gemini:gemini-3.8-flash uv run uvicorn finance_agent.server:app --port 8000
+# A model: Claude (needs ANTHROPIC_API_KEY), any OpenAI-compatible endpoint, or a script.
+FC_MODEL=anthropic:claude-haiku-5-5 uv run uvicorn finance_agent.server:app --port 8000
 FC_MODEL="openai:http://localhost:11434/v1|qwen3:8b" uv run uvicorn finance_agent.server:app --port 8000
 FC_MODEL=scripted:demo/script.json uv run uvicorn finance_agent.server:app --port 8000
 
@@ -121,7 +121,7 @@ cd android && ./gradlew test testDebugUnitTest verifyRoborazziDebug
 cd android && ./gradlew :app:connectedDebugAndroidTest   # on an emulator or device
 ```
 
-- **The agent (73 tests)**: the tools against values worked out from the raw
+- **The agent (78 tests)**: the tools against values worked out from the raw
   rows; the checks; the question-to-surface loop, corrections, fallbacks and
   actions with a scripted model; the model clients' message formats; the HTTP
   service; and the evaluation harness.
@@ -151,17 +151,15 @@ ones and adversarial ones (a figure asked for in plain text, a ticker the
 warehouse lacks, a forecast, raw SQL).
 
 ```sh
-FC_MODEL=gemini:gemini-3.8-flash uv run python evals/run.py --out evals/results/gemini.json
+FC_MODEL=anthropic:claude-haiku-5-5 uv run python evals/run.py --out evals/results/claude-haiku-5-5.json
 uv run python evals/run.py --report evals/results/*.json > evals/REPORT.md
 ```
 
 ## What has not been run
 
-- **No live model has answered yet.** The agent's Gemini and
-  OpenAI-compatible clients are tested for the messages they build, not
-  against a service: there was no API key on the machine this was built on,
-  and running a local model server was not permitted there. The evaluation
-  report is therefore still to be written.
+- **No live model has answered yet.** The agent's Claude and
+  OpenAI-compatible clients are tested for the requests they send, not
+  against a service. The evaluation report is therefore still to be written.
 - **The agent keeps its sessions in memory.** After it restarts, a range
   button on an earlier answer does nothing; the answer itself still shows.
 - **The A2UI Compose renderer is an alpha** (1.0.0-alpha02, spec v0.9.1) and
