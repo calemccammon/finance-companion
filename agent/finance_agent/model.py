@@ -79,7 +79,7 @@ class GeminiClient:
             contents=gemini_contents(transcript),
             config=types.GenerateContentConfig(
                 system_instruction=system,
-                tools=[types.Tool(function_declarations=tools)],
+                tools=[gemini_tools(tools)],
                 automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
                 temperature=0.2,
             ),
@@ -90,6 +90,22 @@ class GeminiClient:
         )
         text = "".join(p.text or "" for p in response.candidates[0].content.parts if not p.function_call)
         return ModelTurn(text=text, tool_calls=calls)
+
+
+def gemini_tools(tools: list[dict]):
+    """The tools for Gemini. Their parameters go as standard JSON Schema: Gemini's own
+    `parameters` schema has no `additionalProperties`, which the tools' schemas use to
+    refuse unknown arguments."""
+    from google.genai import types
+
+    return types.Tool(
+        function_declarations=[
+            types.FunctionDeclaration(
+                name=t["name"], description=t["description"], parameters_json_schema=t["parameters"]
+            )
+            for t in tools
+        ]
+    )
 
 
 def gemini_contents(transcript: Sequence[Turn]) -> list[dict]:

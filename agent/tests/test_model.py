@@ -12,6 +12,7 @@ from finance_agent.model import (
     ToolTurn,
     UserTurn,
     gemini_contents,
+    gemini_tools,
     openai_messages,
 )
 
@@ -69,3 +70,15 @@ def test_a_script_can_be_read_from_a_file(tmp_path):
 
     assert client.reply("", [], []).tool_calls[0].name == "macro_snapshot"
     assert client.reply("", [], []).text == "done"
+
+
+def test_gemini_tools_send_the_parameters_as_json_schema_with_unknown_arguments_refused():
+    from finance_agent.tools import tool_declarations
+
+    tool = gemini_tools(tool_declarations())
+    sent = tool.model_dump(exclude_none=True, by_alias=True)["functionDeclarations"]
+
+    assert [d["name"] for d in sent] == [t["name"] for t in tool_declarations()]
+    # Gemini rejects `additionalProperties` in `parameters`; in `parametersJsonSchema` it is kept.
+    assert all("parameters" not in d for d in sent)
+    assert all(d["parametersJsonSchema"]["additionalProperties"] is False for d in sent)
