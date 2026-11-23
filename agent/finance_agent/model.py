@@ -62,7 +62,14 @@ class GeminiClient:
 
         self.name = f"gemini:{model}"
         self._model = model
-        self._client = genai.Client(api_key=api_key or os.environ["GEMINI_API_KEY"])
+        from google.genai import types
+
+        # Free-tier keys are rate limited; a 429 or a brief outage is waited out, not reported as a failure.
+        retry = types.HttpRetryOptions(attempts=6, initial_delay=5, max_delay=60, http_status_codes=[429, 500, 503])
+        self._client = genai.Client(
+            api_key=api_key or os.environ["GEMINI_API_KEY"],
+            http_options=types.HttpOptions(retry_options=retry),
+        )
 
     def reply(self, system: str, transcript: Sequence[Turn], tools: list[dict]) -> ModelTurn:
         from google.genai import types
