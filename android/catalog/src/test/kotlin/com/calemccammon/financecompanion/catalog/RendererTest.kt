@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.a2ui.A2uiSurface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import kotlinx.coroutines.CoroutineScope
@@ -27,11 +28,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * Spike for issue #1: a v0.9.1 surface, written by hand as an agent would
- * send it, drawn by the Compose renderer with a custom component.
+ * The renderer with this app's catalog: a v0.9.1 surface as the agent sends
+ * it is drawn, and a component the catalog lacks is reported back.
  */
 @RunWith(RobolectricTestRunner::class)
-class CatalogSpikeTest {
+class RendererTest {
     @get:Rule
     val compose = createComposeRule()
 
@@ -75,9 +76,10 @@ class CatalogSpikeTest {
             )
             show()
 
-            compose.waitUntil(TIMEOUT) { compose.onAllNodes(hasTextNode("182.31")).fetchSemanticsNodes().isNotEmpty() }
+            compose.waitUntil(TIMEOUT) {
+                compose.onAllNodes(hasContentDescription("Close, 182.31")).fetchSemanticsNodes().isNotEmpty()
+            }
             compose.onNodeWithText("Apple").assertExists()
-            compose.onNodeWithText("Close").assertExists()
         }
     }
 
@@ -93,15 +95,10 @@ class CatalogSpikeTest {
             compose.waitUntil(TIMEOUT) { outbound.isNotEmpty() }
 
             val error = outbound.single() as A2uiClientErrorMessage
-            println("SPIKE error: $error")
             assertTrue("Sparkline" in error.toString(), error.toString())
             assertEquals(1, processor.activeSurfaces.value.size)
         }
     }
-
-    private fun hasTextNode(text: String) =
-        androidx.compose.ui.test
-            .hasText(text)
 
     private companion object {
         const val TIMEOUT = 5_000L

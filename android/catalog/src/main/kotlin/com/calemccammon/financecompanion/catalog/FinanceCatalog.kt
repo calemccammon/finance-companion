@@ -27,6 +27,9 @@ object FinanceCatalog {
                     MaterialA2uiBasicCatalogV1Defaults.divider,
                     MaterialA2uiBasicCatalogV1Defaults.button,
                     MetricCard,
+                    PriceChart,
+                    OverlayChart,
+                    RankedBars,
                 ),
         )
 }
