@@ -43,6 +43,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -108,10 +110,11 @@ private fun Exchanges(
     LaunchedEffect(state.exchanges.size, surfaces.size) {
         if (state.exchanges.isNotEmpty()) list.animateScrollToItem(state.exchanges.lastIndex)
     }
+    // The list ends where the bars begin: nothing in it sits under the opaque ask bar.
     LazyColumn(
-        Modifier.fillMaxSize(),
+        Modifier.fillMaxSize().padding(padding),
         state = list,
-        contentPadding = PaddingValues(16.dp).plus(padding),
+        contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         items(state.exchanges, key = { it.id }) { exchange ->
@@ -172,10 +175,21 @@ private fun AskBar(
     onAsk: (String) -> Unit,
 ) {
     var text by rememberSaveable { mutableStateOf("") }
+    val keyboard = LocalSoftwareKeyboardController.current
+    val focus = LocalFocusManager.current
     val send = {
         if (text.isNotBlank() && !asking) {
             onAsk(text)
             text = ""
+        }
+    }
+    // Once a question is on its way the answer appears above, and the
+    // keyboard would cover it. Hidden here, after the screen has changed,
+    // because the change itself brings it back if hidden any earlier.
+    LaunchedEffect(asking) {
+        if (asking) {
+            focus.clearFocus(force = true)
+            keyboard?.hide()
         }
     }
     Surface(tonalElevation = 3.dp) {
@@ -221,15 +235,3 @@ private fun Unanswered(
         if (result == SnackbarResult.ActionPerformed) currentOnRetry() else currentOnDismiss()
     }
 }
-
-private operator fun PaddingValues.plus(other: PaddingValues): PaddingValues =
-    PaddingValues(
-        start =
-            calculateLeftPadding(androidx.compose.ui.unit.LayoutDirection.Ltr) +
-                other.calculateLeftPadding(androidx.compose.ui.unit.LayoutDirection.Ltr),
-        top = calculateTopPadding() + other.calculateTopPadding(),
-        end =
-            calculateRightPadding(androidx.compose.ui.unit.LayoutDirection.Ltr) +
-                other.calculateRightPadding(androidx.compose.ui.unit.LayoutDirection.Ltr),
-        bottom = calculateBottomPadding() + other.calculateBottomPadding(),
-    )

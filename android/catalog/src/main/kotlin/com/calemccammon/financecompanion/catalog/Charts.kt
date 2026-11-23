@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -360,6 +361,9 @@ object RankedBars : A2uiComponent {
                     // The press goes first: the semantics set after it replace only what is inside.
                     press
                         .fillMaxWidth()
+                        // A row is a touch target: never shorter than Material's minimum,
+                        // or a press near its edge lands on the row beside it.
+                        .heightIn(min = 48.dp)
                         .clearAndSetSemantics { contentDescription = "$ticker, $written" }
                         .padding(vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
