@@ -56,7 +56,9 @@ How to answer:
 7. Under a PriceChart or OverlayChart from result /rN you may add a Row of Buttons with
    actions {{"event": {{"name": "set_range", "context": {{"result": "/rN", "days": 30}}}}}}, and
    the same with 90 and 180 days, labelled "1 month", "3 months" and "6 months".
-8. If the question is not about these stocks or the economy, answer with a short Text saying
+8. Do not state a result's date range in text: the range buttons change it, and text would
+   not follow. Bind a MetricCard's caption to the result's "start" or "end" instead.
+9. If the question is not about these stocks or the economy, answer with a short Text saying
    what you can help with.
 
 """

@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.isHeading
 import androidx.compose.ui.test.junit4.v2.createComposeRule
@@ -22,6 +23,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
@@ -99,6 +101,11 @@ class ComponentsTest {
         compose.onNodeWithText("Returns").performScrollTo().assert(isHeading())
         compose.onNodeWithContentDescription("NVDA, +12.50%").assertHasClickAction()
         compose.onNodeWithContentDescription("AAPL, −4.20%").assertHasClickAction()
+    }
+
+    @Test
+    fun `each ranked row is at least a touch target tall`() {
+        compose.onNodeWithContentDescription("NVDA, +12.50%").performScrollTo().assertHeightIsAtLeast(48.dp)
     }
 
     @Test

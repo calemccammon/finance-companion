@@ -50,9 +50,13 @@ class ConversationJourneyTest {
             waitForDescription("Close, $342.56")
             waitForDescription("closes from 2026-08-24")
 
-            compose.onNodeWithText("1 month").performScrollTo()
-            compose.waitForIdle()
-            compose.onNodeWithText("1 month").performClick()
+            // The list scrolls to the new answer as it arrives, and a tap
+            // during a scroll only stops the scroll: press until the agent hears it.
+            compose.waitUntil(TIMEOUT) {
+                compose.onNodeWithText("1 month").performScrollTo().performClick()
+                Thread.sleep(PRESS_INTERVAL)
+                agent.requests.any { it.first == "/action" }
+            }
             waitForDescription("closes from 2026-10-21")
         }
         assertEquals(listOf("/ask", "/action"), agent.requests.map { it.first })
@@ -80,5 +84,6 @@ class ConversationJourneyTest {
 
     private companion object {
         const val TIMEOUT = 10_000L
+        const val PRESS_INTERVAL = 500L
     }
 }
