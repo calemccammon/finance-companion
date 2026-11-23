@@ -1,13 +1,15 @@
 """The language model, behind one small interface.
 
 The agent keeps the conversation in its own neutral shape and each client
-translates it for one API: Gemini, any OpenAI-compatible endpoint (a local
+translates it for one API: Claude, any OpenAI-compatible endpoint (a local
 Ollama, for one), or a script of replies for tests.
 """
 
 import json
+import logging
 import os
 import uuid
+from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -32,6 +34,9 @@ class UserTurn:
 class ModelTurn:
     text: str = ""
     tool_calls: tuple[ToolCall, ...] = ()
+    # The provider's own record of the turn, opaque to the agent, which the client that
+    # made it sends back unchanged: Claude's thinking blocks must return exactly as they came.
+    raw: tuple = field(default=(), compare=False)
 
 
 @dataclass(frozen=True)
@@ -51,66 +56,87 @@ class ModelClient(Protocol):
         ...
 
 
-# --- Gemini -----------------------------------------------------------------
+# --- Claude -----------------------------------------------------------------
+
+log = logging.getLogger(__name__)
+
+DEFAULT_CLAUDE = "claude-haiku-5-5"
 
 
-class GeminiClient:
-    """Gemini through the google-genai SDK. Reads GEMINI_API_KEY."""
+class ClaudeClient:
+    """Claude through Anthropic's SDK. Reads ANTHROPIC_API_KEY."""
 
-    def __init__(self, model: str = "gemini-3.8-flash", api_key: str | None = None):
-        from google import genai
+    def __init__(self, model: str = DEFAULT_CLAUDE, client=None):
+        import anthropic
 
-        self.name = f"gemini:{model}"
+        self.name = f"anthropic:{model}"
         self._model = model
-        from google.genai import types
-
-        # Free-tier keys are rate limited; a 429 or a brief outage is waited out, not reported as a failure.
-        retry = types.HttpRetryOptions(attempts=6, initial_delay=5, max_delay=60, http_status_codes=[429, 500, 503])
-        self._client = genai.Client(
-            api_key=api_key or os.environ["GEMINI_API_KEY"],
-            http_options=types.HttpOptions(retry_options=retry),
-        )
+        # The SDK waits out rate limits and brief outages (429, 5xx); a new key's limits are low.
+        self._client = client or anthropic.Anthropic(max_retries=6)
+        # Tokens used so far, by kind, so a run can say what it cost.
+        self.usage: Counter = Counter()
 
     def reply(self, system: str, transcript: Sequence[Turn], tools: list[dict]) -> ModelTurn:
-        from google.genai import types
-
-        response = self._client.models.generate_content(
+        response = self._client.messages.create(
             model=self._model,
-            contents=gemini_contents(transcript),
-            config=types.GenerateContentConfig(
-                system_instruction=system,
-                tools=[types.Tool(function_declarations=tools)],
-                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
-                temperature=0.2,
-            ),
+            max_tokens=16000,
+            system=system,
+            tools=claude_tools(tools),
+            messages=claude_messages(transcript),
+            # The rules, catalog and tools are the same on every request: cached, they cost a tenth.
+            cache_control={"type": "ephemeral"},
+            # Haiku's own default, set here so it does not move under us.
+            output_config={"effort": "medium"},
         )
-        calls = tuple(
-            ToolCall(name=c.name, arguments=dict(c.args or {}), id=c.id or uuid.uuid4().hex[:12])
-            for c in response.function_calls or []
-        )
-        text = "".join(p.text or "" for p in response.candidates[0].content.parts if not p.function_call)
-        return ModelTurn(text=text, tool_calls=calls)
+        for kind in ("input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"):
+            self.usage[kind] += getattr(response.usage, kind, 0) or 0
+        if response.stop_reason in ("refusal", "max_tokens"):
+            log.warning("Claude stopped with %s", response.stop_reason)
+        return claude_turn(response)
 
 
-def gemini_contents(transcript: Sequence[Turn]) -> list[dict]:
-    """The transcript as Gemini `contents`: user, model and function-response turns."""
-    contents: list[dict] = []
+def claude_turn(response) -> ModelTurn:
+    """Claude's reply as a turn: its tool calls and its text, with every block kept to send back."""
+    blocks = tuple(response.content or ())
+    calls = tuple(ToolCall(name=b.name, arguments=dict(b.input or {}), id=b.id) for b in blocks if b.type == "tool_use")
+    text = "".join(b.text for b in blocks if b.type == "text")
+    return ModelTurn(text=text, tool_calls=calls, raw=blocks)
+
+
+def claude_tools(tools: list[dict]) -> list[dict]:
+    return [{"name": t["name"], "description": t["description"], "input_schema": t["parameters"]} for t in tools]
+
+
+def claude_messages(transcript: Sequence[Turn]) -> list[dict]:
+    """The transcript as Claude `messages`. A model turn goes back as it came; the results of
+    one turn's calls, and any text after them, go together in the next user message."""
+    messages: list[dict] = []
+
+    def user(block: dict) -> None:
+        if messages and messages[-1]["role"] == "user":
+            messages[-1]["content"].append(block)
+        else:
+            messages.append({"role": "user", "content": [block]})
+
     for turn in transcript:
         match turn:
             case UserTurn(text=text):
-                contents.append({"role": "user", "parts": [{"text": text}]})
-            case ModelTurn(text=text, tool_calls=calls):
-                parts = [{"text": text}] if text else []
-                parts += [{"function_call": {"id": c.id, "name": c.name, "args": c.arguments}} for c in calls]
-                contents.append({"role": "model", "parts": parts})
-            case ToolTurn(call=call, result=result):
-                part = {"function_response": {"id": call.id, "name": call.name, "response": result}}
-                # Responses to one model turn's calls go together in one user turn.
-                if contents and contents[-1]["role"] == "user" and "function_response" in contents[-1]["parts"][0]:
-                    contents[-1]["parts"].append(part)
+                user({"type": "text", "text": text})
+            case ModelTurn(text=text, tool_calls=calls, raw=raw):
+                if raw:
+                    content = list(raw)
                 else:
-                    contents.append({"role": "user", "parts": [part]})
-    return contents
+                    content = [{"type": "text", "text": text}] if text else []
+                    content += [{"type": "tool_use", "id": c.id, "name": c.name, "input": c.arguments} for c in calls]
+                # A turn with nothing in it (a refusal) cannot be sent; the user message after it carries on.
+                if content:
+                    messages.append({"role": "assistant", "content": content})
+            case ToolTurn(call=call, result=result):
+                block = {"type": "tool_result", "tool_use_id": call.id, "content": json.dumps(result)}
+                if "error" in result:
+                    block["is_error"] = True
+                user(block)
+    return messages
 
 
 # --- OpenAI-compatible ------------------------------------------------------
@@ -211,11 +237,11 @@ class ScriptedClient:
 
 
 def client_from_env() -> ModelClient:
-    """The model named by FC_MODEL: `gemini:<model>`, `openai:<base url>|<model>` or `scripted:<file>`."""
-    spec = os.environ.get("FC_MODEL", "gemini:gemini-3.8-flash")
+    """The model named by FC_MODEL: `anthropic:<model>`, `openai:<base url>|<model>` or `scripted:<file>`."""
+    spec = os.environ.get("FC_MODEL", f"anthropic:{DEFAULT_CLAUDE}")
     kind, _, rest = spec.partition(":")
-    if kind == "gemini":
-        return GeminiClient(model=rest or "gemini-3.8-flash")
+    if kind == "anthropic":
+        return ClaudeClient(model=rest or DEFAULT_CLAUDE)
     if kind == "openai":
         base_url, _, model = rest.partition("|")
         return OpenAICompatibleClient(base_url, model, api_key=os.environ.get("OPENAI_API_KEY"))

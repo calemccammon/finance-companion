@@ -1,13 +1,13 @@
 name: Evaluations
 
 # Started by hand: puts the evaluation questions to a real model through the
-# agent and keeps the results. Uses the GEMINI_API_KEY repository secret.
+# agent and keeps the results. Uses the ANTHROPIC_API_KEY repository secret.
 on:
   workflow_dispatch:
     inputs:
       model:
-        description: FC_MODEL, e.g. gemini:gemini-3.8-flash
-        default: gemini:gemini-3.8-flash
+        description: FC_MODEL, e.g. anthropic:claude-haiku-5-5
+        default: anthropic:claude-haiku-5-5
       only:
         description: Question ids to run, separated by spaces (empty runs all)
         default: ""
@@ -30,7 +30,7 @@ jobs:
         env:
           FC_MODEL: ${{ inputs.model }}
           ONLY: ${{ inputs.only }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           name=$(echo "$FC_MODEL" | tr -c 'A-Za-z0-9.-' '_')
           if [ -n "$ONLY" ]; then set -- --only $ONLY; fi
