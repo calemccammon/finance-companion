@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -112,16 +113,23 @@ private fun ChartCard(
     }
 }
 
+/** The first and last dates under a chart, and, if given, the lowest and highest close between them. */
 @Composable
 private fun AxisNotes(
     first: String?,
     last: String?,
-    low: String,
-    high: String,
+    lowest: String? = null,
+    highest: String? = null,
 ) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(listOfNotNull(first, "low $low").joinToString(" · "), style = MaterialTheme.typography.labelSmall)
-        Text(listOfNotNull("high $high", last).joinToString(" · "), style = MaterialTheme.typography.labelSmall)
+        Text(first.orEmpty(), style = MaterialTheme.typography.labelSmall)
+        Text(last.orEmpty(), style = MaterialTheme.typography.labelSmall)
+    }
+    if (lowest != null && highest != null) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text("Lowest close $lowest", style = MaterialTheme.typography.labelSmall)
+            Text("Highest close $highest", style = MaterialTheme.typography.labelSmall)
+        }
     }
 }
 
@@ -185,7 +193,9 @@ object PriceChart : A2uiComponent {
 
         ChartCard(title, description, modifier) {
             Canvas(Modifier.fillMaxWidth().height(160.dp)) { drawLines(lines, low, high) }
-            AxisNotes(first, last, money.format(low), money.format(high))
+            // The chart is scaled to every line drawn; the notes are about the closes alone.
+            val shown = closes.filterNotNull()
+            AxisNotes(first, last, shown.minOrNull()?.let(money::format), shown.maxOrNull()?.let(money::format))
             if (averages) {
                 Legend(
                     listOf(
@@ -265,10 +275,7 @@ object OverlayChart : A2uiComponent {
                     series.filterNotNull().maxOrNull() ?: 0.0,
                 )
             }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(first.orEmpty(), style = MaterialTheme.typography.labelSmall)
-                Text(last.orEmpty(), style = MaterialTheme.typography.labelSmall)
-            }
+            AxisNotes(first, last)
             Legend(listOf(priceLabel to priceColour, seriesLabel to Charts.series))
         }
     }
@@ -385,5 +392,11 @@ internal object Charts {
 }
 
 internal object Gains {
-    val up = Color(0xFF1E7B34)
+    /** Green for a rise, light on a dark theme and dark on a light one, so it reads on either. */
+    @Composable
+    fun up(): Color = if (MaterialTheme.colorScheme.surface.luminance() < HALF) onDark else onLight
+
+    private val onLight = Color(0xFF1E7B34)
+    private val onDark = Color(0xFF7DD88C)
+    private const val HALF = 0.5f
 }

@@ -38,3 +38,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(":app")
 include(":catalog")
+include(":core:domain")
+include(":core:data")
+include(":core:testing")
+include(":feature:conversation")

@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
  */
 @RunWith(RobolectricTestRunner::class)
 class CatalogSchemaTest {
-    private val committed = File("../../catalog/finance-catalog.json")
+    private val committed = File(System.getProperty("fc.catalog"), "finance-catalog.json")
 
     @Test
     fun `the committed catalog matches the components`() {

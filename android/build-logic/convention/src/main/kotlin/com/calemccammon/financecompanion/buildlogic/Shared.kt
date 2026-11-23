@@ -83,6 +83,8 @@ internal fun Project.configureUnitTests() {
     tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
         // Lets a test rewrite a committed file it checks, when asked to.
         providers.systemProperty("fc.updateCatalog").orNull?.let { systemProperty("fc.updateCatalog", it) }
+        // The shared catalog and the fixtures both halves of the project test against.
+        systemProperty("fc.catalog", rootProject.layout.projectDirectory.dir("../catalog").asFile.absolutePath)
     }
     dependencies {
         "testImplementation"(libs.library("junit"))

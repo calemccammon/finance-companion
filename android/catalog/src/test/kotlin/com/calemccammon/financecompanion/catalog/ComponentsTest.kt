@@ -58,9 +58,13 @@ class ComponentsTest {
         scope.launch { processor.collectMessages() }
         scope.launch(start = CoroutineStart.UNDISPATCHED) { processor.outboundEvents.collect { outbound += it } }
         val parser = A2uiMessageParser()
-        File("../../catalog/fixtures/components-surface.jsonl").readLines().filter { it.isNotBlank() }.forEach {
-            processor.processInput(parser, it)
-        }
+        File(System.getProperty("fc.catalog"), "fixtures/components-surface.jsonl")
+            .readLines()
+            .filter {
+                it.isNotBlank()
+            }.forEach {
+                processor.processInput(parser, it)
+            }
         compose.setContent {
             MaterialTheme {
                 val surfaces by processor.activeSurfaces.collectAsState()

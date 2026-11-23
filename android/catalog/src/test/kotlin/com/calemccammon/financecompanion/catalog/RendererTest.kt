@@ -71,7 +71,8 @@ class RendererTest {
             // The same messages the Python agent's test builds with the SDK.
             send(
                 *File(
-                    "../../catalog/fixtures/metric-card-surface.jsonl",
+                    System.getProperty("fc.catalog"),
+                    "fixtures/metric-card-surface.jsonl",
                 ).readLines().filter { it.isNotBlank() }.toTypedArray(),
             )
             show()

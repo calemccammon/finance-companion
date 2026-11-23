@@ -7,11 +7,11 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 /**
- * A feature module: one screen and its view models.
+ * A feature module: one screen and its view model.
  *
- * A feature sees the domain and the shared UI, and nothing of where data
- * comes from: it cannot name the database, the network or another feature
- * because it does not depend on them.
+ * A feature sees the domain and the component catalog, and nothing of where
+ * data comes from: it cannot name the database or the network because it does
+ * not depend on them.
  */
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) =
@@ -19,8 +19,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply("fc.android.library")
             pluginManager.apply("fc.android.compose")
             pluginManager.apply("fc.hilt")
-            // Routes are serializable objects.
-            pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
             pluginManager.apply("io.github.takahirom.roborazzi")
 
             extensions.configure<RoborazziExtension> {
@@ -31,17 +29,13 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                "implementation"(project(":core:model"))
                 "implementation"(project(":core:domain"))
-                "implementation"(project(":core:designsystem"))
-                "implementation"(project(":core:ui"))
+                "implementation"(project(":catalog"))
 
                 "implementation"(libs.library("androidx-hilt-lifecycle-viewmodel-compose"))
                 "implementation"(libs.library("androidx-lifecycle-runtime-compose"))
                 "implementation"(libs.library("androidx-lifecycle-viewmodel-compose"))
-                "implementation"(libs.library("androidx-navigation-compose"))
                 "implementation"(libs.library("kotlinx-coroutines-android"))
-                "implementation"(libs.library("kotlinx-serialization-json"))
 
                 "testImplementation"(project(":core:testing"))
                 "testImplementation"(libs.library("roborazzi"))

@@ -95,7 +95,12 @@ class Agent:
     # --- answering --------------------------------------------------------
 
     def answer(self, question: str) -> Iterator[dict]:
-        """The A2UI messages that answer [question] on a new surface, in order."""
+        """The A2UI messages that answer [question] on a new surface, in order.
+
+        The first item is `{"question": ...}`, not an A2UI message: it names the
+        question being answered, which the app does not know when a tap asked it.
+        """
+        yield {"question": question}
         surface = Surface(id=f"answer-{next(self._ids)}", question=question)
         self._surfaces[surface.id] = surface
         surface.transcript.append(UserTurn(question))

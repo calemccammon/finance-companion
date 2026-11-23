@@ -1,4 +1,4 @@
-package com.calemccammon.financecompanion
+package com.calemccammon.financecompanion.feature.conversation
 
 import androidx.a2ui.model.protocol.A2uiClientErrorMessage
 import androidx.a2ui.model.protocol.A2uiClientEventMessage

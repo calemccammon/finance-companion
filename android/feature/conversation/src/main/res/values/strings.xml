@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Every string the conversation screen shows or speaks. -->
+<resources>
+    <string name="feature_conversation_title">Finance Companion</string>
+    <string name="feature_conversation_intro">Ask about ten large US stocks and the US economy. Every figure comes from the warehouse, not from the model.</string>
+    <string name="feature_conversation_input_hint">Ask about a stock or the economy</string>
+    <string name="feature_conversation_send">Send</string>
+    <!-- Screen-reader name of the progress bar shown while an answer is on its way. -->
+    <string name="feature_conversation_answering">Answering</string>
+    <string name="feature_conversation_unavailable">Could not reach the agent. Check that it is running.</string>
+    <string name="feature_conversation_try_again">Try again</string>
+    <!-- Suggested first questions, shown when the conversation is empty. -->
+    <string name="feature_conversation_suggestion_apple">How is Apple doing?</string>
+    <string name="feature_conversation_suggestion_volatile">Which stocks are most volatile?</string>
+    <string name="feature_conversation_suggestion_tech">How have the big tech stocks done since June?</string>
+    <string name="feature_conversation_suggestion_rates">How has JPMorgan moved with the 10-year yield?</string>
+    <!-- Screen-reader label for a question the user asked. %1$s is the question. -->
+    <string name="feature_conversation_you_asked">You asked: %1$s</string>
+</resources>
