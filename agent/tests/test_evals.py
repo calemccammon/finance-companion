@@ -1,7 +1,6 @@
 """The evaluation harness, scored against scripted models whose behaviour is known."""
 
 import json
-from collections import Counter
 from dataclasses import asdict
 
 from conftest import calls, layout
@@ -92,7 +91,6 @@ def test_the_report_counts_scores_and_failure_classes(warehouse, catalog):
         ],
         name="scripted",
     )
-    from dataclasses import asdict
 
     result = {"model": "scripted", "outcomes": [asdict(run_question(APPLE, model, warehouse, catalog))]}
     summary = summarise(result)
@@ -105,23 +103,3 @@ def test_the_report_counts_scores_and_failure_classes(warehouse, catalog):
 
 def test_conversational_text_is_not_needed_for_a_layout():
     assert isinstance(layout("answer-1", CARD), ModelTurn)
-
-
-def test_the_tokens_a_counting_client_uses_are_kept_per_question_and_summed(warehouse, catalog):
-    class Counting(ScriptedClient):
-        def __init__(self, replies):
-            super().__init__(replies, name="counting")
-            self.usage = Counter()
-
-        def reply(self, system, transcript, tools):
-            self.usage.update(input_tokens=100, output_tokens=10)
-            return super().reply(system, transcript, tools)
-
-    model = Counting([calls(("price_history", {"ticker": "AAPL"})), layout("answer-1", CARD)] * 2)
-    first, second = (asdict(run_question(APPLE, model, warehouse, catalog)) for _ in range(2))
-
-    # Each question counts only its own two requests.
-    assert first["tokens"] == second["tokens"] == {"input_tokens": 200, "output_tokens": 20}
-    summary = summarise({"model": "counting", "outcomes": [first, second]})
-    assert summary["tokens"] == {"input_tokens": 400, "output_tokens": 40}
-    assert "| counting | 400 | 0 | 0 | 40 |" in report([{"model": "counting", "outcomes": [first, second]}])

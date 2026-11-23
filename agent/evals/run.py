@@ -11,7 +11,7 @@ What happens is recorded through the agent's observer and scored:
 - right_tools:    the tools called include every tool the question needs, and
                   questions that need none (off-topic, unanswerable) called none
 
-    FC_MODEL=anthropic:claude-haiku-5-5 uv run python evals/run.py --out evals/results/claude-haiku-5-5.json
+    uv run python evals/run.py --out evals/results/qwen3-8b.json
     uv run python evals/run.py --report evals/results/*.json > evals/REPORT.md
 """
 
@@ -59,8 +59,6 @@ class Outcome:
     error: str | None = None
     seconds: float = 0.0
     scores: dict[str, bool] = field(default_factory=dict)
-    # Tokens the model used on this question, by kind, when its client counts them.
-    tokens: dict[str, int] = field(default_factory=dict)
 
 
 def run_question(question: dict, model: ModelClient, warehouse: Warehouse, catalog) -> Outcome:
@@ -78,14 +76,12 @@ def run_question(question: dict, model: ModelClient, warehouse: Warehouse, catal
             outcome.accepted = True
 
     agent = Agent(warehouse, catalog, model, observer=observe)
-    before = Counter(getattr(model, "usage", {}))
     started = time.monotonic()
     try:
         list(agent.answer(question["ask"]))
     except Exception as e:
         outcome.error = f"{type(e).__name__}: {e}"
     outcome.seconds = round(time.monotonic() - started, 2)
-    outcome.tokens = dict(Counter(getattr(model, "usage", {})) - before)
     outcome.scores = score(question, outcome)
     return outcome
 
@@ -120,14 +116,7 @@ def summarise(result: dict) -> dict:
     n = len(outcomes)
     rates = {s: sum(o["scores"][s] for o in outcomes) for s in SCORES}
     classes = Counter(c for o in outcomes for attempt in o["rejections"] for c in attempt)
-    tokens = sum((Counter(o.get("tokens", {})) for o in outcomes), Counter())
-    return {
-        "model": result["model"],
-        "questions": n,
-        "passed": rates,
-        "failure_classes": dict(classes),
-        "tokens": dict(tokens),
-    }
+    return {"model": result["model"], "questions": n, "passed": rates, "failure_classes": dict(classes)}
 
 
 def report(results: list[dict]) -> str:
@@ -147,10 +136,6 @@ def report(results: list[dict]) -> str:
     for s in summaries:
         for cls, count in sorted(s["failure_classes"].items(), key=lambda kv: -kv[1]):
             lines.append(f"| {s['model']} | {cls} | {count} |")
-    kinds = ("input_tokens", "cache_read_input_tokens", "cache_creation_input_tokens", "output_tokens")
-    lines += ["", "## Tokens used", "", "| Model | " + " | ".join(kinds) + " |", "|---|" + "---|" * len(kinds)]
-    for s in summaries:
-        lines.append(f"| {s['model']} | " + " | ".join(str(s["tokens"].get(k, 0)) for k in kinds) + " |")
     return "\n".join(lines) + "\n"
 
 
