@@ -1,0 +1,35 @@
+# Overrides on top of detekt's default rule set.
+# All rules: https://detekt.dev/docs/rules/comments
+
+naming:
+  FunctionNaming:
+    # Composable functions are named like classes.
+    ignoreAnnotated: ['Composable']
+    # Tests are named as sentences, in backticks.
+    excludes: ['**/test/**', '**/androidTest/**']
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][A-Za-z0-9_]*'
+
+style:
+  MagicNumber:
+    # Sizes and colours in Compose UI code and its previews.
+    ignoreAnnotated: ['Composable', 'Preview']
+    ignorePropertyDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    excludes: ['**/test/**', '**/androidTest/**']
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']
+
+complexity:
+  LongParameterList:
+    # Composables take many parameters by design, and Hilt writes the call
+    # that builds a class from its constructor.
+    ignoreAnnotated: ['Composable']
+    constructorThreshold: 8
+  LongMethod:
+    ignoreAnnotated: ['Composable']
+    excludes: ['**/test/**', '**/androidTest/**']
+  TooManyFunctions:
+    # A file's private helpers are how it is kept readable, not a sign it does too much.
+    ignorePrivate: true
+    excludes: ['**/test/**', '**/androidTest/**']
