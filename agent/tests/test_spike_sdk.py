@@ -30,8 +30,12 @@ def build_surface() -> list[dict]:
     ]
     messages = [
         CreateSurfaceMessage(version="v0.9.1", create_surface=CreateSurface(surface_id="s1", catalog_id=CATALOG_ID)),
-        UpdateComponentsMessage(version="v0.9.1", update_components=UpdateComponents(surface_id="s1", components=components)),
-        UpdateDataModelMessage(version="v0.9.1", update_data_model=UpdateDataModel(surface_id="s1", path="/close", value=182.31)),
+        UpdateComponentsMessage(
+            version="v0.9.1", update_components=UpdateComponents(surface_id="s1", components=components)
+        ),
+        UpdateDataModelMessage(
+            version="v0.9.1", update_data_model=UpdateDataModel(surface_id="s1", path="/close", value=182.31)
+        ),
     ]
     return [m.model_dump(by_alias=True, exclude_none=True, mode="json") for m in messages]
 
