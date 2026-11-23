@@ -17,7 +17,7 @@ never handles the data, only where it is.
 import itertools
 import json
 import logging
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from datetime import timedelta
 
@@ -77,7 +77,16 @@ class Surface:
 
 
 class Agent:
-    def __init__(self, warehouse: Warehouse, catalog, model: ModelClient):
+    def __init__(
+        self,
+        warehouse: Warehouse,
+        catalog,
+        model: ModelClient,
+        observer: Callable[[str, dict], None] | None = None,
+    ):
+        """[observer], if given, hears what happens while answering: tool calls,
+        rejected layouts and fallbacks. The evaluations score a model from it."""
+        self.observer = observer or (lambda kind, detail: None)
         self.warehouse = warehouse
         self.catalog = catalog
         self.model = model
@@ -129,7 +138,9 @@ class Agent:
         try:
             result = run_tool(self.warehouse, name, arguments)
         except ToolError as e:
+            self.observer("tool", {"name": name, "arguments": arguments, "error": str(e)})
             return {"error": str(e)}
+        self.observer("tool", {"name": name, "arguments": arguments, "error": None})
         path = f"/r{len(surface.results) + 1}"
         surface.data[path[1:]] = result.data
         surface.results[path] = (name, arguments)
@@ -139,10 +150,14 @@ class Agent:
         """The components of the model's answer, checked; corrected once if need be."""
         while True:
             try:
-                return self._components(surface, reply)
+                components = self._components(surface, reply)
+                self.observer("accepted", {"components": components})
+                return components
             except SurfaceRejected as e:
                 log.info("surface %s rejected: %s", surface.id, e)
+                self.observer("rejected", {"reasons": str(e)})
                 if surface.corrections_left <= 0:
+                    self.observer("fallback", {})
                     return _fallback()
                 surface.corrections_left -= 1
                 reply = self._ask(surface, extra=f"Your screen was rejected: {e}. Send a corrected updateComponents.")
