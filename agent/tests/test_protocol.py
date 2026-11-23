@@ -1,4 +1,4 @@
-"""Spike for issue #2: the Python SDK builds a v0.9.1 surface that the app's
+"""The Python SDK builds a v0.9.1 surface that the app's
 catalog accepts, and it is the same surface the Kotlin spike draws."""
 
 import json
@@ -63,3 +63,18 @@ def test_the_app_catalog_rejects_a_card_without_its_figure():
     del surface[1]["updateComponents"]["components"][2]["value"]
     with pytest.raises(A2uiValidationError):
         validate_payload([load_catalog()], surface)
+
+
+def test_the_app_s_action_message_is_one_the_sdk_reads():
+    from a2ui.core.schema.v0_9.client_to_server import A2uiClientActionMessage
+
+    fixture = Path(__file__).resolve().parents[2] / "catalog" / "fixtures" / "refresh-action.json"
+    message = A2uiClientActionMessage.model_validate_json(fixture.read_text())
+
+    assert message.action.name == "refresh"
+    assert message.action.context == {"ticker": "AAPL"}
+
+
+def test_the_app_catalog_accepts_the_component_fixture_the_app_draws():
+    fixture = Path(__file__).resolve().parents[2] / "catalog" / "fixtures" / "components-surface.jsonl"
+    validate_payload([load_catalog()], [json.loads(line) for line in fixture.read_text().splitlines() if line.strip()])
