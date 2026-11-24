@@ -1,12 +1,11 @@
 """The evaluation harness, scored against scripted models whose behaviour is known."""
 
 import json
-from collections import Counter
 from dataclasses import asdict
 
 from conftest import calls, layout
 
-from evals.run import QUESTIONS, failure_class, report, run_question, summarise
+from evals.run import QUESTIONS, SCORES, failure_class, report, run_question, summarise
 from finance_agent.model import ModelTurn, ScriptedClient
 
 CARD = {"id": "root", "component": "MetricCard", "label": "Close", "value": {"path": "/r1/latest/close"}}
@@ -80,6 +79,21 @@ def test_rejections_are_sorted_into_classes():
         "missing data path",
         "written figure",
     ]
+    # The SDK's own words, as a local model's layouts drew them.
+    assert failure_class("The direct JSON block is not JSON: Invalid JSON at 412") == ["not JSON"]
+    assert failure_class("Missing root component: No component has id='root'") == ["broken component tree"]
+    assert failure_class("Component 'card-1' is not reachable from 'root'") == ["broken component tree"]
+    assert failure_class("components.root.children: [{'id': 'h1', 'component': 'Text'}]") == [
+        "components nested in children"
+    ]
+    assert failure_class("components.m1.value: '/r1/latest/close' is not valid under any of the given schemas") == [
+        "path written as plain text"
+    ]
+    assert failure_class("updateComponents.weight\n  Extra inputs are not permitted") == ["stray fields"]
+    # Both phrases somewhere, but no path rejected: not a plain-text path.
+    assert "path written as plain text" not in failure_class(
+        "children: [{'text': 'a: '/x'}] Extra inputs are not permitted; is not valid under any of the given schemas"
+    )
     assert failure_class("something else") == ["other schema error"]
 
 
@@ -92,36 +106,26 @@ def test_the_report_counts_scores_and_failure_classes(warehouse, catalog):
         ],
         name="scripted",
     )
-    from dataclasses import asdict
 
     result = {"model": "scripted", "outcomes": [asdict(run_question(APPLE, model, warehouse, catalog))]}
     summary = summarise(result)
     assert summary["passed"]["renders"] == 1 and summary["passed"]["first_try"] == 0
     assert summary["failure_classes"] == {"written figure": 1}
+    assert "writes the figure" in result["outcomes"][0]["reasons"][0]
     text = report([result])
     assert "| scripted | 1 | 1 | 0 |" in text
     assert "| scripted | written figure | 1 |" in text
+    # Two attempts: one rejected by the app's own check, then one that rendered.
+    assert summary["attempts"] == 2 and summary["reached_own_checks"] == 2
+    assert "| scripted | 2 | 2 |" in text
 
 
 def test_conversational_text_is_not_needed_for_a_layout():
     assert isinstance(layout("answer-1", CARD), ModelTurn)
 
 
-def test_the_tokens_a_counting_client_uses_are_kept_per_question_and_summed(warehouse, catalog):
-    class Counting(ScriptedClient):
-        def __init__(self, replies):
-            super().__init__(replies, name="counting")
-            self.usage = Counter()
-
-        def reply(self, system, transcript, tools):
-            self.usage.update(input_tokens=100, output_tokens=10)
-            return super().reply(system, transcript, tools)
-
-    model = Counting([calls(("price_history", {"ticker": "AAPL"})), layout("answer-1", CARD)] * 2)
-    first, second = (asdict(run_question(APPLE, model, warehouse, catalog)) for _ in range(2))
-
-    # Each question counts only its own two requests.
-    assert first["tokens"] == second["tokens"] == {"input_tokens": 200, "output_tokens": 20}
-    summary = summarise({"model": "counting", "outcomes": [first, second]})
-    assert summary["tokens"] == {"input_tokens": 400, "output_tokens": 40}
-    assert "| counting | 400 | 0 | 0 | 40 |" in report([{"model": "counting", "outcomes": [first, second]}])
+def test_saved_reasons_are_sorted_by_todays_rules():
+    outcome = {"accepted": False, "rejections": [["other schema error"]], "reasons": ["The JSON block is not JSON"]}
+    summary = summarise({"model": "m", "outcomes": [outcome | {"scores": dict.fromkeys(SCORES, False)}]})
+    assert summary["failure_classes"] == {"not JSON": 1}
+    assert summary["attempts"] == 1 and summary["reached_own_checks"] == 0

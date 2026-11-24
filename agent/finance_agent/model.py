@@ -1,15 +1,13 @@
 """The language model, behind one small interface.
 
 The agent keeps the conversation in its own neutral shape and each client
-translates it for one API: Claude, any OpenAI-compatible endpoint (a local
-Ollama, for one), or a script of replies for tests.
+translates it for one API: any OpenAI-compatible endpoint (a local Ollama,
+for one), or a script of replies for tests.
 """
 
 import json
-import logging
 import os
 import uuid
-from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -34,9 +32,6 @@ class UserTurn:
 class ModelTurn:
     text: str = ""
     tool_calls: tuple[ToolCall, ...] = ()
-    # The provider's own record of the turn, opaque to the agent, which the client that
-    # made it sends back unchanged: Claude's thinking blocks must return exactly as they came.
-    raw: tuple = field(default=(), compare=False)
 
 
 @dataclass(frozen=True)
@@ -56,90 +51,9 @@ class ModelClient(Protocol):
         ...
 
 
-# --- Claude -----------------------------------------------------------------
-
-log = logging.getLogger(__name__)
-
-DEFAULT_CLAUDE = "claude-haiku-5-5"
-
-
-class ClaudeClient:
-    """Claude through Anthropic's SDK. Reads ANTHROPIC_API_KEY."""
-
-    def __init__(self, model: str = DEFAULT_CLAUDE, client=None):
-        import anthropic
-
-        self.name = f"anthropic:{model}"
-        self._model = model
-        # The SDK waits out rate limits and brief outages (429, 5xx); a new key's limits are low.
-        self._client = client or anthropic.Anthropic(max_retries=6)
-        # Tokens used so far, by kind, so a run can say what it cost.
-        self.usage: Counter = Counter()
-
-    def reply(self, system: str, transcript: Sequence[Turn], tools: list[dict]) -> ModelTurn:
-        response = self._client.messages.create(
-            model=self._model,
-            max_tokens=16000,
-            system=system,
-            tools=claude_tools(tools),
-            messages=claude_messages(transcript),
-            # The rules, catalog and tools are the same on every request: cached, they cost a tenth.
-            cache_control={"type": "ephemeral"},
-            # Haiku's own default, set here so it does not move under us.
-            output_config={"effort": "medium"},
-        )
-        for kind in ("input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"):
-            self.usage[kind] += getattr(response.usage, kind, 0) or 0
-        if response.stop_reason in ("refusal", "max_tokens"):
-            log.warning("Claude stopped with %s", response.stop_reason)
-        return claude_turn(response)
-
-
-def claude_turn(response) -> ModelTurn:
-    """Claude's reply as a turn: its tool calls and its text, with every block kept to send back."""
-    blocks = tuple(response.content or ())
-    calls = tuple(ToolCall(name=b.name, arguments=dict(b.input or {}), id=b.id) for b in blocks if b.type == "tool_use")
-    text = "".join(b.text for b in blocks if b.type == "text")
-    return ModelTurn(text=text, tool_calls=calls, raw=blocks)
-
-
-def claude_tools(tools: list[dict]) -> list[dict]:
-    return [{"name": t["name"], "description": t["description"], "input_schema": t["parameters"]} for t in tools]
-
-
-def claude_messages(transcript: Sequence[Turn]) -> list[dict]:
-    """The transcript as Claude `messages`. A model turn goes back as it came; the results of
-    one turn's calls, and any text after them, go together in the next user message."""
-    messages: list[dict] = []
-
-    def user(block: dict) -> None:
-        if messages and messages[-1]["role"] == "user":
-            messages[-1]["content"].append(block)
-        else:
-            messages.append({"role": "user", "content": [block]})
-
-    for turn in transcript:
-        match turn:
-            case UserTurn(text=text):
-                user({"type": "text", "text": text})
-            case ModelTurn(text=text, tool_calls=calls, raw=raw):
-                if raw:
-                    content = list(raw)
-                else:
-                    content = [{"type": "text", "text": text}] if text else []
-                    content += [{"type": "tool_use", "id": c.id, "name": c.name, "input": c.arguments} for c in calls]
-                # A turn with nothing in it (a refusal) cannot be sent; the user message after it carries on.
-                if content:
-                    messages.append({"role": "assistant", "content": content})
-            case ToolTurn(call=call, result=result):
-                block = {"type": "tool_result", "tool_use_id": call.id, "content": json.dumps(result)}
-                if "error" in result:
-                    block["is_error"] = True
-                user(block)
-    return messages
-
-
 # --- OpenAI-compatible ------------------------------------------------------
+
+DEFAULT_MODEL = "openai:http://127.0.0.1:11434/v1|qwen3:8b"
 
 
 class OpenAICompatibleClient:
@@ -190,6 +104,9 @@ def openai_messages(transcript: Sequence[Turn]) -> list[dict]:
             case UserTurn(text=text):
                 messages.append({"role": "user", "content": text})
             case ModelTurn(text=text, tool_calls=calls):
+                # A turn with nothing in it cannot be sent (Ollama refuses its null content).
+                if not text and not calls:
+                    continue
                 message: dict = {"role": "assistant", "content": text or None}
                 if calls:
                     message["tool_calls"] = [
@@ -237,11 +154,10 @@ class ScriptedClient:
 
 
 def client_from_env() -> ModelClient:
-    """The model named by FC_MODEL: `anthropic:<model>`, `openai:<base url>|<model>` or `scripted:<file>`."""
-    spec = os.environ.get("FC_MODEL", f"anthropic:{DEFAULT_CLAUDE}")
+    """The model named by FC_MODEL: `openai:<base url>|<model>` or `scripted:<file>`.
+    Without it, qwen3:8b on a local Ollama."""
+    spec = os.environ.get("FC_MODEL", DEFAULT_MODEL)
     kind, _, rest = spec.partition(":")
-    if kind == "anthropic":
-        return ClaudeClient(model=rest or DEFAULT_CLAUDE)
     if kind == "openai":
         base_url, _, model = rest.partition("|")
         return OpenAICompatibleClient(base_url, model, api_key=os.environ.get("OPENAI_API_KEY"))
