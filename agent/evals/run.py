@@ -201,7 +201,8 @@ def report(results: list[dict]) -> str:
         "## How far answers got",
         "",
         "The catalog_only, bindings and no_written_figure scores count questions where no attempt broke "
-        "that rule. The app's checks for bindings and written figures run only on an answer the A2UI SDK "
+        "that rule. The app's own checks (bindings, written figures, paths written into text, rows shown "
+        "under another name) run only on an answer the A2UI SDK "
         "has accepted, so they say little when few answers got that far.",
         "",
         "| Model | Attempts | Reached the app's own checks |",

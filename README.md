@@ -16,9 +16,10 @@ fixed query against the dbt marts of
 ![A session: asking about Apple, switching the chart to one month, ranking the stocks by volatility, and pressing Tesla](docs/demo.gif)
 
 The screenshots and the recording come from the real agent, tools and app on an
-emulator. The model's turns came from a script (`agent/demo/script.json`):
-the local model evaluated below rarely writes a screen the checks accept; see
-[Evaluations](#evaluations).
+emulator. The model's turns came from a script (`agent/demo/script.json`), so
+that they show the same thing each time; a local 8B model now writes a screen
+the checks accept for 44 of 50 test questions (see
+[Evaluations](#evaluations)).
 
 ## How an answer is made
 
@@ -26,6 +27,8 @@ the local model evaluated below rarely writes a screen the checks accept; see
  app ──POST /ask──▶ agent ──▶ model: "price_history(AAPL)"
                      │        agent runs fixed SQL on the dbt marts,
                      │        stores the rows at /r1 in the surface's data model
+                     │  ──▶   model, asked again for the layout, held to a
+                     │        JSON Schema of the catalog and the paths in /r1
                      │  ◀──── model: one updateComponents message, figures
                      │        bound to paths such as /r1/latest/close
                      │        agent checks it (below); a rejected layout goes
@@ -42,13 +45,24 @@ the local model evaluated below rarely writes a screen the checks accept; see
 - **The model never handles the data, only where it is.** It is told that a
   result is at `/r1` and what it holds, and binds its components to those
   paths. The server sends the data itself.
+- **The layout is written under a JSON Schema.** Once the model has its
+  data, it is asked for the layout with no tools and a schema built from the
+  catalog and that data (`agent/finance_agent/layout_schema.py`): one
+  `updateComponents` message, components referred to by id, no fields a
+  component lacks, and every binding one of the paths the data holds, of the
+  right kind (a list for a chart or a ranking, a number for a figure, a
+  string for text). With no data, only words can be laid out. Ollama's
+  OpenAI-compatible endpoint enforces it with `response_format`.
 - **Every layout is checked before it is sent.** First the A2UI SDK's
   validation against the app's catalog: unknown components, properties,
-  types, malformed JSON. Then two rules the SDK cannot know: every binding
-  must resolve in the data model (inside a `List` template, against an item),
-  and no figure may be written by the model, neither as a literal number in a
-  data property nor as a money, percent or decimal figure from the data in
-  text.
+  types, malformed JSON. Then rules the SDK cannot know: every binding must
+  resolve in the data model (inside a `List` template, against an item); a
+  chart's points and a ranking's rows must be bound to a list; no figure may
+  be written by the model, neither as a literal number in a data property nor
+  as a money, percent or decimal figure from the data in text; no path may be
+  written into text, where it would be shown as it is; and a card showing one
+  row of a ranking must name that row, since rankings are sorted by their
+  figure.
 - **Taps go back to the agent as A2UI actions.** A range button reruns its
   result's tool and rewrites only that part of the data model, with no model
   call. Pressing a stock in a ranking asks about it as a new question. An
@@ -132,8 +146,9 @@ cd android && ./gradlew test testDebugUnitTest verifyRoborazziDebug
 cd android && ./gradlew :app:connectedDebugAndroidTest   # on an emulator or device
 ```
 
-- **The agent (74 tests)**: the tools against values worked out from the raw
-  rows; the checks; the question-to-surface loop, corrections, fallbacks and
+- **The agent (121 tests)**: the tools against values worked out from the raw
+  rows; the checks and the layout schema, each with the mistakes a local model made;
+  the question-to-surface loop, corrections, fallbacks and
   actions with a scripted model; the model clients' message formats; the HTTP
   service; and the evaluation harness.
 - **The app on the JVM (33 tests)**: the components drawn by the renderer from
@@ -168,28 +183,42 @@ uv run python evals/run.py --report evals/results/*.json > evals/REPORT.md
 
 ### qwen3:8b on a laptop
 
-[`agent/evals/REPORT.md`](agent/evals/REPORT.md) holds the scores of a run
-with qwen3:8b on Ollama 0.40.17 (16K context, 8-bit context cache) on an
-8 GB RTX 4060 laptop GPU: 53 minutes for the 50 questions, a minute each at
-the median. Every rejection's reasons are kept in
-[`agent/evals/results/qwen3-8b.json`](agent/evals/results/qwen3-8b.json).
+[`agent/evals/REPORT.md`](agent/evals/REPORT.md) holds the scores of two runs
+of the same code with qwen3:8b on Ollama 0.40.17 (16K context, 8-bit context
+cache) on an 8 GB RTX 4060 laptop GPU, each about an hour for the 50
+questions: one with the layout held to the schema, one without
+(`--no-schema`). Every answer's tools, rejections with their reasons, and
+accepted layout are kept in [`agent/evals/results/`](agent/evals/results/).
 
-- **It picks the right data.** The right tools were called for 47 of the 50
-  questions.
-- **It rarely writes a screen the A2UI SDK accepts.** One answer of 50
-  rendered (two in an earlier run), after 99 rejected attempts. The
-  commonest faults: JSON that does not parse (29), components written inside
-  `children` instead of their ids (28), a component tree with no root or a
-  missing id (16), plain text instead of a screen (12), and a data path
-  written as a bare string instead of `{"path": ...}` (10).
-- **The rules held, but were hardly tested.** No screen reached the app with
-  an unknown component, an unbound path or a figure the model wrote. Only one
-  answer got past the SDK to the app's own checks for bindings and written
-  figures, though, so this run says little about those checks.
+| | Without the schema | With the schema |
+|---|---|---|
+| Screens that passed every check | 0 / 50 | 44 / 50 |
+| ...and showed data where the question needed it | 0 | 43 |
+| ...the first time, with no correction | 0 | 28 |
+| Right tools called | 47 | 47 |
+| Attempts that reached the app's own checks | 0 of 100 | 66 of 71 |
 
-The checks did what they are for: nothing broken reached the screen, and
-every failure fell back to a plain message. qwen3:8b is not enough to
-compose A2UI screens; a larger model is still to be tried.
+- **Without the schema, the model rarely writes A2UI.** Its rejections were
+  JSON that does not parse (33), components written inside `children`
+  instead of their ids (26), plain text instead of a screen (13) and a broken
+  component tree (10). An earlier run of older code rendered one answer.
+- **With it, those faults are gone, and the app's own checks do the work.**
+  The rejections left are mistakes about meaning: a path written as a plain
+  string where it should be bound (13), and a card labelled with a stock other
+  than the row it shows (11). Each went back to the model with the reason;
+  most were corrected.
+- **What fell back to a plain message:** three company-profile questions,
+  where the model wrote a path such as `"/r1/sector"` as text twice running;
+  two answers whose first layout referred to a component it did not define
+  and whose correction wrote a path or a figure into text; and one question
+  that took longer than the five-minute limit.
+- **What got through and is still wrong.** Reading the 44 accepted layouts:
+  four cards, in two answers, show a closing price formatted as a percent
+  change, so $300 would read +300%. Nothing checks that a format fits its figure yet.
+
+The schema came from reading the first runs' rejections; the two newest
+checks came from reading the layouts a run accepted, which had passed and
+were wrong. A larger model is still to be tried.
 
 ## Limits
 
