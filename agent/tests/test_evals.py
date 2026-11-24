@@ -79,6 +79,10 @@ def test_rejections_are_sorted_into_classes():
         "missing data path",
         "written figure",
     ]
+    # The SDK's own words, as a local model's layouts drew them.
+    assert failure_class("The direct JSON block is not JSON: Invalid JSON at 412") == ["not JSON"]
+    assert failure_class("Missing root component: No component has id='root'") == ["broken component tree"]
+    assert failure_class("Component 'card-1' is not reachable from 'root'") == ["broken component tree"]
     assert failure_class("something else") == ["other schema error"]
 
 
@@ -96,6 +100,7 @@ def test_the_report_counts_scores_and_failure_classes(warehouse, catalog):
     summary = summarise(result)
     assert summary["passed"]["renders"] == 1 and summary["passed"]["first_try"] == 0
     assert summary["failure_classes"] == {"written figure": 1}
+    assert "writes the figure" in result["outcomes"][0]["reasons"][0]
     text = report([result])
     assert "| scripted | 1 | 1 | 0 |" in text
     assert "| scripted | written figure | 1 |" in text

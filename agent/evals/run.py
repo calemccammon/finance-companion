@@ -35,6 +35,13 @@ SCORES = ("renders", "first_try", "catalog_only", "bindings", "no_written_figure
 def failure_class(reasons: str) -> list[str]:
     """Sorts a rejection's reasons into the classes the report counts."""
     found = []
+    if "is not JSON" in reasons:
+        found.append("not JSON")
+    if any(
+        k in reasons
+        for k in ("Missing root component", "missing an 'id'", "missing required 'id'", "not reachable from")
+    ):
+        found.append("broken component tree")
     if "Unrecognized component" in reasons or "not found in catalog" in reasons:
         found.append("unknown component")
     if "which is not in the data" in reasons or "not a list in the data" in reasons:
@@ -54,6 +61,8 @@ class Outcome:
     tools: list[str] = field(default_factory=list)
     tool_errors: int = 0
     rejections: list[list[str]] = field(default_factory=list)
+    # Each rejection's reasons as the checks wrote them, to sort again without a rerun.
+    reasons: list[str] = field(default_factory=list)
     fallback: bool = False
     accepted: bool = False
     error: str | None = None
@@ -70,6 +79,7 @@ def run_question(question: dict, model: ModelClient, warehouse: Warehouse, catal
             outcome.tool_errors += detail["error"] is not None
         elif kind == "rejected":
             outcome.rejections.append(failure_class(detail["reasons"]))
+            outcome.reasons.append(detail["reasons"])
         elif kind == "fallback":
             outcome.fallback = True
         elif kind == "accepted":
