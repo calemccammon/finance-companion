@@ -94,6 +94,12 @@ def test_rejections_are_sorted_into_classes():
     assert "path written as plain text" not in failure_class(
         "children: [{'text': 'a: '/x'}] Extra inputs are not permitted; is not valid under any of the given schemas"
     )
+    assert failure_class("component 't' writes '/r1/end' into its text, where it is shown as it is") == [
+        "path written into text"
+    ]
+    assert failure_class("component 'c' shows row 0 of /r1/rows, which is NVDA, but its label does not say so") == [
+        "row shown under another name"
+    ]
     assert failure_class("something else") == ["other schema error"]
 
 

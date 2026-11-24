@@ -58,6 +58,10 @@ def failure_class(reasons: str) -> list[str]:
         found.append("missing data path")
     if "writes the number" in reasons or "writes the figure" in reasons:
         found.append("written figure")
+    if "where it is shown as it is" in reasons:
+        found.append("path written into text")
+    if "but its label does not say so" in reasons:
+        found.append("row shown under another name")
     if "exactly one updateComponents" in reasons:
         found.append("no layout")
     if "called a tool instead" in reasons:
@@ -166,9 +170,9 @@ def summarise(result: dict) -> dict:
     rejected = [a for o in outcomes for a in attempts(o)]
     classes = Counter(c for a in rejected for c in a)
     accepted = sum(o["accepted"] for o in outcomes)
-    # The app's own checks (bindings, written figures) run only on an answer the SDK has
+    # The app's own checks (bindings, written figures and paths, named rows) run only on an answer the SDK has
     # accepted: one that rendered, or one those checks rejected.
-    own = {"missing data path", "written figure"}
+    own = {"missing data path", "written figure", "path written into text", "row shown under another name"}
     return {
         "model": result["model"],
         "questions": n,
