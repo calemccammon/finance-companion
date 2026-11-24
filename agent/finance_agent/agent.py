@@ -11,7 +11,7 @@
    is answered with a plain message instead.
 
 A model that can be held to a JSON Schema writes its layouts under one built
-from the catalog (finance_agent.layout_schema). Such a request cannot offer
+from the catalog and the data it has (finance_agent.layout_schema). Such a request cannot offer
 tools as well, so the model gathers data first, then is asked for the layout.
 
 The server sends `createSurface` and `updateDataModel` itself, so the model
@@ -218,7 +218,9 @@ class Agent:
         if extra:
             surface.transcript.append(UserTurn(extra))
         if layout and self.use_schema:
-            return self.model.reply(self._system(surface), surface.transcript, [], layout_schema(surface.id, VERSION))
+            return self.model.reply(
+                self._system(surface), surface.transcript, [], layout_schema(surface.id, VERSION, surface.data)
+            )
         return self.model.reply(self._system(surface), surface.transcript, self._tools)
 
     def _system(self, surface: Surface) -> str:
