@@ -1,5 +1,5 @@
-"""The Python SDK builds a v0.9.1 surface that the app's
-catalog accepts, and it is the same surface the Kotlin spike draws."""
+"""The Python SDK builds a v0.9.1 surface that the app's catalog accepts,
+and it is the same surface the app's renderer test draws."""
 
 import json
 from pathlib import Path
@@ -53,9 +53,8 @@ def test_the_app_catalog_accepts_it():
 def test_the_app_catalog_rejects_a_component_it_does_not_have():
     surface = build_surface()
     surface[1]["updateComponents"]["components"][2]["component"] = "Sparkline"
-    with pytest.raises(A2uiValidationError) as error:
+    with pytest.raises(A2uiValidationError, match="Sparkline"):
         validate_payload([load_catalog()], surface)
-    print("SPIKE", error.value)
 
 
 def test_the_app_catalog_rejects_a_card_without_its_figure():
