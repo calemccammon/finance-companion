@@ -17,6 +17,7 @@ What happens is recorded through the agent's observer and scored:
 
 import argparse
 import json
+import re
 import sys
 import time
 from collections import Counter
@@ -42,6 +43,12 @@ def failure_class(reasons: str) -> list[str]:
         for k in ("Missing root component", "missing an 'id'", "missing required 'id'", "not reachable from")
     ):
         found.append("broken component tree")
+    if ".children: [{" in reasons:
+        found.append("components nested in children")
+    if re.search(r": '/[^']*' is not valid under any of the given schemas", reasons):
+        found.append("path written as plain text")
+    if "Extra inputs are not permitted" in reasons:
+        found.append("stray fields")
     if "Unrecognized component" in reasons or "not found in catalog" in reasons:
         found.append("unknown component")
     if "which is not in the data" in reasons or "not a list in the data" in reasons:
@@ -121,12 +128,32 @@ def run(model: ModelClient, questions: list[dict]) -> dict:
     return {"model": model.name, "outcomes": [asdict(o) for o in outcomes]}
 
 
+def attempts(outcome: dict) -> list[list[str]]:
+    """Each rejected attempt's classes, sorted from its reasons by today's rules when the
+    results kept them, so a new class needs no rerun."""
+    if outcome.get("reasons"):
+        return [failure_class(r) for r in outcome["reasons"]]
+    return outcome["rejections"]
+
+
 def summarise(result: dict) -> dict:
     outcomes = result["outcomes"]
     n = len(outcomes)
     rates = {s: sum(o["scores"][s] for o in outcomes) for s in SCORES}
-    classes = Counter(c for o in outcomes for attempt in o["rejections"] for c in attempt)
-    return {"model": result["model"], "questions": n, "passed": rates, "failure_classes": dict(classes)}
+    rejected = [a for o in outcomes for a in attempts(o)]
+    classes = Counter(c for a in rejected for c in a)
+    accepted = sum(o["accepted"] for o in outcomes)
+    # The app's own checks (bindings, written figures) run only on an answer the SDK has
+    # accepted: one that rendered, or one those checks rejected.
+    own = {"missing data path", "written figure"}
+    return {
+        "model": result["model"],
+        "questions": n,
+        "passed": rates,
+        "failure_classes": dict(classes),
+        "attempts": accepted + len(rejected),
+        "reached_own_checks": accepted + sum(bool(own & set(a)) for a in rejected),
+    }
 
 
 def report(results: list[dict]) -> str:
@@ -142,6 +169,19 @@ def report(results: list[dict]) -> str:
     summaries = [summarise(r) for r in results]
     for s in summaries:
         lines.append(f"| {s['model']} | {s['questions']} | " + " | ".join(str(s["passed"][k]) for k in SCORES) + " |")
+    lines += [
+        "",
+        "## How far answers got",
+        "",
+        "The catalog_only, bindings and no_written_figure scores count questions where no attempt broke "
+        "that rule. The app's checks for bindings and written figures run only on an answer the A2UI SDK "
+        "has accepted, so they say little when few answers got that far.",
+        "",
+        "| Model | Attempts | Reached the app's own checks |",
+        "|---|---|---|",
+    ]
+    for s in summaries:
+        lines.append(f"| {s['model']} | {s['attempts']} | {s['reached_own_checks']} |")
     lines += ["", "## Why layouts were rejected", "", "| Model | Class | Count |", "|---|---|---|"]
     for s in summaries:
         for cls, count in sorted(s["failure_classes"].items(), key=lambda kv: -kv[1]):

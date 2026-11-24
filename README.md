@@ -16,8 +16,9 @@ fixed query against the dbt marts of
 ![A session: asking about Apple, switching the chart to one month, ranking the stocks by volatility, and pressing Tesla](docs/demo.gif)
 
 The screenshots and the recording come from the real agent, tools and app on an
-emulator. The model's turns came from a script (`agent/demo/script.json`),
-because no model API key was at hand; see [What has not been run](#what-has-not-been-run).
+emulator. The model's turns came from a script (`agent/demo/script.json`):
+the local model evaluated below rarely writes a screen the checks accept; see
+[Evaluations](#evaluations).
 
 ## How an answer is made
 
@@ -130,7 +131,7 @@ cd android && ./gradlew test testDebugUnitTest verifyRoborazziDebug
 cd android && ./gradlew :app:connectedDebugAndroidTest   # on an emulator or device
 ```
 
-- **The agent (73 tests)**: the tools against values worked out from the raw
+- **The agent (74 tests)**: the tools against values worked out from the raw
   rows; the checks; the question-to-surface loop, corrections, fallbacks and
   actions with a scripted model; the model clients' message formats; the HTTP
   service; and the evaluation harness.
@@ -164,10 +165,33 @@ uv run python evals/run.py --out evals/results/qwen3-8b.json
 uv run python evals/run.py --report evals/results/*.json > evals/REPORT.md
 ```
 
-## What has not been run
+### qwen3:8b on a laptop
 
-- **No live model has answered yet.** The evaluation report is still to be
-  written.
+[`agent/evals/REPORT.md`](agent/evals/REPORT.md) holds the scores of a run
+with qwen3:8b on Ollama 0.40.17 (16K context, 8-bit context cache) on an
+8 GB RTX 4060 laptop GPU: 53 minutes for the 50 questions, a minute each at
+the median. Every rejection's reasons are kept in
+[`agent/evals/results/qwen3-8b.json`](agent/evals/results/qwen3-8b.json).
+
+- **It picks the right data.** The right tools were called for 47 of the 50
+  questions.
+- **It rarely writes a screen the A2UI SDK accepts.** One answer of 50
+  rendered (two in an earlier run), after 99 rejected attempts. The
+  commonest faults: JSON that does not parse (29), components written inside
+  `children` instead of their ids (28), a component tree with no root or a
+  missing id (16), plain text instead of a screen (12), and a data path
+  written as a bare string instead of `{"path": ...}` (10).
+- **The rules held, but were hardly tested.** No screen reached the app with
+  an unknown component, an unbound path or a figure the model wrote. Only one
+  answer got past the SDK to the app's own checks for bindings and written
+  figures, though, so this run says little about those checks.
+
+The checks did what they are for: nothing broken reached the screen, and
+every failure fell back to a plain message. qwen3:8b is not enough to
+compose A2UI screens; a larger model is still to be tried.
+
+## Limits
+
 - **The agent keeps its sessions in memory.** After it restarts, a range
   button on an earlier answer does nothing; the answer itself still shows.
 - **The A2UI Compose renderer is an alpha** (1.0.0-alpha02, spec v0.9.1) and
