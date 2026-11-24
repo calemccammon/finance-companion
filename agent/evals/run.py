@@ -4,6 +4,8 @@ Each question in questions.json is put to the agent with the chosen model.
 What happens is recorded through the agent's observer and scored:
 
 - renders:        the final layout passed every check (not the fallback)
+- shows_data:     it rendered, and for a question that needs data, the screen binds at
+                  least one figure, chart or ranking to it (a heading alone does not count)
 - first_try:      the first layout passed every check, with no correction
 - catalog_only:   no layout used a component the app does not have
 - bindings:       no layout bound to a path missing from the data
@@ -31,7 +33,7 @@ from finance_agent.model import ModelClient, client_from_env
 from finance_agent.warehouse import Warehouse
 
 QUESTIONS = Path(__file__).with_name("questions.json")
-SCORES = ("renders", "first_try", "catalog_only", "bindings", "no_written_figure", "right_tools")
+SCORES = ("renders", "shows_data", "first_try", "catalog_only", "bindings", "no_written_figure", "right_tools")
 
 
 def failure_class(reasons: str) -> list[str]:
@@ -76,6 +78,8 @@ class Outcome:
     error: str | None = None
     seconds: float = 0.0
     scores: dict[str, bool] = field(default_factory=dict)
+    # The components of the layout that passed, to see what the screen held.
+    layout: list[dict] | None = None
 
 
 def run_question(
@@ -94,6 +98,7 @@ def run_question(
             outcome.fallback = True
         elif kind == "accepted":
             outcome.accepted = True
+            outcome.layout = detail["components"]
 
     agent = Agent(warehouse, catalog, model, observer=observe, use_schema=use_schema)
     started = time.monotonic()
@@ -111,14 +116,25 @@ def score(question: dict, outcome: Outcome) -> dict[str, bool]:
     needed = set(question["tools"])
     called = set(outcome.tools)
     right_tools = needed <= called if needed else not called
+    renders = outcome.accepted and not outcome.fallback and outcome.error is None
     return {
-        "renders": outcome.accepted and not outcome.fallback and outcome.error is None,
+        "renders": renders,
+        "shows_data": renders and (not needed or _binds(outcome.layout)),
         "first_try": outcome.accepted and not outcome.rejections and outcome.error is None,
         "catalog_only": "unknown component" not in every,
         "bindings": "missing data path" not in every,
         "no_written_figure": "written figure" not in every,
         "right_tools": right_tools,
     }
+
+
+def _binds(node) -> bool:
+    """Whether anything in [node] is bound to the data: a `{"path": ...}`, or a list template."""
+    if isinstance(node, dict):
+        return "path" in node or any(_binds(v) for v in node.values())
+    if isinstance(node, list):
+        return any(_binds(v) for v in node)
+    return False
 
 
 def run(model: ModelClient, questions: list[dict], use_schema: bool | None = None) -> dict:

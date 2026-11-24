@@ -113,7 +113,7 @@ def test_the_report_counts_scores_and_failure_classes(warehouse, catalog):
     assert summary["failure_classes"] == {"written figure": 1}
     assert "writes the figure" in result["outcomes"][0]["reasons"][0]
     text = report([result])
-    assert "| scripted | 1 | 1 | 0 |" in text
+    assert "| scripted | 1 | 1 | 1 | 0 |" in text
     assert "| scripted | written figure | 1 |" in text
     # Two attempts: one rejected by the app's own check, then one that rendered.
     assert summary["attempts"] == 2 and summary["reached_own_checks"] == 2
@@ -129,3 +129,19 @@ def test_saved_reasons_are_sorted_by_todays_rules():
     summary = summarise({"model": "m", "outcomes": [outcome | {"scores": dict.fromkeys(SCORES, False)}]})
     assert summary["failure_classes"] == {"not JSON": 1}
     assert summary["attempts"] == 1 and summary["reached_own_checks"] == 0
+
+
+def test_a_screen_with_no_data_on_it_renders_but_does_not_show_data(warehouse, catalog):
+    heading = {"id": "root", "component": "Text", "text": "Apple", "variant": "h3"}
+    model = ScriptedClient([calls(("price_history", {"ticker": "AAPL"})), layout("answer-1", heading)])
+    outcome = run_question(APPLE, model, warehouse, catalog)
+    assert outcome.scores["renders"] and not outcome.scores["shows_data"]
+    assert outcome.layout == [heading]
+
+
+def test_a_bound_screen_shows_data_and_an_off_topic_answer_needs_none(warehouse, catalog):
+    model = ScriptedClient([calls(("price_history", {"ticker": "AAPL"})), layout("answer-1", CARD)])
+    assert run_question(APPLE, model, warehouse, catalog).scores["shows_data"]
+
+    model = ScriptedClient([layout("answer-1", {"id": "root", "component": "Text", "text": "I answer about stocks."})])
+    assert run_question(OFF_TOPIC, model, warehouse, catalog).scores["shows_data"]
