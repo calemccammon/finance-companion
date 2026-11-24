@@ -45,9 +45,14 @@ Turn = UserTurn | ModelTurn | ToolTurn
 
 class ModelClient(Protocol):
     name: str
+    # Whether a reply can be held to a JSON Schema (see `reply`'s `schema`).
+    follows_schema: bool
 
-    def reply(self, system: str, transcript: Sequence[Turn], tools: list[dict]) -> ModelTurn:
-        """The model's next turn: text, tool calls, or both."""
+    def reply(
+        self, system: str, transcript: Sequence[Turn], tools: list[dict], schema: dict | None = None
+    ) -> ModelTurn:
+        """The model's next turn: text, tool calls, or both. With [schema], the text is JSON
+        that follows it."""
         ...
 
 
@@ -59,6 +64,8 @@ DEFAULT_MODEL = "openai:http://127.0.0.1:11434/v1|qwen3:8b"
 class OpenAICompatibleClient:
     """Any chat-completions endpoint with tool calling, such as Ollama's `/v1`."""
 
+    follows_schema = True
+
     def __init__(self, base_url: str, model: str, api_key: str | None = None, http: httpx.Client | None = None):
         self.name = f"openai:{model}"
         self._model = model
@@ -66,13 +73,18 @@ class OpenAICompatibleClient:
         self._headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
         self._http = http or httpx.Client(timeout=300)
 
-    def reply(self, system: str, transcript: Sequence[Turn], tools: list[dict]) -> ModelTurn:
-        body = {
+    def reply(
+        self, system: str, transcript: Sequence[Turn], tools: list[dict], schema: dict | None = None
+    ) -> ModelTurn:
+        body: dict = {
             "model": self._model,
             "temperature": 0.2,
             "messages": [{"role": "system", "content": system}, *openai_messages(transcript)],
-            "tools": [{"type": "function", "function": t} for t in tools],
         }
+        if tools:
+            body["tools"] = [{"type": "function", "function": t} for t in tools]
+        if schema:
+            body["response_format"] = {"type": "json_schema", "json_schema": {"name": "answer", "schema": schema}}
         response = self._http.post(self._url, json=body, headers=self._headers)
         response.raise_for_status()
         message = response.json()["choices"][0]["message"]
@@ -129,13 +141,19 @@ def openai_messages(transcript: Sequence[Turn]) -> list[dict]:
 class ScriptedClient:
     """Replies from a script, in order: for tests, and for running the app without a model."""
 
-    def __init__(self, replies: Sequence[ModelTurn], name: str = "scripted"):
+    def __init__(self, replies: Sequence[ModelTurn], name: str = "scripted", follows_schema: bool = False):
         self.name = name
+        self.follows_schema = follows_schema
         self._replies = list(replies)
         self.seen: list[tuple[str, list[Turn]]] = []
+        # What each request offered: its tools' names, and its schema if it had one.
+        self.offered: list[tuple[list[str], dict | None]] = []
 
-    def reply(self, system: str, transcript: Sequence[Turn], tools: list[dict]) -> ModelTurn:
+    def reply(
+        self, system: str, transcript: Sequence[Turn], tools: list[dict], schema: dict | None = None
+    ) -> ModelTurn:
         self.seen.append((system, list(transcript)))
+        self.offered.append(([t["name"] for t in tools], schema))
         if not self._replies:
             raise RuntimeError("The script has no more replies")
         return self._replies.pop(0)

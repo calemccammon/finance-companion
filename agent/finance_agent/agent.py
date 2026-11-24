@@ -10,6 +10,10 @@
    layout goes back to the model once, with the reasons; a second rejection
    is answered with a plain message instead.
 
+A model that can be held to a JSON Schema writes its layouts under one built
+from the catalog and the data it has (finance_agent.layout_schema). Such a request cannot offer
+tools as well, so the model gathers data first, then is asked for the layout.
+
 The server sends `createSurface` and `updateDataModel` itself, so the model
 never handles the data, only where it is.
 """
@@ -29,6 +33,7 @@ from a2ui.processor.catalog_config import CatalogConfig
 from a2ui.processor.generator import A2uiGenerator
 
 from finance_agent.checks import SurfaceRejected, check_surface
+from finance_agent.layout_schema import layout_schema
 from finance_agent.model import ModelClient, ModelTurn, ToolTurn, Turn, UserTurn
 from finance_agent.tools import TOOLS, ToolError, run_tool, tool_declarations
 from finance_agent.warehouse import Warehouse
@@ -85,10 +90,15 @@ class Agent:
         catalog,
         model: ModelClient,
         observer: Callable[[str, dict], None] | None = None,
+        use_schema: bool | None = None,
     ):
         """[observer], if given, hears what happens while answering: tool calls,
-        rejected layouts and fallbacks. The evaluations score a model from it."""
+        rejected layouts and fallbacks. The evaluations score a model from it.
+
+        [use_schema] holds layouts to the catalog's schema; by default, whenever the
+        model can follow one."""
         self.observer = observer or (lambda kind, detail: None)
+        self.use_schema = getattr(model, "follows_schema", False) if use_schema is None else use_schema
         self.warehouse = warehouse
         self.catalog = catalog
         self.model = model
@@ -127,12 +137,17 @@ class Agent:
         """Lets the model call tools until it answers. Returns its answering turn."""
         for _ in range(MAX_TOOL_ROUNDS):
             reply = self._ask(surface)
-            surface.transcript.append(reply)
             if not reply.tool_calls:
+                if self.use_schema:
+                    # The model is done with tools. Its free-written answer is dropped,
+                    # and the same request is made again, held to the layout's schema.
+                    reply = self._ask(surface, layout=True)
+                surface.transcript.append(reply)
                 return reply
+            surface.transcript.append(reply)
             for call in reply.tool_calls:
                 surface.transcript.append(ToolTurn(call, self._run(surface, call.name, call.arguments)))
-        reply = self._ask(surface, extra="Answer now with the results you have; do not call more tools.")
+        reply = self._ask(surface, extra="Answer now with the results you have; do not call more tools.", layout=True)
         surface.transcript.append(reply)
         return reply
 
@@ -162,7 +177,9 @@ class Agent:
                     self.observer("fallback", {})
                     return _fallback()
                 surface.corrections_left -= 1
-                reply = self._ask(surface, extra=f"Your screen was rejected: {e}. Send a corrected updateComponents.")
+                reply = self._ask(
+                    surface, extra=f"Your screen was rejected: {e}. Send a corrected updateComponents.", layout=True
+                )
                 surface.transcript.append(reply)
 
     def _components(self, surface: Surface, reply: ModelTurn) -> list[dict]:
@@ -175,8 +192,10 @@ class Agent:
                 self._message("updateDataModel", {"surfaceId": surface.id, "path": "/", "value": surface.data}),
             ]
         )
+        # A reply held to the schema is the bare message; the SDK reads it from a block.
+        text = f"<a2ui-json>[{reply.text}]</a2ui-json>" if self.use_schema else reply.text
         try:
-            parts = self._processor.parse_response(reply.text, state=state)
+            parts = self._processor.parse_response(text, state=state)
         except A2uiError as e:
             # Unknown components, bad properties, a surface that does not exist.
             raise SurfaceRejected(str(e)) from e
@@ -193,9 +212,15 @@ class Agent:
         check_surface(components, surface.data)
         return components
 
-    def _ask(self, surface: Surface, extra: str | None = None) -> ModelTurn:
+    def _ask(self, surface: Surface, extra: str | None = None, layout: bool = False) -> ModelTurn:
+        """The model's next turn. [layout] asks for the answer's layout: held to its schema,
+        with no tools, when the model can follow one."""
         if extra:
             surface.transcript.append(UserTurn(extra))
+        if layout and self.use_schema:
+            return self.model.reply(
+                self._system(surface), surface.transcript, [], layout_schema(surface.id, VERSION, surface.data)
+            )
         return self.model.reply(self._system(surface), surface.transcript, self._tools)
 
     def _system(self, surface: Surface) -> str:
@@ -250,6 +275,7 @@ class Agent:
         reply = self._ask(
             surface,
             extra=f"The app could not draw your screen: {error.get('message')}. Send a corrected updateComponents.",
+            layout=True,
         )
         surface.transcript.append(reply)
         try:

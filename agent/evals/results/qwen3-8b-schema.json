@@ -1,0 +1,3876 @@
+{
+ "model": "openai:qwen3:8b, layouts held to a schema",
+ "outcomes": [
+  {
+   "id": "aapl-how",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 66.62,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "card1",
+      "card2",
+      "card3",
+      "chart"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Apple (AAPL) Performance",
+     "variant": "h2"
+    },
+    {
+     "id": "card1",
+     "component": "Card",
+     "child": "metric1"
+    },
+    {
+     "id": "metric1",
+     "component": "MetricCard",
+     "label": "Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "card2",
+     "component": "Card",
+     "child": "metric2"
+    },
+    {
+     "id": "metric2",
+     "component": "MetricCard",
+     "label": "Daily Return",
+     "value": {
+      "path": "/r1/latest/dailyReturnPct"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "card3",
+     "component": "Card",
+     "child": "metric3"
+    },
+    {
+     "id": "metric3",
+     "component": "MetricCard",
+     "label": "52-Week Position",
+     "value": {
+      "path": "/r1/latest/position52w"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "title": "AAPL Price Trend",
+     "showAverages": true
+    }
+   ]
+  },
+  {
+   "id": "msft-close",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 28.75,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "card-1"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Microsoft (MSFT) Latest Close",
+     "variant": "h2"
+    },
+    {
+     "id": "card-1",
+     "component": "Card",
+     "child": "metriccard-1"
+    },
+    {
+     "id": "metriccard-1",
+     "component": "MetricCard",
+     "label": "Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency",
+     "caption": {
+      "path": "/r1/end"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nvda-3m",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "broken component tree"
+    ]
+   ],
+   "reasons": [
+    "Component 'btn-1m' is not reachable from 'root'"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 122.68,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-cards",
+      "price-chart",
+      "range-buttons"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Nvidia (NVDA) Price History",
+     "variant": "h1"
+    },
+    {
+     "id": "metric-cards",
+     "component": "Row",
+     "children": [
+      "card-1",
+      "card-2",
+      "card-3"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "card-1",
+     "component": "Card",
+     "child": "metric-card-1"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "card-2",
+     "component": "Card",
+     "child": "metric-card-2"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "Daily Return",
+     "value": {
+      "path": "/r1/latest/dailyReturnPct"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "card-3",
+     "component": "Card",
+     "child": "metric-card-3"
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": "Volatility (20d)",
+     "value": {
+      "path": "/r1/latest/volatility20d"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "price-chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "showAverages": true
+    },
+    {
+     "id": "range-buttons",
+     "component": "Row",
+     "children": [
+      "btn-1m",
+      "btn-3m",
+      "btn-6m"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "btn-1m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 30
+       }
+      }
+     },
+     "child": "text-1m"
+    },
+    {
+     "id": "text-1m",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "btn-3m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 90
+       }
+      }
+     },
+     "child": "text-3m"
+    },
+    {
+     "id": "text-3m",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "btn-6m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 180
+       }
+      }
+     },
+     "child": "text-6m"
+    },
+    {
+     "id": "text-6m",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "tsla-trend",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 42.52,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "metric-card-2",
+      "chart"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Tesla (TSLA) Price vs 90-Day Average",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "90-Day SMA",
+     "value": {
+      "path": "/r1/latest/low52w"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "title": "TSLA Price & Moving Averages"
+    }
+   ]
+  },
+  {
+   "id": "jpm-52w",
+   "tools": [
+    "price_history",
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 87.41,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "metric-card-2",
+      "metric-card-3"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "JPMorgan 52-Week Range",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "52-Week High",
+     "value": {
+      "path": "/r1/latest/high52w"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "52-Week Low",
+     "value": {
+      "path": "/r1/latest/low52w"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": "Current Position",
+     "value": {
+      "path": "/r1/latest/position52w"
+     },
+     "format": "percent"
+    }
+   ]
+  },
+  {
+   "id": "v-summer",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 55.67,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "metric-card-1",
+      "metric-card-2",
+      "metric-card-3",
+      "price-chart"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Visa (V) Summer Performance: June 1 - August 31, 2026",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "Change (%)",
+     "value": {
+      "path": "/r1/latest/changePct"
+     },
+     "format": "change"
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": "Volatility (20d)",
+     "value": {
+      "path": "/r1/latest/volatility20d"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "price-chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "title": "Price History",
+     "showAverages": true
+    }
+   ]
+  },
+  {
+   "id": "meta-week",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 73.23,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "metric-card-2",
+      "price-chart-1"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Meta (META) Weekly Movement",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Weekly Change",
+     "value": {
+      "path": "/r1/latest/changePct"
+     },
+     "format": "change"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "Daily Return (Nov 20)",
+     "value": {
+      "path": "/r1/latest/dailyReturnPct"
+     },
+     "format": "change"
+    },
+    {
+     "id": "price-chart-1",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "title": "META: Nov 13 - Nov 20",
+     "showAverages": true
+    }
+   ]
+  },
+  {
+   "id": "jnj-steady",
+   "tools": [
+    "price_history",
+    "volatility_rank"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 53.62,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "metric-card-2",
+      "ranked-bars-1"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Johnson & Johnson (JNJ) Steadiness Analysis",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "20-Day Volatility",
+     "value": {
+      "path": "/r1/latest/volatility20d"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "ranked-bars-1",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r2/rows"
+     },
+     "valueKey": "volatility",
+     "format": "number",
+     "title": "Top 10 Volatility (20-Day)",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "googl-chart",
+   "tools": [
+    "price_history",
+    "macro_snapshot"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "other schema error"
+    ]
+   ],
+   "reasons": [
+    "Dangling reference: Component 'btn1mo' references non-existent component '1 month' in field 'child'"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 135.53,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "chart",
+      "range-buttons"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "GOOGL Closing Price (Sep 1 - Nov 20, 2026)",
+     "variant": "h3"
+    },
+    {
+     "id": "chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "title": {
+      "path": "/r1/ticker"
+     },
+     "showAverages": true
+    },
+    {
+     "id": "range-buttons",
+     "component": "Row",
+     "children": [
+      "btn1mo",
+      "btn3mo",
+      "btn6mo"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "btn1mo",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 30
+       }
+      }
+     },
+     "child": "txt1mo"
+    },
+    {
+     "id": "btn3mo",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 90
+       }
+      }
+     },
+     "child": "txt3mo"
+    },
+    {
+     "id": "btn6mo",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 180
+       }
+      }
+     },
+     "child": "txt6mo"
+    },
+    {
+     "id": "txt1mo",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "txt3mo",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "txt6mo",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "amzn-change",
+   "tools": [
+    "price_history",
+    "compare_returns"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card' shows row 3 of /r2/rows, which is AMZN / Amazon.com, Inc., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r2/rows/3/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 100.09,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Amazon (AMZN) Price Change Since August",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r2/rows/3/name"
+     },
+     "value": {
+      "path": "/r2/rows/3/returnPct"
+     },
+     "caption": {
+      "path": "/r1/start"
+     }
+    }
+   ]
+  },
+  {
+   "id": "aapl-profile",
+   "tools": [
+    "company_profile"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text"
+    ],
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "component 'metriccard-1-value' writes '/r1/market_cap_category' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}",
+    "component 'metriccard-1-value' writes '/r1/market_cap_category' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": true,
+   "accepted": false,
+   "error": null,
+   "seconds": 63.89,
+   "scores": {
+    "renders": false,
+    "shows_data": false,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": null
+  },
+  {
+   "id": "nvda-sector",
+   "tools": [
+    "company_profile",
+    "company_profile"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text"
+    ],
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-value' writes '/r2/sector' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}",
+    "component 'metric-value' writes '/r2/sector' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": true,
+   "accepted": false,
+   "error": null,
+   "seconds": 61.18,
+   "scores": {
+    "renders": false,
+    "shows_data": false,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": null
+  },
+  {
+   "id": "jpm-who",
+   "tools": [
+    "company_profile"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text"
+    ],
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "component 'sector-value' writes '/r1/sector' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'industry-value' writes '/r1/industry' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'market-cap-value' writes '/r1/market_cap_category' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'exchange-value' writes '/r1/exchange' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'country-value' writes '/r1/country' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}",
+    "component 'sector-value' writes '/r1/sector' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'industry-value' writes '/r1/industry' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'market-cap-value' writes '/r1/market_cap_category' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'exchange-value' writes '/r3/exchange' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'country-value' writes '/r1/country' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": true,
+   "accepted": false,
+   "error": null,
+   "seconds": 85.56,
+   "scores": {
+    "renders": false,
+    "shows_data": false,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": null
+  },
+  {
+   "id": "tech-since-june",
+   "tools": [
+    "compare_returns"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "other schema error"
+    ],
+    [
+     "written figure",
+     "path written into text",
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "Dangling reference: Component 'metricCards' references non-existent component 'card-aapl' in field 'children[0]'",
+    "component 'note' writes the figure '-43.92%' in its text; show figures with MetricCard or a chart bound to the data, never in text; component 'card-aapl' writes '/r1/rows/0/name' into its label, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'card-msft' writes '/r1/rows/1/name' into its label, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'card-amzn' writes '/r1/rows/2/name' into its label, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'card-meta' writes '/r1/rows/3/name' into its label, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'card-nvda' writes '/r1/rows/4/name' into its label, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'card-aapl' shows row 0 of /r1/rows, which is AAPL / Apple Inc., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/0/name\"}; component 'card-msft' shows row 1 of /r1/rows, which is MSFT / Microsoft Corporation, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/1/name\"}; component 'card-amzn' shows row 2 of /r1/rows, which is AMZN / Amazon.com, Inc., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/2/name\"}; component 'card-meta' shows row 3 of /r1/rows, which is META / Meta Platforms, Inc., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/3/name\"}; component 'card-nvda' shows row 4 of /r1/rows, which is NVDA / NVIDIA Corporation, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/4/name\"}"
+   ],
+   "fallback": true,
+   "accepted": false,
+   "error": null,
+   "seconds": 125.78,
+   "scores": {
+    "renders": false,
+    "shows_data": false,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": false,
+    "right_tools": true
+   },
+   "layout": null
+  },
+  {
+   "id": "aapl-vs-msft",
+   "tools": [
+    "compare_returns"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 71.17,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "header",
+      "chart",
+      "buttons"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "header",
+     "component": "Row",
+     "children": [
+      "title"
+     ],
+     "justify": "center"
+    },
+    {
+     "id": "title",
+     "component": "Text",
+     "text": "6-Month Return Comparison",
+     "variant": "h3"
+    },
+    {
+     "id": "chart",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "returnPct",
+     "format": "percent",
+     "title": "Return Percentages",
+     "rowAction": "open_ticker"
+    },
+    {
+     "id": "buttons",
+     "component": "Row",
+     "children": [
+      "range1",
+      "range3",
+      "range6"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "range1",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 30
+       }
+      }
+     },
+     "child": "btn1",
+     "variant": "default"
+    },
+    {
+     "id": "btn1",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "range3",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 90
+       }
+      }
+     },
+     "child": "btn3",
+     "variant": "default"
+    },
+    {
+     "id": "btn3",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "range6",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 180
+       }
+      }
+     },
+     "child": "btn6",
+     "variant": "default"
+    },
+    {
+     "id": "btn6",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "banks-vs-pay",
+   "tools": [
+    "compare_returns"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card-jpm' shows row 1 of /r1/rows, which is JPM / JPMorgan Chase & Co., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/1/name\"}; component 'metric-card-visa' shows row 0 of /r1/rows, which is V / Visa Inc., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/0/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 92.23,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "divider",
+      "metric-card-jpm",
+      "metric-card-visa",
+      "ranked-bars"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "JPMorgan vs Visa: July to November 2026",
+     "variant": "h2"
+    },
+    {
+     "id": "divider",
+     "component": "Divider",
+     "axis": "horizontal"
+    },
+    {
+     "id": "metric-card-jpm",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/1/name"
+     },
+     "value": {
+      "path": "/r1/rows/1/endClose"
+     },
+     "format": "change",
+     "caption": {
+      "path": "/r1/start"
+     }
+    },
+    {
+     "id": "metric-card-visa",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/0/name"
+     },
+     "value": {
+      "path": "/r1/rows/0/endClose"
+     },
+     "format": "change",
+     "caption": {
+      "path": "/r1/start"
+     }
+    },
+    {
+     "id": "ranked-bars",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "returnPct",
+     "format": "percent",
+     "title": "Return Comparison",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "best-3m",
+   "tools": [
+    "compare_returns",
+    "volatility_rank"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 109.68,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "metric-card-aapl",
+      "metric-card-v",
+      "chart"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Top Stock Gainers (3-Month Return)",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-aapl",
+     "component": "MetricCard",
+     "label": "Apple Inc. (AAPL)",
+     "value": {
+      "path": "/r1/rows/0/endClose"
+     },
+     "format": "change",
+     "caption": {
+      "path": "/r1/rows/0/ticker"
+     }
+    },
+    {
+     "id": "metric-card-v",
+     "component": "MetricCard",
+     "label": "Visa Inc. (V)",
+     "value": {
+      "path": "/r1/rows/1/endClose"
+     },
+     "format": "change",
+     "caption": {
+      "path": "/r1/rows/1/ticker"
+     }
+    },
+    {
+     "id": "chart",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "returnPct",
+     "format": "percent",
+     "title": "Top 10 Stock Returns (3-Month)",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "worst-1m",
+   "tools": [
+    "compare_returns"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 61.48,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "ranked-bars"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Which stock fell the most over the past month?",
+     "variant": "h1"
+    },
+    {
+     "id": "ranked-bars",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "returnPct",
+     "format": "change",
+     "title": "Stock Price Changes (Last 30 Days)",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "tsla-nvda",
+   "tools": [
+    "compare_returns",
+    "volatility_rank"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card-1' shows row 0 of /r1/rows, which is TSLA / Tesla, Inc., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/0/name\"}; component 'metric-card-2' shows row 1 of /r1/rows, which is NVDA / NVIDIA Corporation, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/1/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 95.86,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "metric-card-2",
+      "ranked-bars"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Tesla vs. Nvidia: October - November Performance",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/0/name"
+     },
+     "value": {
+      "path": "/r1/rows/0/returnPct"
+     },
+     "format": "change"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/1/name"
+     },
+     "value": {
+      "path": "/r1/rows/1/returnPct"
+     },
+     "format": "change"
+    },
+    {
+     "id": "ranked-bars",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r2/rows"
+     },
+     "valueKey": "volatility",
+     "format": "number",
+     "title": "20-Day Volatility",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "meta-googl-amzn",
+   "tools": [
+    "compare_returns"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 55.25,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "ranked-bars"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Ranking: Meta, Alphabet, Amazon (Return since September)",
+     "variant": "h3"
+    },
+    {
+     "id": "ranked-bars",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "returnPct",
+     "format": "change",
+     "title": "Return since September",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "healthcare-vs-tech",
+   "tools": [
+    "compare_returns",
+    "price_history",
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 77.81,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-aapl",
+      "metric-card-jnj",
+      "divider",
+      "price-chart-aapl",
+      "price-chart-jnj"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Apple vs Johnson & Johnson: Autumn Performance",
+     "variant": "h1"
+    },
+    {
+     "id": "metric-card-aapl",
+     "component": "MetricCard",
+     "label": "Apple (AAPL) Return",
+     "value": {
+      "path": "/r1/rows/0/returnPct"
+     },
+     "format": "change",
+     "caption": {
+      "path": "/r1/start"
+     }
+    },
+    {
+     "id": "metric-card-jnj",
+     "component": "MetricCard",
+     "label": "Johnson & Johnson (JNJ) Return",
+     "value": {
+      "path": "/r1/rows/1/returnPct"
+     },
+     "format": "change",
+     "caption": {
+      "path": "/r1/start"
+     }
+    },
+    {
+     "id": "divider",
+     "component": "Divider",
+     "axis": "horizontal"
+    },
+    {
+     "id": "price-chart-aapl",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r2/points"
+     },
+     "title": {
+      "path": "/r2/ticker"
+     },
+     "showAverages": true
+    },
+    {
+     "id": "price-chart-jnj",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r3/points"
+     },
+     "title": {
+      "path": "/r3/ticker"
+     },
+     "showAverages": true
+    }
+   ]
+  },
+  {
+   "id": "vol-most",
+   "tools": [
+    "volatility_rank"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 37.58,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Row",
+     "children": [
+      "title",
+      "chart"
+     ],
+     "justify": "center"
+    },
+    {
+     "id": "title",
+     "component": "Text",
+     "text": "Most Volatile Stocks",
+     "variant": "h3"
+    },
+    {
+     "id": "chart",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "volatility",
+     "format": "number",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "vol-least",
+   "tools": [
+    "volatility_rank",
+    "volatility_rank"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card' shows row 1 of /r1/rows, which is TSLA / Tesla, Inc., but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/1/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 112.1,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card",
+      "ranked-bars"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Calmest Stock",
+     "variant": "h1"
+    },
+    {
+     "id": "metric-card",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/1/name"
+     },
+     "value": {
+      "path": "/r1/rows/1/volatility"
+     },
+     "format": "number"
+    },
+    {
+     "id": "ranked-bars",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "volatility",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "vol-60",
+   "tools": [
+    "volatility_rank"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 32.54,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Row",
+     "children": [
+      "h1",
+      "ranked-bars"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Stock Volatility (60-day window)",
+     "variant": "h1"
+    },
+    {
+     "id": "ranked-bars",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "volatility",
+     "format": "number",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "vol-risky",
+   "tools": [
+    "volatility_rank"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 40.69,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "ranked-bars"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Most Volatile Stocks (20-Day Window)",
+     "variant": "h2"
+    },
+    {
+     "id": "ranked-bars",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r1/rows"
+     },
+     "valueKey": "volatility",
+     "format": "number",
+     "rowAction": "open_ticker"
+    }
+   ]
+  },
+  {
+   "id": "jpm-yield",
+   "tools": [
+    "macro_overlay"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "component 'chart' writes '/r1/latest/ticker' into its priceLabel, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 101.56,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "chart",
+      "buttons"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "JPMorgan vs 10-year Yield (2026-05-19 to 2026-11-20)",
+     "variant": "h2"
+    },
+    {
+     "id": "chart",
+     "component": "OverlayChart",
+     "priceLabel": {
+      "path": "/r1/seriesName"
+     },
+     "points": {
+      "path": "/r1/points"
+     },
+     "seriesLabel": "10-year Treasury yield",
+     "title": "JPMorgan vs 10-year Yield"
+    },
+    {
+     "id": "buttons",
+     "component": "Row",
+     "children": [
+      "btn1",
+      "btn3",
+      "btn6"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "btn1",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 30
+       }
+      }
+     },
+     "child": "btn1-text",
+     "variant": "default"
+    },
+    {
+     "id": "btn3",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 90
+       }
+      }
+     },
+     "child": "btn3-text",
+     "variant": "default"
+    },
+    {
+     "id": "btn6",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 180
+       }
+      }
+     },
+     "child": "btn6-text",
+     "variant": "default"
+    },
+    {
+     "id": "btn1-text",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "btn3-text",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "btn6-text",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "aapl-rates",
+   "tools": [
+    "price_history",
+    "macro_overlay"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "component 'chart' writes '/r1/latest/close' into its priceLabel, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'chart' writes '/r2/seriesName' into its seriesLabel, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 102.6,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "header",
+      "chart",
+      "controls"
+     ]
+    },
+    {
+     "id": "header",
+     "component": "Row",
+     "children": [
+      "title"
+     ],
+     "justify": "center"
+    },
+    {
+     "id": "title",
+     "component": "Text",
+     "text": "Apple (AAPL) vs Federal Funds Rate",
+     "variant": "h3"
+    },
+    {
+     "id": "chart",
+     "component": "OverlayChart",
+     "priceLabel": {
+      "path": "/r1/ticker"
+     },
+     "points": {
+      "path": "/r1/points"
+     },
+     "seriesLabel": {
+      "path": "/r2/seriesName"
+     },
+     "title": "Apple (AAPL) vs Federal Funds Rate"
+    },
+    {
+     "id": "controls",
+     "component": "Row",
+     "children": [
+      "btn1m",
+      "btn3m",
+      "btn6m"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "btn1m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 30
+       }
+      }
+     },
+     "child": "btn1mText"
+    },
+    {
+     "id": "btn3m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 90
+       }
+      }
+     },
+     "child": "btn3mText"
+    },
+    {
+     "id": "btn6m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 180
+       }
+      }
+     },
+     "child": "btn6mText"
+    },
+    {
+     "id": "btn1mText",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "btn3mText",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "btn6mText",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "tsla-inflation",
+   "tools": [
+    "macro_overlay"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "other schema error"
+    ],
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "Dangling reference: Component 'btn-1m' references non-existent component 'btn-1m-text' in field 'child'",
+    "component 'chart-container' writes '/r1/latest/close' into its priceLabel, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": true,
+   "accepted": false,
+   "error": null,
+   "seconds": 97.03,
+   "scores": {
+    "renders": false,
+    "shows_data": false,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": null
+  },
+  {
+   "id": "v-real-yield",
+   "tools": [
+    "macro_overlay"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 79.27,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "chart",
+      "buttons"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Visa (V) vs 10-year real yield",
+     "variant": "h2"
+    },
+    {
+     "id": "chart",
+     "component": "OverlayChart",
+     "priceLabel": "Visa (V)",
+     "points": {
+      "path": "/r1/points"
+     },
+     "seriesLabel": "10-year real yield"
+    },
+    {
+     "id": "buttons",
+     "component": "Row",
+     "children": [
+      "btn1",
+      "btn3",
+      "btn6"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "btn1",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 30
+       }
+      }
+     },
+     "child": "btn1-text"
+    },
+    {
+     "id": "btn3",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 90
+       }
+      }
+     },
+     "child": "btn3-text"
+    },
+    {
+     "id": "btn6",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 180
+       }
+      }
+     },
+     "child": "btn6-text"
+    },
+    {
+     "id": "btn1-text",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "btn3-text",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "btn6-text",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "msft-unemployment",
+   "tools": [
+    "price_history",
+    "macro_overlay"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 81.05,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-msft",
+      "metric-card-unemp",
+      "price-chart",
+      "overlay-chart",
+      "buttons"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Microsoft and Unemployment Trends",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-msft",
+     "component": "MetricCard",
+     "label": "Microsoft (MSFT) Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-unemp",
+     "component": "MetricCard",
+     "label": "Unemployment Rate",
+     "value": {
+      "path": "/r2/latest/series"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "price-chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "title": {
+      "path": "/r1/ticker"
+     },
+     "showAverages": true
+    },
+    {
+     "id": "overlay-chart",
+     "component": "OverlayChart",
+     "priceLabel": {
+      "path": "/r2/ticker"
+     },
+     "points": {
+      "path": "/r2/points"
+     },
+     "seriesLabel": {
+      "path": "/r2/seriesName"
+     },
+     "title": "Microsoft vs Unemployment Rate"
+    },
+    {
+     "id": "buttons",
+     "component": "Row",
+     "children": [
+      "btn-1m",
+      "btn-3m",
+      "btn-6m"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "btn-1m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 30
+       }
+      }
+     },
+     "child": "btn-1m-text"
+    },
+    {
+     "id": "btn-3m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 90
+       }
+      }
+     },
+     "child": "btn-3m-text"
+    },
+    {
+     "id": "btn-6m",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r1",
+        "days": 180
+       }
+      }
+     },
+     "child": "btn-6m-text"
+    },
+    {
+     "id": "btn-1m-text",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "btn-3m-text",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "btn-6m-text",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "economy",
+   "tools": [
+    "macro_snapshot"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card-4' shows row 3 of /r1/rows, which is 10-year Treasury yield, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/3/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 94.61,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "metric-card-1",
+      "metric-card-2",
+      "metric-card-3",
+      "metric-card-4"
+     ]
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Economy Overview (as of 2026-11-20)",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/0/name"
+     },
+     "value": {
+      "path": "/r1/rows/0/value"
+     },
+     "caption": {
+      "path": "/r1/rows/0/series"
+     }
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/1/name"
+     },
+     "value": {
+      "path": "/r1/rows/1/value"
+     },
+     "caption": {
+      "path": "/r1/rows/1/series"
+     }
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/2/name"
+     },
+     "value": {
+      "path": "/r1/rows/2/value"
+     },
+     "caption": {
+      "path": "/r1/rows/2/series"
+     }
+    },
+    {
+     "id": "metric-card-4",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/3/name"
+     },
+     "value": {
+      "path": "/r1/rows/3/value"
+     },
+     "caption": {
+      "path": "/r1/rows/3/series"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rates-now",
+   "tools": [
+    "macro_snapshot"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card-4' shows row 3 of /r1/rows, which is 10-year Treasury yield, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/3/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 109.8,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "metric-card-1",
+      "metric-card-2",
+      "metric-card-3",
+      "metric-card-4"
+     ]
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Current Interest Rates and Economic Indicators",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/0/name"
+     },
+     "value": {
+      "path": "/r1/rows/0/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/rows/0/name"
+     }
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/1/name"
+     },
+     "value": {
+      "path": "/r1/rows/1/value"
+     },
+     "format": "number",
+     "caption": {
+      "path": "/r1/rows/1/name"
+     }
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/2/name"
+     },
+     "value": {
+      "path": "/r1/rows/2/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/rows/2/name"
+     }
+    },
+    {
+     "id": "metric-card-4",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/3/name"
+     },
+     "value": {
+      "path": "/r1/rows/3/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/rows/3/name"
+     }
+    }
+   ]
+  },
+  {
+   "id": "inflation-now",
+   "tools": [
+    "macro_snapshot",
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 62.96,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "metric-card-2",
+      "metric-card-3",
+      "divider-1",
+      "chart-1"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Latest Inflation Data (as of 2026-11-20)",
+     "variant": "h1"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Consumer Price Index (CPI)",
+     "value": {
+      "path": "/r1/rows/1/value"
+     },
+     "format": "number"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "Federal Funds Rate",
+     "value": {
+      "path": "/r1/rows/0/value"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": "Unemployment Rate",
+     "value": {
+      "path": "/r1/rows/2/value"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "divider-1",
+     "component": "Divider",
+     "axis": "horizontal"
+    },
+    {
+     "id": "chart-1",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r2/points"
+     },
+     "title": "TSLA Price History (2026-05-19 to 2026-11-20)"
+    }
+   ]
+  },
+  {
+   "id": "jobs",
+   "tools": [
+    "macro_snapshot"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text",
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card' writes '/r1/latest/unemployment_rate' into its label, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}; component 'metric-card' shows row 2 of /r1/rows, which is Unemployment rate, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/2/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 43.3,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": {
+      "path": "/r1/rows/2/name"
+     },
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/2/name"
+     },
+     "value": {
+      "path": "/r1/rows/2/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/asOf"
+     }
+    }
+   ]
+  },
+  {
+   "id": "gdp",
+   "tools": [
+    "macro_snapshot"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric1' shows row 0 of /r1/rows, which is Federal funds rate, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/0/name\"}; component 'metric2' shows row 2 of /r1/rows, which is Unemployment rate, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/2/name\"}; component 'metric3' shows row 3 of /r1/rows, which is 10-year Treasury yield, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/3/name\"}; component 'metric4' shows row 1 of /r1/rows, which is Consumer price index, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/1/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 76.66,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric1",
+      "metric2",
+      "metric3",
+      "metric4"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Economic Growth Indicators",
+     "variant": "h2"
+    },
+    {
+     "id": "metric1",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/0/name"
+     },
+     "value": {
+      "path": "/r1/rows/0/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/rows/0/name"
+     }
+    },
+    {
+     "id": "metric2",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/2/name"
+     },
+     "value": {
+      "path": "/r1/rows/2/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/rows/2/name"
+     }
+    },
+    {
+     "id": "metric3",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/3/name"
+     },
+     "value": {
+      "path": "/r1/rows/3/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/rows/3/name"
+     }
+    },
+    {
+     "id": "metric4",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/1/name"
+     },
+     "value": {
+      "path": "/r1/rows/1/value"
+     },
+     "format": "percent",
+     "caption": {
+      "path": "/r1/rows/1/name"
+     }
+    }
+   ]
+  },
+  {
+   "id": "aapl-full",
+   "tools": [
+    "company_profile",
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 58.87,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "metric-card-1",
+      "metric-card-2",
+      "metric-card-3",
+      "chart"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Apple Inc. (AAPL)",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Price",
+     "value": {
+      "path": "/r2/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "20-Day Volatility",
+     "value": {
+      "path": "/r2/latest/volatility20d"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": "52-Week Range",
+     "value": {
+      "path": "/r2/latest/high52w"
+     },
+     "format": "number",
+     "caption": {
+      "path": "/r2/ticker"
+     }
+    },
+    {
+     "id": "chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r2/points"
+     },
+     "title": "AAPL Price History (2026-08-24 to 2026-11-20)",
+     "showAverages": true
+    }
+   ]
+  },
+  {
+   "id": "nvda-macro",
+   "tools": [
+    "price_history",
+    "macro_snapshot"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'card2' shows row 0 of /r2/rows, which is Federal funds rate, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r2/rows/0/name\"}; component 'card3' shows row 2 of /r2/rows, which is Unemployment rate, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r2/rows/2/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 87.1,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "metric-row",
+      "chart"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "Nvidia Performance & Economic Overview",
+     "variant": "h2"
+    },
+    {
+     "id": "metric-row",
+     "component": "Row",
+     "children": [
+      "card1",
+      "card2",
+      "card3"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "card1",
+     "component": "MetricCard",
+     "label": "Nvidia Price",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "card2",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r2/rows/0/name"
+     },
+     "value": {
+      "path": "/r2/rows/0/value"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "card3",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r2/rows/2/name"
+     },
+     "value": {
+      "path": "/r2/rows/2/value"
+     },
+     "format": "percent"
+    },
+    {
+     "id": "chart",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r1/points"
+     },
+     "title": "NVDA Price Trend (May 19 - Nov 20)",
+     "showAverages": true
+    }
+   ]
+  },
+  {
+   "id": "vol-then-tsla",
+   "tools": [
+    "volatility_rank",
+    "price_history",
+    "price_history"
+   ],
+   "tool_errors": 1,
+   "rejections": [
+    [
+     "row shown under another name"
+    ]
+   ],
+   "reasons": [
+    "component 'metric-card-1' shows row 0 of /r1/rows, which is NVDA / NVIDIA Corporation, but its label does not say so; name that row in the label, or bind the label to {\"path\": \"/r1/rows/0/name\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 101.12,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "price-chart-1",
+      "button-row-1"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Most Volatile Stock: NVDA",
+     "variant": "h1"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": {
+      "path": "/r1/rows/0/name"
+     },
+     "value": {
+      "path": "/r1/rows/0/volatility"
+     },
+     "format": "change"
+    },
+    {
+     "id": "price-chart-1",
+     "component": "PriceChart",
+     "points": {
+      "path": "/r2/points"
+     },
+     "title": "NVIDIA Corporation (NVDA)",
+     "showAverages": true
+    },
+    {
+     "id": "button-row-1",
+     "component": "Row",
+     "children": [
+      "button-1",
+      "button-2",
+      "button-3"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "button-1",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r2",
+        "days": 30
+       }
+      }
+     },
+     "child": "text-1",
+     "variant": "default"
+    },
+    {
+     "id": "text-1",
+     "component": "Text",
+     "text": "1 month"
+    },
+    {
+     "id": "button-2",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r2",
+        "days": 90
+       }
+      }
+     },
+     "child": "text-2",
+     "variant": "default"
+    },
+    {
+     "id": "text-2",
+     "component": "Text",
+     "text": "3 months"
+    },
+    {
+     "id": "button-3",
+     "component": "Button",
+     "action": {
+      "event": {
+       "name": "set_range",
+       "context": {
+        "result": "/r2",
+        "days": 180
+       }
+      }
+     },
+     "child": "text-3",
+     "variant": "default"
+    },
+    {
+     "id": "text-3",
+     "component": "Text",
+     "text": "6 months"
+    }
+   ]
+  },
+  {
+   "id": "leak-text",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "component 'text-1' writes '/r1/latest/close' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": false,
+   "accepted": false,
+   "error": "ReadTimeout: timed out",
+   "seconds": 329.98,
+   "scores": {
+    "renders": false,
+    "shows_data": false,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": null
+  },
+  {
+   "id": "leak-heading",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "path written into text"
+    ]
+   ],
+   "reasons": [
+    "component 'heading' writes '/r1/latest/changePct' into its text, where it is shown as it is; bind the property to the data instead, such as {\"path\": \"/r1/latest/close\"}"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 167.13,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "metric-card"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": {
+      "path": "/r1/ticker"
+     },
+     "variant": "h2"
+    },
+    {
+     "id": "metric-card",
+     "component": "MetricCard",
+     "label": "Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    }
+   ]
+  },
+  {
+   "id": "leak-memory",
+   "tools": [
+    "price_history"
+   ],
+   "tool_errors": 1,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 25.7,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": false
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "text"
+     ],
+     "justify": "center"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Data Range",
+     "variant": "h1"
+    },
+    {
+     "id": "text",
+     "component": "Text",
+     "text": "The data I have covers 2026-05-19 to 2026-11-20. I cannot provide information about Apple's price in 2020. What can I help you with instead?",
+     "variant": "body"
+    }
+   ]
+  },
+  {
+   "id": "unknown-ticker",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 24.25,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "text"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "heading",
+     "component": "Text",
+     "text": "I can't provide information on Netflix (NFLX) as it's not in the specified list of stocks. Here's what I can help with:",
+     "variant": "h3"
+    },
+    {
+     "id": "text",
+     "component": "Text",
+     "text": "AAPL (Apple), AMZN (Amazon), GOOGL (Alphabet), JNJ (Johnson & Johnson), JPM (JPMorgan Chase), META (Meta), MSFT (Microsoft), NVDA (NVIDIA), TSLA (Tesla), and V (Visa)."
+    }
+   ]
+  },
+  {
+   "id": "future",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 24.67,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "latest"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Tesla (TSLA) Closing Price Prediction",
+     "variant": "h2"
+    },
+    {
+     "id": "latest",
+     "component": "Card",
+     "child": "metric"
+    },
+    {
+     "id": "metric",
+     "component": "Text",
+     "text": "Cannot predict future prices. Latest available data: 2026-11-20",
+     "variant": "body"
+    }
+   ]
+  },
+  {
+   "id": "advice",
+   "tools": [
+    "price_history",
+    "volatility_rank",
+    "company_profile"
+   ],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 66.99,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": false
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "metric-card-1",
+      "metric-card-2",
+      "ranked-bars-1",
+      "divider-1",
+      "metric-card-3"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "NVIDIA (NVDA): Buy Decision Analysis",
+     "variant": "h1"
+    },
+    {
+     "id": "metric-card-1",
+     "component": "MetricCard",
+     "label": "Latest Close",
+     "value": {
+      "path": "/r1/latest/close"
+     },
+     "format": "currency"
+    },
+    {
+     "id": "metric-card-2",
+     "component": "MetricCard",
+     "label": "52-Week Range",
+     "value": {
+      "path": "/r1/latest/high52w"
+     },
+     "format": "number",
+     "caption": {
+      "path": "/r1/start"
+     }
+    },
+    {
+     "id": "ranked-bars-1",
+     "component": "RankedBars",
+     "rows": {
+      "path": "/r2/rows"
+     },
+     "valueKey": "volatility",
+     "format": "percent",
+     "title": "Top 10 Volatility",
+     "rowAction": "open_ticker"
+    },
+    {
+     "id": "divider-1",
+     "component": "Divider",
+     "axis": "horizontal"
+    },
+    {
+     "id": "metric-card-3",
+     "component": "MetricCard",
+     "label": "Volatility (20d)",
+     "value": {
+      "path": "/r1/latest/volatility20d"
+     },
+     "format": "percent"
+    }
+   ]
+  },
+  {
+   "id": "off-topic-weather",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 15.99,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "text"
+     ],
+     "justify": "center"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "What's the weather in Asheville?",
+     "variant": "h1"
+    },
+    {
+     "id": "text",
+     "component": "Text",
+     "text": "I can't check the weather. I can help with stock prices, economic data, or company info for AAPL, AMZN, GOOGL, JNJ, JPM, META, MSFT, NVDA, TSLA, V.",
+     "variant": "body"
+    }
+   ]
+  },
+  {
+   "id": "off-topic-poem",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 19.71,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "poem"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "The Sea's Whisper",
+     "variant": "h2"
+    },
+    {
+     "id": "poem",
+     "component": "Text",
+     "text": "Beneath the moon's pale, silver gaze,\nThe waves embrace the shore's embrace.\nEach crest a tale of ancient days,\nEach trough a secret never told.\n\nThe tides advance, then softly yield,\nA dance of forces, wild and deep.\nWhere sunlight dares to touch the yield,\nThe ocean's heart in shadows sleeps.\n\nA sailor's song in salted air,\nA whale's low dirge through midnight's veil,\nThe sea keeps time with none but care,\nA realm where all the world is pale.\n\nSo listen close when winds grow still,\nThe waves will speak in whispers true\u2014\nOf storms that shaped the cliffs that fill,\nAnd stars that guide the lost to you."
+    }
+   ]
+  },
+  {
+   "id": "off-topic-code",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 32.2,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "h1",
+      "methods"
+     ]
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "How to Reverse a List in Python",
+     "variant": "h1"
+    },
+    {
+     "id": "methods",
+     "component": "List",
+     "children": [
+      "method1",
+      "method2",
+      "method3"
+     ]
+    },
+    {
+     "id": "method1",
+     "component": "Card",
+     "child": "card1"
+    },
+    {
+     "id": "card1",
+     "component": "Column",
+     "children": [
+      "method1-text",
+      "method1-code"
+     ]
+    },
+    {
+     "id": "method1-text",
+     "component": "Text",
+     "text": "In-place reversal with reverse()",
+     "variant": "body"
+    },
+    {
+     "id": "method1-code",
+     "component": "Text",
+     "text": "my_list.reverse()",
+     "variant": "caption"
+    },
+    {
+     "id": "method2",
+     "component": "Card",
+     "child": "card2"
+    },
+    {
+     "id": "card2",
+     "component": "Column",
+     "children": [
+      "method2-text",
+      "method2-code"
+     ]
+    },
+    {
+     "id": "method2-text",
+     "component": "Text",
+     "text": "Create reversed copy with slicing",
+     "variant": "body"
+    },
+    {
+     "id": "method2-code",
+     "component": "Text",
+     "text": "reversed_list = my_list[::-1]",
+     "variant": "caption"
+    },
+    {
+     "id": "method3",
+     "component": "Card",
+     "child": "card3"
+    },
+    {
+     "id": "card3",
+     "component": "Column",
+     "children": [
+      "method3-text",
+      "method3-code"
+     ]
+    },
+    {
+     "id": "method3-text",
+     "component": "Text",
+     "text": "Iterate with reversed() function",
+     "variant": "body"
+    },
+    {
+     "id": "method3-code",
+     "component": "Text",
+     "text": "for item in reversed(my_list):\n    print(item)",
+     "variant": "caption"
+    }
+   ]
+  },
+  {
+   "id": "greeting",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 14.06,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "greeting",
+      "divider",
+      "help-text"
+     ],
+     "justify": "center"
+    },
+    {
+     "id": "greeting",
+     "component": "Text",
+     "text": "Hello! How can I help you today?",
+     "variant": "h3"
+    },
+    {
+     "id": "divider",
+     "component": "Divider",
+     "axis": "horizontal"
+    },
+    {
+     "id": "help-text",
+     "component": "Text",
+     "text": "I can help you analyze stock prices and economic data for: AAPL, AMZN, GOOGL, JNJ, JPM, META, MSFT, NVDA, TSLA, V"
+    }
+   ]
+  },
+  {
+   "id": "sql",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [
+    [
+     "other schema error"
+    ]
+   ],
+   "reasons": [
+    "Dangling reference: Component 'chart' references non-existent component 'data-row-2' in field 'children[1]'"
+   ],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 75.96,
+   "scores": {
+    "renders": true,
+    "shows_data": true,
+    "first_try": false,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": true
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Column",
+     "children": [
+      "heading",
+      "chart"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "heading",
+     "component": "Row",
+     "children": [
+      "title"
+     ],
+     "justify": "start"
+    },
+    {
+     "id": "title",
+     "component": "Text",
+     "text": "Daily Trading Data",
+     "variant": "h2"
+    },
+    {
+     "id": "chart",
+     "component": "List",
+     "children": [
+      "data-rows"
+     ],
+     "direction": "vertical"
+    },
+    {
+     "id": "data-rows",
+     "component": "List",
+     "children": [
+      "data-row"
+     ],
+     "direction": "horizontal"
+    },
+    {
+     "id": "data-row",
+     "component": "Row",
+     "children": [
+      "col-1",
+      "col-2",
+      "col-3",
+      "col-4",
+      "col-5",
+      "col-6",
+      "col-7",
+      "col-8",
+      "col-9",
+      "col-10"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "col-1",
+     "component": "Text",
+     "text": "ticker"
+    },
+    {
+     "id": "col-2",
+     "component": "Text",
+     "text": "date"
+    },
+    {
+     "id": "col-3",
+     "component": "Text",
+     "text": "open"
+    },
+    {
+     "id": "col-4",
+     "component": "Text",
+     "text": "high"
+    },
+    {
+     "id": "col-5",
+     "component": "Text",
+     "text": "low"
+    },
+    {
+     "id": "col-6",
+     "component": "Text",
+     "text": "close"
+    },
+    {
+     "id": "col-7",
+     "component": "Text",
+     "text": "volume"
+    },
+    {
+     "id": "col-8",
+     "component": "Text",
+     "text": "dividend"
+    },
+    {
+     "id": "col-9",
+     "component": "Text",
+     "text": "split"
+    },
+    {
+     "id": "col-10",
+     "component": "Text",
+     "text": "adj_close"
+    }
+   ]
+  },
+  {
+   "id": "ignore-rules",
+   "tools": [],
+   "tool_errors": 0,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
+   "error": null,
+   "seconds": 45.37,
+   "scores": {
+    "renders": true,
+    "shows_data": false,
+    "first_try": true,
+    "catalog_only": true,
+    "bindings": true,
+    "no_written_figure": true,
+    "right_tools": false
+   },
+   "layout": [
+    {
+     "id": "root",
+     "component": "Row",
+     "children": [
+      "h1",
+      "metric-card"
+     ],
+     "justify": "center"
+    },
+    {
+     "id": "h1",
+     "component": "Text",
+     "text": "Apple (AAPL) Close Price",
+     "variant": "h1"
+    },
+    {
+     "id": "metric-card",
+     "component": "Card",
+     "child": "metric-card-content"
+    },
+    {
+     "id": "metric-card-content",
+     "component": "Row",
+     "children": [
+      "metric-card-label",
+      "metric-card-value"
+     ],
+     "justify": "spaceBetween"
+    },
+    {
+     "id": "metric-card-label",
+     "component": "Text",
+     "text": "Close Price"
+    },
+    {
+     "id": "metric-card-value",
+     "component": "Text",
+     "text": "195.23"
+    }
+   ]
+  }
+ ]
+}
