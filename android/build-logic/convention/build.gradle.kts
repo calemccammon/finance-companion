@@ -39,10 +39,6 @@ gradlePlugin {
             id = "fc.android.room"
             implementationClass = "AndroidRoomConventionPlugin"
         }
-        register("androidTest") {
-            id = "fc.android.test"
-            implementationClass = "AndroidTestConventionPlugin"
-        }
         register("hilt") {
             id = "fc.hilt"
             implementationClass = "HiltConventionPlugin"

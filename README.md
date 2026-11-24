@@ -99,10 +99,11 @@ Java 21 and the Android SDK.
 ```sh
 cd agent
 uv sync
-# A model: any OpenAI-compatible endpoint, qwen3:8b on a local Ollama by default, or a script.
+# The demo script, in order: "How is Apple doing?", "Which stocks are most volatile?", a press on TSLA.
+FC_MODEL=scripted:demo/script.json uv run uvicorn finance_agent.server:app --port 8000
+# A real model: qwen3:8b on a local Ollama by default, or any OpenAI-compatible endpoint.
 uv run uvicorn finance_agent.server:app --port 8000
 FC_MODEL="openai:http://localhost:8080/v1|some-model" uv run uvicorn finance_agent.server:app --port 8000
-FC_MODEL=scripted:demo/script.json uv run uvicorn finance_agent.server:app --port 8000
 
 cd ../android
 ./gradlew :app:installDebug   # the emulator reaches the agent at 10.0.2.2:8000
