@@ -4,8 +4,8 @@ import json
 
 from conftest import calls, layout
 
-from finance_agent.agent import FALLBACK_TEXT
-from finance_agent.model import ModelTurn, ToolTurn
+from finance_agent.agent import FALLBACK_TEXT, Agent
+from finance_agent.model import ModelTurn, ScriptedClient, ToolTurn
 
 
 def kinds(messages):
@@ -256,3 +256,56 @@ def test_a_reply_with_no_layout_at_all_is_corrected(make_agent):
     )
     answer(agent, "Hi")
     assert "exactly one updateComponents" in model.seen[1][1][-1].text
+
+
+def bare(surface, *components):
+    """A reply held to the layout's schema: the bare message, with no block around it."""
+    return ModelTurn(
+        text=json.dumps(
+            {"version": "v0.9.1", "updateComponents": {"surfaceId": surface, "components": list(components)}}
+        )
+    )
+
+
+def test_a_model_that_follows_a_schema_gathers_with_tools_then_lays_out_under_the_schema(warehouse, catalog):
+    model = ScriptedClient(
+        [
+            calls(("price_history", {"ticker": "AAPL"})),
+            ModelTurn(text="Apple closed at 342.56."),  # its free-written answer: dropped
+            bare("answer-1", APPLE_CARD | {"id": "root"}),
+        ],
+        follows_schema=True,
+    )
+    messages = answer(Agent(warehouse, catalog, model), "How is Apple doing?")
+
+    assert messages[2]["updateComponents"]["components"][0]["component"] == "MetricCard"
+    tools, schemas = zip(*model.offered, strict=True)
+    # Tools while gathering; then the same request again, held to the schema, with none.
+    assert [bool(t) for t in tools] == [True, True, False]
+    assert schemas[:2] == (None, None)
+    assert schemas[2]["properties"]["updateComponents"]["properties"]["surfaceId"] == {"const": "answer-1"}
+    assert model.seen[2][1] == model.seen[1][1]
+    assert all("342.56" not in getattr(turn, "text", "") for turn in model.seen[2][1])
+
+
+def test_a_correction_is_held_to_the_schema_too(warehouse, catalog):
+    model = ScriptedClient(
+        [
+            calls(("price_history", {"ticker": "AAPL"})),
+            ModelTurn(text="done"),
+            bare("answer-1", APPLE_CARD | {"id": "root", "value": {"path": "/r1/latest/open"}}),
+            bare("answer-1", APPLE_CARD | {"id": "root"}),
+        ],
+        follows_schema=True,
+    )
+    messages = answer(Agent(warehouse, catalog, model), "How is Apple doing?")
+
+    assert model.offered[3][0] == [] and model.offered[3][1] is not None
+    assert "/r1/latest/open" in model.seen[3][1][-1].text
+    assert messages[2]["updateComponents"]["components"][0]["value"] == {"path": "/r1/latest/close"}
+
+
+def test_the_schema_can_be_turned_off_for_a_model_that_follows_one(warehouse, catalog):
+    model = ScriptedClient([layout("answer-1", {"id": "root", "component": "Text", "text": "Hi"})], follows_schema=True)
+    answer(Agent(warehouse, catalog, model, use_schema=False), "Hi")
+    assert model.offered[0][1] is None

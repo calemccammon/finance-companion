@@ -66,3 +66,20 @@ def test_a_script_can_be_read_from_a_file(tmp_path):
 
     assert client.reply("", [], []).tool_calls[0].name == "macro_snapshot"
     assert client.reply("", [], []).text == "done"
+
+
+def test_with_a_schema_the_openai_compatible_client_asks_for_json_and_offers_no_tools():
+    sent = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(json.loads(request.content))
+        return httpx.Response(200, json={"choices": [{"message": {"role": "assistant", "content": "{}"}}]})
+
+    client = OpenAICompatibleClient(
+        "http://model/v1", "local", http=httpx.Client(transport=httpx.MockTransport(handler))
+    )
+    schema = {"type": "object"}
+    client.reply("system", [UserTurn("hi")], [], schema)
+
+    assert sent[0]["response_format"] == {"type": "json_schema", "json_schema": {"name": "answer", "schema": schema}}
+    assert "tools" not in sent[0]

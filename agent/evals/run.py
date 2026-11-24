@@ -11,7 +11,8 @@ What happens is recorded through the agent's observer and scored:
 - right_tools:    the tools called include every tool the question needs, and
                   questions that need none (off-topic, unanswerable) called none
 
-    uv run python evals/run.py --out evals/results/qwen3-8b.json
+    uv run python evals/run.py --out evals/results/qwen3-8b-schema.json
+    uv run python evals/run.py --no-schema --out evals/results/qwen3-8b.json
     uv run python evals/run.py --report evals/results/*.json > evals/REPORT.md
 """
 
@@ -77,7 +78,9 @@ class Outcome:
     scores: dict[str, bool] = field(default_factory=dict)
 
 
-def run_question(question: dict, model: ModelClient, warehouse: Warehouse, catalog) -> Outcome:
+def run_question(
+    question: dict, model: ModelClient, warehouse: Warehouse, catalog, use_schema: bool | None = None
+) -> Outcome:
     outcome = Outcome(id=question["id"])
 
     def observe(kind: str, detail: dict) -> None:
@@ -92,7 +95,7 @@ def run_question(question: dict, model: ModelClient, warehouse: Warehouse, catal
         elif kind == "accepted":
             outcome.accepted = True
 
-    agent = Agent(warehouse, catalog, model, observer=observe)
+    agent = Agent(warehouse, catalog, model, observer=observe, use_schema=use_schema)
     started = time.monotonic()
     try:
         list(agent.answer(question["ask"]))
@@ -118,14 +121,18 @@ def score(question: dict, outcome: Outcome) -> dict[str, bool]:
     }
 
 
-def run(model: ModelClient, questions: list[dict]) -> dict:
+def run(model: ModelClient, questions: list[dict], use_schema: bool | None = None) -> dict:
     warehouse, catalog = Warehouse(), load_catalog()
     outcomes = []
     for q in questions:
-        outcome = run_question(q, model, warehouse, catalog)
+        outcome = run_question(q, model, warehouse, catalog, use_schema)
         outcomes.append(outcome)
         print(f"{q['id']:>20}  {' '.join(k for k, v in outcome.scores.items() if not v) or 'ok'}", file=sys.stderr)
-    return {"model": model.name, "outcomes": [asdict(o) for o in outcomes]}
+    schema = Agent(warehouse, catalog, model, use_schema=use_schema).use_schema
+    return {
+        "model": model.name + (", layouts held to a schema" if schema else ""),
+        "outcomes": [asdict(o) for o in outcomes],
+    }
 
 
 def attempts(outcome: dict) -> list[list[str]]:
@@ -193,6 +200,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", type=Path, help="Write the run's results here as JSON.")
     parser.add_argument("--only", nargs="*", help="Question ids to run; all by default.")
+    parser.add_argument(
+        "--no-schema", action="store_true", help="Let the model write layouts freely, even if it can follow a schema."
+    )
     parser.add_argument("--report", nargs="*", type=Path, help="Print a Markdown report of these result files.")
     args = parser.parse_args()
 
@@ -202,7 +212,7 @@ def main() -> None:
     questions = json.loads(QUESTIONS.read_text())
     if args.only:
         questions = [q for q in questions if q["id"] in set(args.only)]
-    result = run(client_from_env(), questions)
+    result = run(client_from_env(), questions, use_schema=False if args.no_schema else None)
     text = json.dumps(result, indent=1)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

@@ -1,4 +1,4 @@
-"""The two rules the SDK cannot check: bindings resolve, and no figure is written by the model."""
+"""The rules the SDK cannot check: bindings resolve, data lists are bound, and no figure is written by the model."""
 
 import pytest
 
@@ -84,3 +84,18 @@ def test_every_problem_is_named_at_once():
     with pytest.raises(SurfaceRejected) as e:
         check_surface([card({"path": "/nope"}), {"id": "t", "component": "Text", "text": "at 182.31"}], DATA)
     assert "'/nope'" in str(e.value) and "182.31" in str(e.value)
+
+
+@pytest.mark.parametrize(
+    "points",
+    ["/r1/points", [{"date": "2026-11-20", "close": 182.31}]],
+    ids=["a path written as text", "points written out"],
+)
+def test_a_chart_whose_points_are_not_bound_is_rejected(points):
+    chart = {"id": "chart", "component": "PriceChart", "points": points}
+    with pytest.raises(SurfaceRejected, match=r"writes its points as .*bind it to a list in the data"):
+        check_surface([chart], DATA)
+
+
+def test_a_chart_bound_to_its_points_passes():
+    check_surface([{"id": "chart", "component": "PriceChart", "points": {"path": "/r1/points"}}], DATA)

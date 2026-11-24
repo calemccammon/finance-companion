@@ -1,18 +1,23 @@
 """Checks every surface the model lays out, before anything is sent.
 
 The SDK checks a surface against the catalog: known components, required
-properties, the right types. Two rules of this app it cannot know:
+properties, the right types. Three rules of this app it cannot know:
 
 - Every binding must name a path that exists in the data model. A binding to
   nothing draws an empty card, which looks like a missing figure.
+- A chart's points and a ranking's rows must be bound to a list in the data.
+  The catalog's type for them also takes a string, which draws nothing.
 - The model must not write figures itself. Every figure on screen comes from
   the warehouse through the data model; a figure typed by the model may be
   wrong, out of date, or made up.
 """
 
+import json
 import re
 from collections.abc import Iterator
 from typing import Any
+
+from finance_agent.catalog import data_properties
 
 # Properties that take a literal number by design: layout, not data.
 LITERAL_NUMBER_PROPERTIES = frozenset({"weight"})
@@ -26,7 +31,9 @@ class SurfaceRejected(ValueError):
 
 def check_surface(components: list[dict], data: dict) -> None:
     """Raises SurfaceRejected naming every problem found, or returns if there is none."""
-    problems = list(_bindings(components, data)) + list(_written_figures(components, data))
+    problems = (
+        list(_bindings(components, data)) + list(_unbound_data(components)) + list(_written_figures(components, data))
+    )
     if problems:
         raise SurfaceRejected("; ".join(problems))
 
@@ -69,6 +76,17 @@ def _bindings(components: list[dict], data: dict) -> Iterator[str]:
                 found, _ = resolve(scope, path)
             if not found:
                 yield f"component {c.get('id')!r} binds {prop} to {path!r}, which is not in the data"
+
+
+def _unbound_data(components: list[dict]) -> Iterator[str]:
+    for c in components:
+        for prop in data_properties().get(c.get("component"), ()):
+            value = c.get(prop)
+            if prop in c and not (isinstance(value, dict) and set(value) == {"path"}):
+                yield (
+                    f"component {c.get('id')!r} writes its {prop} as {json.dumps(value)[:60]}; "
+                    f'bind it to a list in the data, such as {{"path": "/r1/rows"}}'
+                )
 
 
 def _paths(component: dict) -> Iterator[tuple[str, str]]:
