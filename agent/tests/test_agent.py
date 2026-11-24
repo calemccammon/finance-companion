@@ -19,7 +19,13 @@ def answer(agent, question):
     return items[1:]
 
 
-APPLE_CARD = {"id": "c", "component": "MetricCard", "label": "Close", "value": {"path": "/r1/latest/close"}}
+APPLE_CARD = {
+    "id": "c",
+    "component": "MetricCard",
+    "label": "Close",
+    "value": {"path": "/r1/latest/close"},
+    "format": "currency",
+}
 
 
 def test_a_question_becomes_a_surface_bound_to_the_tool_results(make_agent):
@@ -184,6 +190,7 @@ def test_pressing_a_ticker_asks_about_it_on_a_new_surface(make_agent):
                 "component": "RankedBars",
                 "rows": {"path": "/r1/rows"},
                 "valueKey": "volatility",
+                "format": "percent",
                 "rowAction": "open_ticker",
             },
         ),

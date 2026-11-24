@@ -57,14 +57,18 @@ How to answer:
 4. Answer with exactly one A2UI JSON block holding one updateComponents message for surface
    "{surface}". The createSurface message and the data are sent for you; do not send them.
 5. Keep it to one screen: a heading, one to four MetricCards, and at most one chart or ranking.
-6. On RankedBars, set rowAction to "open_ticker" so a row can be pressed to ask about it.
-7. Under a PriceChart or OverlayChart from result /rN you may add a Row of Buttons with
+6. Set the format of a MetricCard or RankedBars to fit its figure: "currency" for prices
+   (close, startClose, endClose, high52w, low52w), "change" for changes (fields ending in
+   Pct), "percent" for volatility, position52w and economic rates, "number" for the
+   consumer price index and counts.
+7. On RankedBars, set rowAction to "open_ticker" so a row can be pressed to ask about it.
+8. Under a PriceChart or OverlayChart from result /rN you may add a Row of Buttons with
    actions {{"event": {{"name": "set_range", "context": {{"result": "/rN", "days": 30}}}}}}, and
    the same with 90 and 180 days, labelled "1 month", "3 months" and "6 months".
-8. Do not state a result's date range in text: the range buttons change it, and text would
+9. Do not state a result's date range in text: the range buttons change it, and text would
    not follow. Bind a MetricCard's caption to the result's "start" or "end" instead.
-9. If the question is not about these stocks or the economy, answer with a short Text saying
-   what you can help with.
+10. If the question is not about these stocks or the economy, answer with a short Text saying
+    what you can help with.
 
 """
 

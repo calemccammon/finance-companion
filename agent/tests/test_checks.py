@@ -14,7 +14,7 @@ DATA = {
 
 
 def card(value, **extra):
-    return {"id": "c", "component": "MetricCard", "label": "Close", "value": value, **extra}
+    return {"id": "c", "component": "MetricCard", "label": "Close", "value": value, "format": "currency", **extra}
 
 
 def test_a_surface_bound_to_the_data_passes():
@@ -112,7 +112,13 @@ RANKED = {
 
 
 def row_card(label, index=0):
-    return {"id": "c", "component": "MetricCard", "label": label, "value": {"path": f"/r1/rows/{index}/returnPct"}}
+    return {
+        "id": "c",
+        "component": "MetricCard",
+        "label": label,
+        "value": {"path": f"/r1/rows/{index}/returnPct"},
+        "format": "change",
+    }
 
 
 @pytest.mark.parametrize("label", ["AAPL return", "Apple", "Return"])
@@ -149,3 +155,52 @@ def test_a_path_written_into_text_is_rejected(text):
 @pytest.mark.parametrize("text", ["Prices in USD/share", "Returns 2025/2026", "1/2 of the index"])
 def test_a_slash_in_plain_text_is_allowed(text):
     check_surface([{"id": "t", "component": "Text", "text": text}], DATA)
+
+
+@pytest.mark.parametrize(
+    ("path", "drawn", "expected"),
+    [
+        ("/r1/latest/close", "change", "currency"),
+        ("/r1/latest/close", None, "currency"),
+        ("/r1/latest/changePct", "percent", "change"),
+        ("/r1/latest/changePct", "currency", "change"),
+    ],
+)
+def test_a_figure_drawn_in_the_wrong_format_is_rejected(path, drawn, expected):
+    component = {"id": "c", "component": "MetricCard", "label": "Apple", "value": {"path": path}}
+    if drawn:
+        component["format"] = drawn
+    with pytest.raises(SurfaceRejected, match=f'set "format": "{expected}"'):
+        check_surface([component], DATA)
+
+
+def test_a_ranking_is_drawn_in_the_format_of_its_value_key():
+    bars = {"id": "b", "component": "RankedBars", "rows": {"path": "/r1/rows"}, "valueKey": "returnPct"}
+    with pytest.raises(SurfaceRejected, match="returnPct in /r1/rows, a change in percent"):
+        check_surface([bars], RANKED)
+    check_surface([bars | {"format": "change"}], RANKED)
+
+
+def test_the_consumer_price_index_is_a_number_and_a_rate_a_percent():
+    snapshot = {
+        "r1": {
+            "rows": [
+                {"series": "cpi", "name": "Consumer price index", "value": 337.476},
+                {"series": "fed_funds_rate", "name": "Federal funds rate", "value": 3.88},
+            ]
+        }
+    }
+
+    def card(index, drawn):
+        return {
+            "id": "c",
+            "component": "MetricCard",
+            "label": {"path": f"/r1/rows/{index}/name"},
+            "value": {"path": f"/r1/rows/{index}/value"},
+            "format": drawn,
+        }
+
+    check_surface([card(0, "number")], snapshot)
+    check_surface([card(1, "percent")], snapshot)
+    with pytest.raises(SurfaceRejected, match='set "format": "number"'):
+        check_surface([card(0, "percent")], snapshot)

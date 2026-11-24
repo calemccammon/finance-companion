@@ -1,7 +1,7 @@
 """Checks every surface the model lays out, before anything is sent.
 
 The SDK checks a surface against the catalog: known components, required
-properties, the right types. Five rules of this app it cannot know:
+properties, the right types. Six rules of this app it cannot know:
 
 - Every binding must name a path that exists in the data model. A binding to
   nothing draws an empty card, which looks like a missing figure.
@@ -15,6 +15,9 @@ properties, the right types. Five rules of this app it cannot know:
 - A MetricCard showing one row of a list must name that row in its label.
   Rankings are sorted by their figure, so the first row is not the first
   stock asked about; a label guessed from the question can be wrong.
+- A figure must be drawn in its format: a price as currency, a change as a
+  change, a rate as a percent. A closing price drawn as a change would read
+  "+342.56%".
 """
 
 import json
@@ -23,6 +26,7 @@ from collections.abc import Iterator
 from typing import Any
 
 from finance_agent.catalog import data_properties
+from finance_agent.tools import figure_format
 
 # Properties that take a literal number by design: layout, not data.
 LITERAL_NUMBER_PROPERTIES = frozenset({"weight"})
@@ -47,6 +51,7 @@ def check_surface(components: list[dict], data: dict) -> None:
         *_written_figures(components, data),
         *_written_paths(components),
         *_unnamed_rows(components, data),
+        *_wrong_formats(components, data),
     ]
     if problems:
         raise SurfaceRejected("; ".join(problems))
@@ -193,3 +198,31 @@ def _unnamed_rows(components: list[dict], data: dict) -> Iterator[str]:
             f"{' / '.join(names)}, but its label does not say so; name that row in the label, or bind the label "
             f'to {{"path": "{here}name"}}'
         )
+
+
+FORMAT_MEANINGS = {
+    "currency": "a price in dollars",
+    "change": "a change in percent",
+    "percent": "a figure in percent",
+    "number": "a plain number",
+}
+
+
+def _wrong_formats(components: list[dict], data: dict) -> Iterator[str]:
+    for c in components:
+        match c.get("component"), c.get("value"), c.get("rows"):
+            case "MetricCard", {"path": str(path)}, _:
+                shown = path
+            case "RankedBars", _, {"path": str(rows)} if isinstance(c.get("valueKey"), str):
+                shown = f"{rows}/0/{c['valueKey']}"
+            case _:
+                continue
+        if not resolve(data, shown)[0] or (expected := figure_format(data, shown)) is None:
+            continue
+        drawn = c.get("format", "number")
+        if drawn != expected:
+            figure = shown if c.get("component") == "MetricCard" else f"{c['valueKey']} in {rows}"
+            yield (
+                f"component {c.get('id')!r} draws {figure}, {FORMAT_MEANINGS[expected]}, with format {drawn!r}; "
+                f'set "format": "{expected}"'
+            )

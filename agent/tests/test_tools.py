@@ -7,7 +7,7 @@ from datetime import date
 
 import pytest
 
-from finance_agent.tools import TOOLS, ToolError, run_tool, tool_declarations
+from finance_agent.tools import TOOLS, ToolError, figure_format, run_tool, tool_declarations
 from finance_agent.warehouse import Warehouse
 
 
@@ -131,3 +131,47 @@ def test_declarations_describe_every_tool_and_parameter():
 def test_the_warehouse_is_read_only(wh):
     with pytest.raises(Exception, match=r"read-only|read only"):
         wh.rows("DELETE FROM dim_company")
+
+
+def test_the_52_week_position_is_in_percent(wh):
+    latest = run_tool(wh, "price_history", {"ticker": "AAPL"}).data["latest"]
+    assert latest["low52w"] <= latest["close"] <= latest["high52w"]
+    expected = (latest["close"] - latest["low52w"]) / (latest["high52w"] - latest["low52w"]) * 100
+    assert latest["position52w"] == pytest.approx(expected, abs=0.2)
+
+
+def test_every_figure_a_tool_returns_has_a_format(wh):
+    results = [
+        run_tool(wh, "price_history", {"ticker": "AAPL"}).data,
+        run_tool(wh, "compare_returns", {"tickers": ["AAPL", "MSFT"]}).data,
+        run_tool(wh, "volatility_rank", {}).data,
+        run_tool(wh, "macro_snapshot", {}).data,
+        run_tool(wh, "macro_overlay", {"ticker": "MSFT", "series": "cpi"}).data,
+    ]
+
+    def figures(node, path=""):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                yield from figures(v, f"{path}/{k}")
+        elif isinstance(node, list):
+            for i, v in enumerate(node):
+                yield from figures(v, f"{path}/{i}")
+        elif isinstance(node, int | float) and not isinstance(node, bool):
+            yield path
+
+    for data in results:
+        for path in figures(data):
+            assert figure_format(data, path) is not None, path
+
+
+def test_a_rate_is_a_percent_and_the_consumer_price_index_a_number(wh):
+    snapshot = run_tool(wh, "macro_snapshot", {}).data
+    formats = {row["series"]: figure_format(snapshot, f"/rows/{i}/value") for i, row in enumerate(snapshot["rows"])}
+    assert formats.pop("cpi") == "number"
+    assert set(formats.values()) == {"percent"}
+
+    overlay = {"r2": run_tool(wh, "macro_overlay", {"ticker": "MSFT", "series": "cpi"}).data}
+    assert figure_format(overlay, "/r2/latest/series") == "number"
+    assert figure_format(overlay, "/r2/latest/close") == "currency"
+    rate = {"r1": run_tool(wh, "macro_overlay", {"ticker": "MSFT", "series": "fed_funds_rate"}).data}
+    assert figure_format(rate, "/r1/latest/series") == "percent"

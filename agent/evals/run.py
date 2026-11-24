@@ -62,6 +62,8 @@ def failure_class(reasons: str) -> list[str]:
         found.append("path written into text")
     if "but its label does not say so" in reasons:
         found.append("row shown under another name")
+    if 'set "format"' in reasons:
+        found.append("wrong format")
     if "exactly one updateComponents" in reasons:
         found.append("no layout")
     if "called a tool instead" in reasons:
@@ -172,7 +174,13 @@ def summarise(result: dict) -> dict:
     accepted = sum(o["accepted"] for o in outcomes)
     # The app's own checks (bindings, written figures and paths, named rows) run only on an answer the SDK has
     # accepted: one that rendered, or one those checks rejected.
-    own = {"missing data path", "written figure", "path written into text", "row shown under another name"}
+    own = {
+        "missing data path",
+        "written figure",
+        "path written into text",
+        "row shown under another name",
+        "wrong format",
+    }
     return {
         "model": result["model"],
         "questions": n,
@@ -202,7 +210,7 @@ def report(results: list[dict]) -> str:
         "",
         "The catalog_only, bindings and no_written_figure scores count questions where no attempt broke "
         "that rule. The app's own checks (bindings, written figures, paths written into text, rows shown "
-        "under another name) run only on an answer the A2UI SDK "
+        "under another name, formats) run only on an answer the A2UI SDK "
         "has accepted, so they say little when few answers got that far.",
         "",
         "| Model | Attempts | Reached the app's own checks |",
