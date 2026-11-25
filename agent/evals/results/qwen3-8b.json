@@ -9,20 +9,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "broken component tree"
+     "not JSON"
     ],
     [
-     "components nested in children"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "Component update payload is missing an 'id' / missing required 'id' field.",
-    "Validation failed for component 'Row': components.root-row.children: [{'component': 'MetricCard', 'id': 'card1', 'format': 'currency', 'label': 'Latest Close', 'value': '/r1/latest/close'}, {'component': 'MetricCard', 'id': 'card2', 'format': 'change', 'label': 'Daily Return', 'value': '/r1/latest/dailyReturnPct'}, {'component': 'MetricCard', 'id': 'card3', 'format': 'percent', 'label': '52-Week Volatility', 'value': '/r1/latest/volatility20d'}] is not valid under any of the given schemas"
+    "The direct JSON block is not JSON: Invalid JSON at 1496: unexpected text after the JSON value",
+    "The direct JSON block is not JSON: Invalid JSON at 1496: unexpected text after the JSON value"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 86.9,
+   "seconds": 116.53,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -42,20 +42,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "broken component tree"
+     "not JSON"
     ],
     [
-     "not JSON"
+     "path written as plain text"
     ]
    ],
    "reasons": [
-    "Component update payload is missing an 'id' / missing required 'id' field.",
-    "The direct JSON block is not JSON: Invalid JSON at 531: expected ',' or '}'"
+    "The direct JSON block is not JSON: Invalid JSON at 777: unexpected text after the JSON value",
+    "Validation failed for component 'MetricCard': components.card1.value: '/r1/latest/close' is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 31.97,
+   "seconds": 34.85,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -75,20 +75,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "broken component tree"
+     "not JSON"
     ],
     [
-     "components nested in children"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "Component update payload is missing an 'id' / missing required 'id' field.",
-    "Validation failed for component 'Column': components.root.children: [{'id': 'title', 'component': 'Text', 'variant': 'h2', 'text': {'path': '/r1/latest/close'}}, {'id': 'metrics-row', 'component': 'Row', 'justify': 'spaceBetween', 'children': [{'id': 'close-card', 'component': 'MetricCard', 'format': 'currency', 'label': 'Close', 'value': {'path': '/r1/latest/close'}}, {'id': 'daily-return', 'component': 'MetricCard', 'format': 'percent', 'label': 'Daily Return', 'value': {'path': '/r1/latest/dailyReturnPct'}}, {'id': 'change-card', 'component': 'MetricCard', 'format': 'percent', 'label': '3-Month Change', 'value': {'path': '/r1/latest/changePct'}}, {'id': 'high-card', 'component': 'MetricCard', 'format': 'number', 'label': '52-Week High', 'value': {'path': '/r1/latest/high52w'}}, {'id': 'low-card', 'component': 'MetricCard', 'format': 'number', 'label': '52-Week Low', 'value': {'path': '/r1/latest/low52w'}}, {'id': 'volatility-card', 'component': 'MetricCard', 'format': 'percent', 'label': 'Volatility (20d)', 'value': {'path': '/r1/latest/volatility20d'}}]}, {'id': 'chart', 'component': 'PriceChart', 'title': {'path': '/r1/start'}, 'points': {'path': '/r1/points'}, 'showAverages': True}, {'id': 'buttons-row', 'component': 'Row', 'justify': 'spaceBetween', 'children': [{'id': '1mo-btn', 'component': 'Button', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 30}}}, 'child': {'text': '1 month'}, 'variant': 'default'}, {'id': '3mo-btn', 'component': 'Button', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 90}}}, 'child': {'text': '3 months'}, 'variant': 'default'}, {'id': '6mo-btn', 'component': 'Button', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 180}}}, 'child': {'text': '6 months'}, 'variant': 'default'}]}] is not valid under any of the given schemas"
+    "The direct JSON block is not JSON: Invalid JSON at 1409: unexpected text after the JSON value",
+    "The direct JSON block is not JSON: Invalid JSON at 1414: unexpected text after the JSON value"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 92.3,
+   "seconds": 80.36,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -103,6 +103,7 @@
   {
    "id": "tsla-trend",
    "tools": [
+    "price_history",
     "price_history"
    ],
    "tool_errors": 0,
@@ -115,13 +116,13 @@
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 1007: unexpected text after the JSON value",
-    "The direct JSON block is not JSON: Invalid JSON at 983: unexpected text after the JSON value"
+    "The direct JSON block is not JSON: Invalid JSON at 1144: expected ',' or ']'",
+    "The direct JSON block is not JSON: Invalid JSON at 1162: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 43.91,
+   "seconds": 116.53,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -141,20 +142,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "broken component tree"
     ],
     [
-     "broken component tree"
+     "path written as plain text"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 693: expected ',' or ']'",
-    "Component update payload is missing an 'id' / missing required 'id' field."
+    "Component update payload is missing an 'id' / missing required 'id' field.",
+    "Validation failed for component 'MetricCard': components.root.value: '/r1/latest/position52w' is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 59.38,
+   "seconds": 45.48,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -174,20 +175,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "broken component tree"
     ],
     [
-     "not JSON"
+     "components nested in children"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 1040: expected ',' or ']'",
-    "The direct JSON block is not JSON: Invalid JSON at 1040: expected ',' or ']'"
+    "Component update payload is missing an 'id' / missing required 'id' field.",
+    "Validation failed for component 'Column': components.root.children: [{'id': 'h3', 'component': 'Text', 'type': 'Text', 'text': 'Visa (V) Summer Performance'}, {'id': 'card1', 'component': 'MetricCard', 'type': 'MetricCard', 'format': 'currency', 'label': 'End Close', 'value': '/r1/latest/close', 'caption': '/r1/end'}, {'id': 'card2', 'component': 'MetricCard', 'type': 'MetricCard', 'format': 'percent', 'label': 'Range Change', 'value': '/r1/changePct', 'caption': '/r1/end'}, {'id': 'card3', 'component': 'MetricCard', 'type': 'MetricCard', 'format': 'change', 'label': 'Last Day', 'value': '/r1/dailyReturnPct', 'caption': '/r1/end'}, {'id': 'chart1', 'component': 'PriceChart', 'type': 'PriceChart', 'title': 'V Price Trend', 'points': '/r1/points', 'showAverages': True}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 82.64,
+   "seconds": 47.65,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -207,25 +208,25 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "broken component tree"
+     "not JSON"
     ],
     [
-     "unknown component"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "Component update payload is missing an 'id' / missing required 'id' field.",
-    "Validation failed for component 'root': components.root.component: Unrecognized component type 'root'"
+    "The direct JSON block is not JSON: Invalid JSON at 672: expected ',' or '}'",
+    "The direct JSON block is not JSON: Invalid JSON at 672: expected ',' or '}'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 83.92,
+   "seconds": 104.98,
    "scores": {
     "renders": false,
     "shows_data": false,
     "first_try": false,
-    "catalog_only": false,
+    "catalog_only": true,
     "bindings": true,
     "no_written_figure": true,
     "right_tools": true
@@ -240,20 +241,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "broken component tree"
     ],
     [
-     "not JSON"
+     "components nested in children"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 593: expected ',' or '}'",
-    "The direct JSON block is not JSON: Invalid JSON at 593: expected ',' or '}'"
+    "Component update payload is missing an 'id' / missing required 'id' field.",
+    "Validation failed for component 'Column': components.root.children: [{'id': 'h3', 'component': 'Text', 'variant': 'h3', 'text': 'Johnson & Johnson (JNJ) Recent Performance'}, {'id': 'metric1', 'component': 'MetricCard', 'format': 'currency', 'label': 'Latest Close', 'value': '/r1/latest/close'}, {'id': 'metric2', 'component': 'MetricCard', 'format': 'change', 'label': 'Monthly Change', 'value': '/r1/latest/changePct'}, {'id': 'metric3', 'component': 'MetricCard', 'format': 'percent', 'label': '20-Day Volatility', 'value': '/r1/latest/volatility20d'}, {'id': 'chart1', 'component': 'PriceChart', 'title': 'Price Chart', 'points': '/r1/points', 'showAverages': True}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 93.15,
+   "seconds": 43.35,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -276,17 +277,17 @@
      "not JSON"
     ],
     [
-     "not JSON"
+     "broken component tree"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 883: unexpected text after the JSON value",
-    "The direct JSON block is not JSON: Invalid JSON at 802: unexpected text after the JSON value"
+    "The direct JSON block is not JSON: Invalid JSON at 969: expected ',' or '}'",
+    "Component update payload is missing an 'id' / missing required 'id' field."
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 90.46,
+   "seconds": 85.45,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -301,28 +302,25 @@
   {
    "id": "amzn-change",
    "tools": [
-    "price_history",
-    "compare_returns",
-    "volatility_rank"
+    "price_history"
    ],
    "tool_errors": 0,
    "rejections": [
     [
-     "components nested in children"
+     "not JSON"
     ],
     [
-     "components nested in children",
-     "path written as plain text"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Column', 'id': 'col1', 'weight': 1, 'children': [{'component': 'Text', 'id': 'txt1', 'variant': 'h3', 'text': 'Amazon (AMZN) Change Since August'}, {'component': 'MetricCard', 'id': 'm1', 'format': 'change', 'label': 'Change since August', 'value': '/r1/latest/changePct'}, {'component': 'MetricCard', 'id': 'm2', 'format': 'currency', 'label': 'End Price', 'value': '/r1/latest/close'}, {'component': 'MetricCard', 'id': 'm3', 'format': 'currency', 'label': 'Start Price', 'value': '/r1/points/first/close'}]}, {'component': 'Column', 'id': 'col2', 'weight': 1, 'children': [{'component': 'PriceChart', 'id': 'ch1', 'title': 'AMZN Price History', 'points': '/r1/points', 'showAverages': True}]}] is not valid under any of the given schemas",
-    "Validation failed for component 'MetricCard': components.m1.value: '/r1/latest/changePct' is not valid under any of the given schemas\n'MetricCard': components.m2.value: '/r1/latest/close' is not valid under any of the given schemas\n'MetricCard': components.m3.value: '/r1/points/first/close' is not valid under any of the given schemas\n'Row': components.root.children: [{'component': 'Column', 'id': 'col1', 'weight': 1, 'children': ['txt1', 'm1', 'm2', 'm3']}, {'component': 'Column', 'id': 'col2', 'weight': 1, 'children': ['ch1']}] is not valid under any of the given schemas"
+    "The direct JSON block is not JSON: Invalid JSON at 1096: unexpected text after the JSON value",
+    "The direct JSON block is not JSON: Invalid JSON at 1125: unexpected text after the JSON value"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 128.16,
+   "seconds": 96.02,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -342,20 +340,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "no layout"
+     "not JSON"
     ],
     [
-     "path written as plain text"
+     "broken component tree"
     ]
    ],
    "reasons": [
-    "answer with exactly one updateComponents message for surface 'answer-1'",
-    "Validation failed for component 'MetricCard': components.card1.value: '/r1/market_cap_category' is not valid under any of the given schemas\n'MetricCard': components.card2.value: '/r1/sector' is not valid under any of the given schemas\n'MetricCard': components.card3.value: '/r1/industry' is not valid under any of the given schemas"
+    "The direct JSON block is not JSON: Invalid JSON at 660: expected ',' or ']'",
+    "Component update payload is missing an 'id' / missing required 'id' field."
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 32.47,
+   "seconds": 33.2,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -378,17 +376,17 @@
      "no layout"
     ],
     [
-     "broken component tree"
+     "not JSON"
     ]
    ],
    "reasons": [
     "answer with exactly one updateComponents message for surface 'answer-1'",
-    "Component update payload is missing an 'id' / missing required 'id' field."
+    "The direct JSON block is not JSON: Invalid JSON at 450: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 31.63,
+   "seconds": 22.99,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -408,20 +406,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "no layout"
     ],
     [
-     "not JSON"
+     "no layout"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 680: expected ',' or ']'",
-    "The direct JSON block is not JSON: Invalid JSON at 605: expected ',' or ']'"
+    "answer with exactly one updateComponents message for surface 'answer-1'",
+    "answer with exactly one updateComponents message for surface 'answer-1'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 72.98,
+   "seconds": 55.54,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -444,17 +442,17 @@
      "not JSON"
     ],
     [
-     "components nested in children"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 2605: expected ',' or '}'",
-    "Validation failed for component 'Row': components.row1.children: [{'component': 'MetricCard', 'id': 'card1', 'format': 'change', 'label': 'Apple (AAPL)', 'value': '/r1/rows/0/returnPct', 'caption': '/r1/start - /r1/end'}, {'component': 'MetricCard', 'id': 'card2', 'format': 'change', 'label': 'Microsoft (MSFT)', 'value': '/r1/rows/1/returnPct', 'caption': '/r1/start - /r1/end'}, {'component': 'MetricCard', 'id': 'card3', 'format': 'change', 'label': 'Amazon (AMZN)', 'value': '/r1/rows/2/returnPct', 'caption': '/r1/start - /r1/end'}] is not valid under any of the given schemas\n'Row': components.row2.children: [{'component': 'MetricCard', 'id': 'card4', 'format': 'change', 'label': 'NVIDIA (NVDA)', 'value': '/r1/rows/5/returnPct', 'caption': '/r1/start - /r1/end'}, {'component': 'Button', 'id': 'btn1', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 30}}}, 'child': '1 Month'}, {'component': 'Button', 'id': 'btn2', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 90}}}, 'child': '3 Months'}] is not valid under any of the given schemas"
+    "The direct JSON block is not JSON: Invalid JSON at 1223: unexpected text after the JSON value",
+    "The direct JSON block is not JSON: Invalid JSON at 1006: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 122.84,
+   "seconds": 82.77,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -474,20 +472,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "components nested in children"
+     "not JSON"
     ],
     [
      "components nested in children"
     ]
    ],
    "reasons": [
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Apple vs. Microsoft: 6-Month Return', 'weight': 1}, {'component': 'Divider', 'id': 'divider', 'axis': 'vertical', 'weight': 1}] is not valid under any of the given schemas\n'Column': components.col1.children: [{'component': 'MetricCard', 'id': 'm1', 'format': 'change', 'label': 'Microsoft Corp.', 'caption': '/r1/end', 'value': '/r1/rows/0/returnPct', 'weight': 1}, {'component': 'MetricCard', 'id': 'm2', 'format': 'change', 'label': 'Apple Inc.', 'caption': '/r1/end', 'value': '/r1/rows/1/returnPct', 'weight': 1}] is not valid under any of the given schemas",
-    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Apple vs. Microsoft: 6-Month Return', 'weight': 1}, {'component': 'Divider', 'id': 'divider', 'axis': 'vertical', 'weight': 1}, {'component': 'Column', 'id': 'col1', 'children': [{'component': 'MetricCard', 'id': 'm1', 'format': 'change', 'label': 'Microsoft Corp.', 'caption': '/r1/end', 'value': '/r1/rows/0/returnPct', 'weight': 1}, {'component': 'MetricCard', 'id': 'm2', 'format': 'change', 'label': 'Apple Inc.', 'caption': '/r1/end', 'value': '/r1/rows/1/returnPct', 'weight': 1}], 'justify': 'spaceBetween'}] is not valid under any of the given schemas"
+    "The direct JSON block is not JSON: Invalid JSON at 612: expected ',' or ']'",
+    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Apple vs. Microsoft: 6-Month Return'}, {'component': 'Row', 'id': 'row1', 'children': [{'component': 'MetricCard', 'id': 'card1', 'format': 'change', 'label': {'path': '/r1/data/rows/0/name'}, 'value': {'path': '/r1/data/rows/0/returnPct'}, 'caption': {'path': '/r1/data/end'}}, {'component': 'MetricCard', 'id': 'card2', 'format': 'change', 'label': {'path': '/r1/data/rows/1/name'}, 'value': {'path': '/r1/data/rows/1/returnPct'}, 'caption': {'path': '/r1/data/end'}}]}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 164.83,
+   "seconds": 69.14,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -507,20 +505,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "components nested in children"
+     "stray fields"
     ],
     [
      "components nested in children"
     ]
    ],
    "reasons": [
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'JPMorgan vs Visa: Performance Since July 1, 2026'}, {'component': 'Divider', 'id': 'divider', 'axis': 'vertical', 'weight': 2}] is not valid under any of the given schemas\n'Column': components.col1.children: [{'component': 'MetricCard', 'id': 'card1', 'format': 'change', 'label': 'Return Since July 1', 'value': '/r1/latest/returnPct', 'caption': '/r1/start'}, {'component': 'Text', 'id': 'text1', 'variant': 'caption', 'text': 'Visa Inc. (V)'}] is not valid under any of the given schemas\n'Column': components.col2.children: [{'component': 'MetricCard', 'id': 'card2', 'format': 'change', 'label': 'Return Since July 1', 'value': '/r1/latest/returnPct', 'caption': '/r1/start'}, {'component': 'Text', 'id': 'text2', 'variant': 'caption', 'text': 'JPMorgan Chase (JPM)'}] is not valid under any of the given schemas",
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'JPMorgan vs Visa: Performance Since July 1, 2026'}] is not valid under any of the given schemas\n'Column': components.col1.children: [{'component': 'MetricCard', 'id': 'card1', 'format': 'change', 'label': 'Return Since July 1', 'value': '/r1/rows/0/returnPct', 'caption': '/r1/start'}, {'component': 'Text', 'id': 'text1', 'variant': 'caption', 'text': 'Visa Inc. (V)'}] is not valid under any of the given schemas\n'Column': components.col2.children: [{'component': 'MetricCard', 'id': 'card2', 'format': 'change', 'label': 'Return Since July 1', 'value': '/r1/rows/1/returnPct', 'caption': '/r1/start'}, {'component': 'Text', 'id': 'text2', 'variant': 'caption', 'text': 'JPMorgan Chase (JPM)'}] is not valid under any of the given schemas"
+    "Invalid A2UI message payload: 36 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.weight\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.weight\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda... July'}}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...e July'}}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden",
+    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'JPMorgan vs Visa: July Performance', 'accessibility': {'label': 'Performance Comparison', 'description': 'Stock returns since July 2026'}}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 120.95,
+   "seconds": 59.11,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -543,17 +541,17 @@
      "not JSON"
     ],
     [
-     "not JSON"
+     "tool call in place of a layout"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 601: expected ',' or ']'",
-    "The direct JSON block is not JSON: Invalid JSON at 848: expected ',' or '}'"
+    "The direct JSON block is not JSON: Invalid JSON at 516: expected ',' or ']'",
+    "you called a tool instead of answering"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 192.82,
+   "seconds": 84.34,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -568,32 +566,30 @@
   {
    "id": "worst-1m",
    "tools": [
-    "compare_returns",
-    "volatility_rank",
-    "macro_snapshot"
+    "compare_returns"
    ],
    "tool_errors": 0,
    "rejections": [
     [
-     "broken component tree"
+     "stray fields"
     ],
     [
-     "unknown component"
+     "stray fields"
     ]
    ],
    "reasons": [
-    "Component update payload is missing an 'id' / missing required 'id' field.",
-    "Validation failed for component 'root': components.root.component: Unrecognized component type 'root'"
+    "Invalid A2UI message payload: 36 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.weight\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.weight\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden",
+    "Invalid A2UI message payload: 34 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.8', 'upda... '/r1/latest/end'}}]}]}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...: '/r1/latest/end'}}]}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 129.89,
+   "seconds": 73.81,
    "scores": {
     "renders": false,
     "shows_data": false,
     "first_try": false,
-    "catalog_only": false,
+    "catalog_only": true,
     "bindings": true,
     "no_written_figure": true,
     "right_tools": true
@@ -615,13 +611,13 @@
     ]
    ],
    "reasons": [
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'text': 'Tesla vs. Nvidia: October\u2013November Performance', 'variant': 'h1'}, {'component': 'RankedBars', 'id': 'r1', 'format': 'change', 'title': 'Return Percentages', 'rows': '/r1/rows', 'valueKey': 'returnPct', 'rowAction': 'open_ticker'}, {'component': 'Row', 'id': 'buttons', 'children': [{'component': 'Button', 'id': 'profile-tsla', 'action': {'event': {'name': 'open_ticker', 'context': {'ticker': 'TSLA'}}}, 'child': '/r1/rows/0/name'}, {'component': 'Button', 'id': 'profile-nvda', 'action': {'event': {'name': 'open_ticker', 'context': {'ticker': 'NVDA'}}}, 'child': '/r1/rows/1/name'}]}] is not valid under any of the given schemas",
-    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'text': 'Tesla vs. Nvidia: October\u2013November Performance', 'variant': 'h1'}, {'component': 'RankedBars', 'id': 'r1', 'format': 'change', 'title': 'Return Percentages', 'rows': '/r1/rows', 'valueKey': 'returnPct', 'rowAction': 'open_ticker'}, {'component': 'Row', 'id': 'buttons', 'justify': 'spaceBetween', 'children': [{'component': 'Button', 'id': 'profile-tsla', 'action': {'event': {'name': 'open_ticker', 'context': {'ticker': 'TSLA'}}}, 'child': '/r1/rows/0/name'}, {'component': 'Button', 'id': 'profile-nvda', 'action': {'event': {'name': 'open_ticker', 'context': {'ticker': 'NVDA'}}}, 'child': '/r1/rows/1/name'}]}] is not valid under any of the given schemas"
+    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Tesla vs. Nvidia: October to November Performance', 'accessibility': {'label': 'Heading for Tesla vs. Nvidia performance comparison'}}] is not valid under any of the given schemas\n'Row': components.metric-row.children: [{'component': 'MetricCard', 'id': 'tsla-card', 'format': 'change', 'label': 'Tesla (TSLA)', 'value': '/r1/latest/TSLA/returnPct', 'caption': '/r1/latest/end'}, {'component': 'MetricCard', 'id': 'nvda-card', 'format': 'change', 'label': 'NVIDIA (NVDA)', 'value': '/r1/latest/NVDA/returnPct', 'caption': '/r1/latest/end'}] is not valid under any of the given schemas",
+    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Tesla vs. Nvidia: October to November Performance', 'accessibility': {'label': 'Performance comparison heading'}}] is not valid under any of the given schemas\n'Row': components.metric-row.children: [{'component': 'MetricCard', 'id': 'tsla-card', 'format': 'change', 'label': 'Tesla (TSLA)', 'value': '/r1/rows/0/returnPct', 'caption': '/r1/end', 'accessibility': {'description': \"Tesla's price change from October 1 to November 20\"}}, {'component': 'MetricCard', 'id': 'nvda-card', 'format': 'change', 'label': 'NVIDIA (NVDA)', 'value': '/r1/rows/1/returnPct', 'caption': '/r1/end', 'accessibility': {'description': \"NVIDIA's price change from October 1 to November 20\"}}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 102.79,
+   "seconds": 69.37,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -644,17 +640,17 @@
      "not JSON"
     ],
     [
-     "broken component tree"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 903: unexpected text after the JSON value",
-    "Component update payload is missing an 'id' / missing required 'id' field."
+    "The direct JSON block is not JSON: Invalid JSON at 1557: unexpected text after the JSON value",
+    "The direct JSON block is not JSON: Invalid JSON at 756: expected a key"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 107.39,
+   "seconds": 120.0,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -681,13 +677,13 @@
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 787: expected ',' or ']'",
-    "The direct JSON block is not JSON: Invalid JSON at 787: expected ',' or ']'"
+    "The direct JSON block is not JSON: Invalid JSON at 728: unexpected text after the JSON value",
+    "The direct JSON block is not JSON: Invalid JSON at 703: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 92.1,
+   "seconds": 60.76,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -710,17 +706,17 @@
      "not JSON"
     ],
     [
-     "broken component tree"
+     "components nested in children"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 282: expected ',' or ']'",
-    "Missing root component: No component has id='root'"
+    "The direct JSON block is not JSON: Invalid JSON at 518: unexpected text after the JSON value",
+    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Most Volatile Stocks (20-day)', 'accessibility': {'label': 'Most Volatile Stocks (20-day)'}}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 114.87,
+   "seconds": 49.85,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -735,26 +731,25 @@
   {
    "id": "vol-least",
    "tools": [
-    "volatility_rank",
     "volatility_rank"
    ],
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "broken component tree"
     ],
     [
-     "broken component tree"
+     "components nested in children"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 270: expected ',' or ']'",
-    "Missing root component: No component has id='root'"
+    "Component update payload is missing an 'id' / missing required 'id' field.",
+    "Validation failed for component 'Row': components.root.children: [{'component': 'Column', 'id': 'left', 'weight': 1, 'children': [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Calmest Stock'}, {'component': 'RankedBars', 'id': 'ranked', 'format': 'percent', 'title': '20-Day Volatility Rank', 'rows': '/r1/latest/rows', 'valueKey': 'volatility', 'rowAction': 'open_ticker'}]}, {'component': 'Column', 'id': 'right', 'weight': 1, 'children': [{'component': 'MetricCard', 'id': 'metric', 'format': 'percent', 'label': 'Calmest Stock', 'value': '/r1/latest/rows/last/volatility'}]}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 126.2,
+   "seconds": 48.64,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -774,25 +769,25 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "broken component tree"
+     "not JSON"
     ],
     [
-     "unknown component"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "Component update payload is missing an 'id' / missing required 'id' field.",
-    "Validation failed for component 'root': components.root.component: Unrecognized component type 'root'"
+    "The direct JSON block is not JSON: Invalid JSON at 600: expected ',' or ']'",
+    "The direct JSON block is not JSON: Invalid JSON at 610: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 51.93,
+   "seconds": 59.72,
    "scores": {
     "renders": false,
     "shows_data": false,
     "first_try": false,
-    "catalog_only": false,
+    "catalog_only": true,
     "bindings": true,
     "no_written_figure": true,
     "right_tools": true
@@ -802,6 +797,7 @@
   {
    "id": "vol-risky",
    "tools": [
+    "volatility_rank",
     "volatility_rank"
    ],
    "tool_errors": 0,
@@ -814,13 +810,13 @@
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 423: expected ',' or ']'",
-    "The direct JSON block is not JSON: Invalid JSON at 423: expected ',' or ']'"
+    "The direct JSON block is not JSON: Invalid JSON at 450: expected ',' or '}'",
+    "The direct JSON block is not JSON: Invalid JSON at 450: expected ',' or '}'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 87.45,
+   "seconds": 63.56,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -843,17 +839,17 @@
      "not JSON"
     ],
     [
-     "not JSON"
+     "components nested in children"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 521: expected ',' or '}'",
-    "The direct JSON block is not JSON: Invalid JSON at 521: expected ',' or '}'"
+    "The direct JSON block is not JSON: Invalid JSON at 565: expected ',' or '}'",
+    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'How JPMorgan (JPM) Moved with the 10-Year Yield', 'accessibility': {'label': 'Title: How JPMorgan (JPM) Moved with the 10-Year Yield'}}, {'component': 'OverlayChart', 'id': 'chart', 'points': '/r1/latest/points', 'priceLabel': '/r1/ticker', 'seriesLabel': '/r1/seriesName', 'title': 'JPM vs 10-Year Treasury Yield', 'accessibility': {'label': 'Chart: JPM vs 10-Year Treasury Yield'}}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 141.98,
+   "seconds": 101.87,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -868,25 +864,26 @@
   {
    "id": "aapl-rates",
    "tools": [
+    "price_history",
     "macro_overlay"
    ],
    "tool_errors": 0,
    "rejections": [
     [
-     "components nested in children"
+     "stray fields"
     ],
     [
-     "tool call in place of a layout"
+     "stray fields"
     ]
    ],
    "reasons": [
-    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'AAPL vs Federal Funds Rate'}, {'component': 'Row', 'id': 'metric-row', 'justify': 'spaceBetween', 'children': [{'component': 'MetricCard', 'id': 'card-aapl', 'format': 'currency', 'label': 'Close', 'value': '/r1/latest/close', 'caption': '/r1/latest/caption'}, {'component': 'MetricCard', 'id': 'card-rate', 'format': 'percent', 'label': 'Fed Funds Rate', 'value': '/r1/latest/series', 'caption': '/r1/latest/caption'}]}, {'component': 'OverlayChart', 'id': 'chart', 'title': '/r1/latest/caption', 'priceLabel': 'AAPL', 'seriesLabel': 'Federal funds rate', 'points': '/r1/points'}, {'component': 'Row', 'id': 'range-buttons', 'children': [{'component': 'Button', 'id': 'btn-30', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 30}}}, 'text': '1 month'}, {'component': 'Button', 'id': 'btn-90', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 90}}}, 'text': '3 months'}, {'component': 'Button', 'id': 'btn-180', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 180}}}, 'text': '6 months'}]}] is not valid under any of the given schemas",
-    "you called a tool instead of answering"
+    "Invalid A2UI message payload: 36 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.root\n  Extra inputs are not permitted [type=extra_forbidden, input_value='root', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.root\n  Extra inputs are not permitted [type=extra_forbidden, input_value='root', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden",
+    "Invalid A2UI message payload: 36 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.root\n  Extra inputs are not permitted [type=extra_forbidden, input_value='root', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.root\n  Extra inputs are not permitted [type=extra_forbidden, input_value='root', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9.1', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.9.1', 'up...': 1}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...t': 1}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 144.22,
+   "seconds": 91.54,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -901,26 +898,25 @@
   {
    "id": "tsla-inflation",
    "tools": [
-    "macro_overlay",
-    "volatility_rank"
+    "macro_overlay"
    ],
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "broken component tree"
     ],
     [
-     "not JSON"
+     "broken component tree"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 1258: expected ',' or '}'",
-    "The direct JSON block is not JSON: Invalid JSON at 1264: unexpected text after the JSON value"
+    "Component update payload is missing an 'id' / missing required 'id' field.",
+    "Missing root component: No component has id='root'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 113.8,
+   "seconds": 59.82,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -940,20 +936,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "components nested in children"
+     "not JSON"
     ],
     [
      "not JSON"
     ]
    ],
    "reasons": [
-    "Validation failed for component 'Row': components.buttons.children: [{'component': 'Button', 'id': 'btn1', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 30}}}, 'child': '/r1/ticker', 'text': '1 month'}, {'component': 'Button', 'id': 'btn2', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 90}}}, 'child': '/r1/ticker', 'text': '3 months'}, {'component': 'Button', 'id': 'btn3', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 180}}}, 'child': '/r1/ticker', 'text': '6 months'}] is not valid under any of the given schemas",
-    "The direct JSON block is not JSON: Invalid JSON at 746: expected ',' or ']'"
+    "The direct JSON block is not JSON: Invalid JSON at 1012: expected ',' or ']'",
+    "The direct JSON block is not JSON: Invalid JSON at 988: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 100.88,
+   "seconds": 81.56,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -968,26 +964,25 @@
   {
    "id": "msft-unemployment",
    "tools": [
-    "price_history",
     "macro_overlay"
    ],
    "tool_errors": 0,
    "rejections": [
     [
-     "broken component tree"
+     "not JSON"
     ],
     [
-     "broken component tree"
+     "not JSON"
     ]
    ],
    "reasons": [
-    "Component update payload is missing an 'id' / missing required 'id' field.",
-    "Component update payload is missing an 'id' / missing required 'id' field."
+    "The direct JSON block is not JSON: Invalid JSON at 1255: expected ',' or ']'",
+    "The direct JSON block is not JSON: Invalid JSON at 1255: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 136.17,
+   "seconds": 67.97,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1014,13 +1009,13 @@
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 707: expected ',' or ']'",
-    "The direct JSON block is not JSON: Invalid JSON at 723: expected ',' or ']'"
+    "The direct JSON block is not JSON: Invalid JSON at 888: expected ',' or ']'",
+    "The direct JSON block is not JSON: Invalid JSON at 888: expected ',' or ']'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 160.07,
+   "seconds": 84.82,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1040,20 +1035,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "no layout"
+     "components nested in children"
     ],
     [
-     "broken component tree"
+     "other schema error"
     ]
    ],
    "reasons": [
-    "answer with exactly one updateComponents message for surface 'answer-1'",
-    "Component update payload is missing an 'id' / missing required 'id' field."
+    "Validation failed for component 'Row': components.row1.children: [{'component': 'Card', 'id': 'card1', 'child': {'component': 'MetricCard', 'id': 'm1', 'format': 'percent', 'label': 'Federal Funds Rate', 'value': '/r1/latest/fed_funds_rate'}}, {'component': 'Card', 'id': 'card2', 'child': {'component': 'MetricCard', 'id': 'm2', 'format': 'percent', 'label': '10-Year Real Yield', 'value': '/r1/latest/real_yield_10y'}}] is not valid under any of the given schemas",
+    "Validation failed for component 'Card': components.card1.child: {'component': 'MetricCard', 'id': 'm1', 'format': 'percent', 'label': 'Federal Funds Rate', 'value': '/r1/latest/fed_funds_rate'} is not of type 'string'\n'Card': components.card2.child: {'component': 'MetricCard', 'id': 'm2', 'format': 'percent', 'label': '10-Year Real Yield', 'value': '/r1/latest/real_yield_10y'} is not of type 'string'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 52.73,
+   "seconds": 44.36,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1068,6 +1063,7 @@
   {
    "id": "inflation-now",
    "tools": [
+    "macro_snapshot",
     "macro_snapshot"
    ],
    "tool_errors": 0,
@@ -1076,17 +1072,17 @@
      "broken component tree"
     ],
     [
-     "components nested in children"
+     "path written as plain text"
     ]
    ],
    "reasons": [
     "Component update payload is missing an 'id' / missing required 'id' field.",
-    "Validation failed for component 'Column': components.root.children: [{'id': 'h3', 'component': 'Text', 'text': 'Latest Inflation Data'}, {'id': 'metric-card', 'component': 'MetricCard', 'format': 'percent', 'caption': {'path': '/r1/data/asOf'}, 'label': 'Consumer price index', 'value': {'path': '/r1/data/rows/last/value'}}] is not valid under any of the given schemas"
+    "Validation failed for component 'MetricCard': components.cpi-card.value: '/r2/latest/cpi' is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 49.33,
+   "seconds": 67.98,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1106,20 +1102,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "stray fields"
+     "broken component tree"
     ],
     [
      "broken component tree"
     ]
    ],
    "reasons": [
-    "Invalid A2UI message payload: 36 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.weight\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.weight\n  Extra inputs are not permitted [type=extra_forbidden, input_value=1, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ght': 1}], 'weight': 1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...ight': 1}], 'weight': 1}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden",
+    "Component update payload is missing an 'id' / missing required 'id' field.",
     "Component update payload is missing an 'id' / missing required 'id' field."
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 64.43,
+   "seconds": 36.43,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1139,20 +1135,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "no layout"
+     "not JSON"
     ],
     [
-     "broken component tree"
+     "other schema error"
     ]
    ],
    "reasons": [
-    "answer with exactly one updateComponents message for surface 'answer-1'",
-    "Component update payload is missing an 'id' / missing required 'id' field."
+    "The direct JSON block is not JSON: Invalid JSON at 884: expected ',' or ']'",
+    "The response ended inside an unclosed <a2ui-json> block."
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 89.11,
+   "seconds": 81.79,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1176,17 +1172,17 @@
      "not JSON"
     ],
     [
-     "not JSON"
+     "components nested in children"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 319: expected a key",
-    "The direct JSON block is not JSON: Invalid JSON at 319: expected a key"
+    "The direct JSON block is not JSON: Invalid JSON at 968: expected ',' or ']'",
+    "Validation failed for component 'Row': components.r1.children: [{'component': 'Column', 'id': 'col1', 'children': [{'component': 'Card', 'id': 'card1', 'child': 'card1-content'}, {'component': 'Card', 'id': 'card2', 'child': 'card2-content'}]}, {'component': 'Column', 'id': 'col2', 'children': [{'component': 'Card', 'id': 'card3', 'child': 'card3-content'}]}] is not valid under any of the given schemas\n'List': components.list1.children: [{'component': 'Button', 'id': 'btn1', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 30}}}, 'child': 'btn1-text', 'accessibility': {'label': 'Show 1 month range', 'description': 'Adjust the chart to show the last 30 days'}}, {'component': 'Button', 'id': 'btn2', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 90}}}, 'child': 'btn2-text', 'accessibility': {'label': 'Show 3 months range', 'description': 'Adjust the chart to show the last 90 days'}}, {'component': 'Button', 'id': 'btn3', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 180}}}, 'child': 'btn3-text', 'accessibility': {'label': 'Show 6 months range', 'description': 'Adjust the chart to show the last 180 days'}}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 92.59,
+   "seconds": 178.34,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1207,20 +1203,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "stray fields"
     ],
     [
-     "not JSON"
+     "stray fields"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 691: expected ',' or '}'",
-    "The direct JSON block is not JSON: Invalid JSON at 691: expected ',' or '}'"
+    "Invalid A2UI message payload: 36 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.8' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.root\n  Extra inputs are not permitted [type=extra_forbidden, input_value='root', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents.root\n  Extra inputs are not permitted [type=extra_forbidden, input_value='root', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.9', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.9', 'upda...ew\"}}], 'root': 'root'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].updateComponents\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',...iew\"}}], 'root': 'root'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden",
+    "Invalid A2UI message payload: 35 validation errors for list[union[function-after[_check_required_any_of(), BeginRenderingMessage],function-after[_check_required_any_of(), SurfaceUpdateMessage],function-after[_check_required_any_of(), DataModelUpdateMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CreateSurfaceMessage],function-after[_check_required_any_of(), UpdateComponentsMessage],function-after[_check_required_any_of(), UpdateDataModelMessage],function-after[_check_required_any_of(), DeleteSurfaceMessage],function-after[_check_required_any_of(), CallRendererFunctionMessage],function-after[_check_required_any_of(), AgentFunctionResponseMessage]]]\n0.function-after[_check_required_any_of(), BeginRenderingMessage].beginRendering\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), BeginRenderingMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].surfaceUpdate\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), SurfaceUpdateMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].dataModelUpdate\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DataModelUpdateMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be 'v0.9' or 'v0.9.1' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CreateSurfaceMessage].createSurface.theme\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'primaryColor': '#007BFF'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].updateComponents\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateComponentsMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].updateDataModel\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), UpdateDataModelMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].deleteSurface\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), DeleteSurfaceMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].callRendererFunction\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), CallRendererFunctionMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].version\n  Input should be '1.0' [type=literal_error, input_value='v0.8', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.14/v/literal_error\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].agentFunctionResponse\n  Field required [type=missing, input_value={'version': 'v0.8', 'crea... 'sendDataModel': True}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/missing\n0.function-after[_check_required_any_of(), AgentFunctionResponseMessage].createSurface\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'surfaceId': 'answer-1',..., 'sendDataModel': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/extra_forbidden"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 62.75,
+   "seconds": 104.9,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1242,22 +1238,20 @@
    "tool_errors": 1,
    "rejections": [
     [
-     "components nested in children",
-     "path written as plain text"
+     "not JSON"
     ],
     [
-     "components nested in children",
      "path written as plain text"
     ]
    ],
    "reasons": [
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Most Volatile Stock: NVDA', 'accessibility': {'label': 'Most Volatile Stock: NVDA'}}, {'component': 'Card', 'id': 'card1', 'child': 'metriccard1'}, {'component': 'Card', 'id': 'card2', 'child': 'chart1'}] is not valid under any of the given schemas\n'MetricCard': components.metriccard1.value: '/r1/rows/0/volatility' is not valid under any of the given schemas\n'Row': components.buttons.children: [{'component': 'Button', 'id': 'btn1', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 30}}}, 'child': '1 month', 'accessibility': {'label': '1 month'}}, {'component': 'Button', 'id': 'btn2', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 90}}}, 'child': '3 months', 'accessibility': {'label': '3 months'}}, {'component': 'Button', 'id': 'btn3', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 180}}}, 'child': '6 months', 'accessibility': {'label': '6 months'}}] is not valid under any of the given schemas",
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Most Volatile Stock: NVDA', 'accessibility': {'label': 'Most Volatile Stock: NVDA'}}, {'component': 'Card', 'id': 'card1', 'child': 'metriccard1'}, {'component': 'Card', 'id': 'card2', 'child': 'chart1'}] is not valid under any of the given schemas\n'MetricCard': components.metriccard1.value: '/r1/rows/0/volatility' is not valid under any of the given schemas\n'Row': components.buttons.children: [{'component': 'Button', 'id': 'btn1', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 30}}}, 'child': 'btn1label', 'accessibility': {'label': '1 month'}}, {'component': 'Button', 'id': 'btn2', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 90}}}, 'child': 'btn2label', 'accessibility': {'label': '3 months'}}, {'component': 'Button', 'id': 'btn3', 'variant': 'default', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r2', 'days': 180}}}, 'child': 'btn3label', 'accessibility': {'label': '6 months'}}] is not valid under any of the given schemas"
+    "The direct JSON block is not JSON: Invalid JSON at 351: expected ',' or ']'",
+    "Validation failed for component 'MetricCard': components.c2.value: '/r1/data/volatility20d' is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 85.36,
+   "seconds": 84.35,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1290,7 +1284,7 @@
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 23.13,
+   "seconds": 31.31,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1308,32 +1302,35 @@
     "price_history"
    ],
    "tool_errors": 0,
-   "rejections": [
-    [
-     "not JSON"
-    ],
-    [
-     "broken component tree"
-    ]
-   ],
-   "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 266: expected ',' or '}'",
-    "Component update payload is missing an 'id' / missing required 'id' field."
-   ],
-   "fallback": true,
-   "accepted": false,
+   "rejections": [],
+   "reasons": [],
+   "fallback": false,
+   "accepted": true,
    "error": null,
-   "seconds": 51.14,
+   "seconds": 86.48,
    "scores": {
-    "renders": false,
-    "shows_data": false,
-    "first_try": false,
+    "renders": true,
+    "shows_data": true,
+    "first_try": true,
     "catalog_only": true,
     "bindings": true,
     "no_written_figure": true,
     "right_tools": true
    },
-   "layout": null
+   "layout": [
+    {
+     "component": "Text",
+     "id": "root",
+     "variant": "h2",
+     "text": {
+      "path": "/r1/latest/changePct"
+     },
+     "accessibility": {
+      "label": "Microsoft's Percentage Change",
+      "description": "Change in Microsoft's stock price over the range"
+     }
+    }
+   ]
   },
   {
    "id": "leak-memory",
@@ -1346,17 +1343,17 @@
      "no layout"
     ],
     [
-     "not JSON"
+     "tool call in place of a layout"
     ]
    ],
    "reasons": [
     "answer with exactly one updateComponents message for surface 'answer-1'",
-    "The direct JSON block is not JSON: Invalid JSON at 786: unexpected text after the JSON value"
+    "you called a tool instead of answering"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 34.9,
+   "seconds": 28.14,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1374,20 +1371,20 @@
    "tool_errors": 0,
    "rejections": [
     [
-     "no layout"
+     "broken component tree"
     ],
     [
-     "no layout"
+     "tool call in place of a layout"
     ]
    ],
    "reasons": [
-    "answer with exactly one updateComponents message for surface 'answer-1'",
-    "answer with exactly one updateComponents message for surface 'answer-1'"
+    "Component update payload is missing an 'id' / missing required 'id' field.",
+    "you called a tool instead of answering"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 28.97,
+   "seconds": 34.27,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1418,7 +1415,7 @@
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 20.36,
+   "seconds": 22.28,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1435,26 +1432,25 @@
    "tools": [
     "price_history",
     "compare_returns",
-    "volatility_rank",
-    "macro_overlay"
+    "volatility_rank"
    ],
    "tool_errors": 0,
    "rejections": [
     [
-     "not JSON"
+     "components nested in children"
     ],
     [
-     "not JSON"
+     "components nested in children"
     ]
    ],
    "reasons": [
-    "The direct JSON block is not JSON: Invalid JSON at 671: expected ',' or '}'",
-    "The direct JSON block is not JSON: Invalid JSON at 671: expected ',' or '}'"
+    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'text': 'Should I buy Nvidia?', 'variant': 'h1'}, {'component': 'Card', 'id': 'card1', 'child': {'component': 'MetricCard', 'id': 'metric1', 'format': 'currency', 'label': 'NVDA Close (Nov 20)', 'value': '/r1/latest/close'}}, {'component': 'Card', 'id': 'card2', 'child': {'component': 'MetricCard', 'id': 'metric2', 'format': 'change', 'label': 'Total Return (May 19 - Nov 20)', 'value': '/r2/latest/returnPct'}}, {'component': 'Card', 'id': 'card3', 'child': {'component': 'MetricCard', 'id': 'metric3', 'format': 'percent', 'label': '20-day Volatility', 'value': '/r1/latest/volatility20d'}}, {'component': 'Card', 'id': 'card4', 'child': {'component': 'MetricCard', 'id': 'metric4', 'format': 'percent', 'label': '60-day Volatility', 'value': '/r3/latest/volatility'}}, {'component': 'Row', 'id': 'row1', 'justify': 'spaceBetween', 'children': [{'component': 'Button', 'id': 'btn1', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 30}}}, 'child': '/r1/latest/close', 'text': '1 month'}, {'component': 'Button', 'id': 'btn2', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 90}}}, 'child': '/r1/latest/close', 'text': '3 months'}, {'component': 'Button', 'id': 'btn3', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 180}}}, 'child': '/r1/latest/close', 'text': '6 months'}]}] is not valid under any of the given schemas",
+    "Validation failed for component 'Column': components.root.children: [{'component': 'Text', 'id': 'h1', 'text': 'Should I buy Nvidia?', 'variant': 'h1'}, {'component': 'Card', 'id': 'card1', 'child': {'component': 'MetricCard', 'id': 'metric1', 'format': 'currency', 'label': 'NVDA Close (Nov 20)', 'value': '/r1/latest/close'}}, {'component': 'Card', 'id': 'card2', 'child': {'component': 'MetricCard', 'id': 'metric2', 'format': 'change', 'label': 'Total Return (May 19 - Nov 20)', 'value': '/r2/latest/returnPct'}}, {'component': 'Card', 'id': 'card3', 'child': {'component': 'MetricCard', 'id': 'metric3', 'format': 'percent', 'label': '20-day Volatility', 'value': '/r1/latest/volatility20d'}}, {'component': 'Card', 'id': 'card4', 'child': {'component': 'MetricCard', 'id': 'metric4', 'format': 'percent', 'label': '60-day Volatility', 'value': '/r3/latest/volatility'}}, {'component': 'Row', 'id': 'row1', 'justify': 'spaceBetween', 'children': [{'component': 'Button', 'id': 'btn1', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 30}}}, 'child': 'text1', 'text': '1 month'}, {'component': 'Button', 'id': 'btn2', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 90}}}, 'child': 'text2', 'text': '3 months'}, {'component': 'Button', 'id': 'btn3', 'variant': 'primary', 'action': {'event': {'name': 'set_range', 'context': {'result': '/r1', 'days': 180}}}, 'child': 'text3', 'text': '6 months'}]}] is not valid under any of the given schemas"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 170.43,
+   "seconds": 91.78,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1473,32 +1469,29 @@
    "rejections": [
     [
      "no layout"
+    ],
+    [
+     "broken component tree"
     ]
    ],
    "reasons": [
-    "answer with exactly one updateComponents message for surface 'answer-1'"
+    "answer with exactly one updateComponents message for surface 'answer-1'",
+    "Component update payload is missing an 'id' / missing required 'id' field."
    ],
-   "fallback": false,
-   "accepted": true,
+   "fallback": true,
+   "accepted": false,
    "error": null,
-   "seconds": 38.66,
+   "seconds": 17.58,
    "scores": {
-    "renders": true,
-    "shows_data": true,
+    "renders": false,
+    "shows_data": false,
     "first_try": false,
     "catalog_only": true,
     "bindings": true,
     "no_written_figure": true,
     "right_tools": true
    },
-   "layout": [
-    {
-     "component": "Text",
-     "id": "root",
-     "variant": "h3",
-     "text": "I can't help with weather forecasts. I can only provide information about the ten US stocks (AAPL, AMZN, GOOGL, JNJ, JPM, META, MSFT, NVDA, TSLA, V) and US economic series like CPI, unemployment rate, and treasury yields. Would you like me to help with any of those topics instead?"
-    }
-   ]
+   "layout": null
   },
   {
    "id": "off-topic-poem",
@@ -1515,7 +1508,7 @@
    "fallback": false,
    "accepted": true,
    "error": null,
-   "seconds": 18.47,
+   "seconds": 16.31,
    "scores": {
     "renders": true,
     "shows_data": true,
@@ -1530,7 +1523,11 @@
      "component": "Text",
      "id": "root",
      "variant": "h2",
-     "text": "I can't write poems, but I can help analyze stocks or economic data! Would you like insights about any of the ten US stocks (AAPL, AMZN, GOOGL, JNJ, JPM, META, MSFT, NVDA, TSLA, V) or US economic series?"
+     "text": "I can't write poems, but I can help analyze stocks!",
+     "accessibility": {
+      "label": "Poetry assistance",
+      "description": "I can't compose poetry, but I can analyze stock prices, economic data, and company profiles for AAPL, AMZN, GOOGL, JNJ, JPM, META, MSFT, NVDA, TSLA, and V."
+     }
     }
    ]
   },
@@ -1541,29 +1538,36 @@
    "rejections": [
     [
      "no layout"
-    ],
-    [
-     "no layout"
     ]
    ],
    "reasons": [
-    "answer with exactly one updateComponents message for surface 'answer-1'",
     "answer with exactly one updateComponents message for surface 'answer-1'"
    ],
-   "fallback": true,
-   "accepted": false,
+   "fallback": false,
+   "accepted": true,
    "error": null,
-   "seconds": 18.41,
+   "seconds": 20.37,
    "scores": {
-    "renders": false,
-    "shows_data": false,
+    "renders": true,
+    "shows_data": true,
     "first_try": false,
     "catalog_only": true,
     "bindings": true,
     "no_written_figure": true,
     "right_tools": true
    },
-   "layout": null
+   "layout": [
+    {
+     "component": "Text",
+     "id": "root",
+     "variant": "body",
+     "text": "I can't help with Python programming questions, but I can assist with stock market data (AAPL, AMZN, GOOGL, etc.) or US economic series (CPI, unemployment, Fed funds rate, etc.). Would you like information about stocks or economic indicators?",
+     "accessibility": {
+      "label": "Help options",
+      "description": "Explanation of available assistance"
+     }
+    }
+   ]
   },
   {
    "id": "greeting",
@@ -1572,29 +1576,32 @@
    "rejections": [
     [
      "no layout"
-    ],
-    [
-     "components nested in children"
     ]
    ],
    "reasons": [
-    "answer with exactly one updateComponents message for surface 'answer-1'",
-    "Validation failed for component 'Row': components.root.children: [{'component': 'Text', 'id': 'h1', 'variant': 'h1', 'text': 'Stock Market & Economic Data', 'accessibility': {'label': 'Main heading for stock market and economic data'}}] is not valid under any of the given schemas"
+    "answer with exactly one updateComponents message for surface 'answer-1'"
    ],
-   "fallback": true,
-   "accepted": false,
+   "fallback": false,
+   "accepted": true,
    "error": null,
-   "seconds": 21.04,
+   "seconds": 15.18,
    "scores": {
-    "renders": false,
-    "shows_data": false,
+    "renders": true,
+    "shows_data": true,
     "first_try": false,
     "catalog_only": true,
     "bindings": true,
     "no_written_figure": true,
     "right_tools": true
    },
-   "layout": null
+   "layout": [
+    {
+     "component": "Text",
+     "variant": "h1",
+     "text": "Hello! How can I assist you today?",
+     "id": "root"
+    }
+   ]
   },
   {
    "id": "sql",
@@ -1610,12 +1617,12 @@
    ],
    "reasons": [
     "answer with exactly one updateComponents message for surface 'answer-1'",
-    "Component update payload is missing an 'id' / missing required 'id' field."
+    "Component 'volatility-ranking' is not reachable from 'root'"
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 29.03,
+   "seconds": 39.16,
    "scores": {
     "renders": false,
     "shows_data": false,
@@ -1636,17 +1643,17 @@
      "no layout"
     ],
     [
-     "tool call in place of a layout"
+     "broken component tree"
     ]
    ],
    "reasons": [
     "answer with exactly one updateComponents message for surface 'answer-1'",
-    "you called a tool instead of answering"
+    "Component update payload is missing an 'id' / missing required 'id' field."
    ],
    "fallback": true,
    "accepted": false,
    "error": null,
-   "seconds": 23.72,
+   "seconds": 32.36,
    "scores": {
     "renders": false,
     "shows_data": false,

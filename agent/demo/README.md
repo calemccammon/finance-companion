@@ -7,6 +7,7 @@ TSLA in the ranking.
 
     FC_MODEL=scripted:demo/script.json uv run uvicorn finance_agent.server:app --port 8000
 
-It is how the app is run and recorded without a model, so that a recording
-shows the same answers each time; the local model evaluated in the main README
-writes a screen the checks accept for most questions, but not every time.
+Use it to run the app without a model, or when the same answers are wanted
+each time. The answer streams the app's tests replay
+(`catalog/fixtures/*.sse`) are recorded from it by
+`agent/scripts/record_streams.py`.
