@@ -90,6 +90,21 @@ class OfflineFirstConversationRepositoryTest {
         }
 
     @Test
+    fun `the comments the agent sends while it works are skipped`() =
+        runTest {
+            // While a model thinks, the agent sends ": working" so the read timeout does not fire.
+            val recorded = File(System.getProperty("fc.catalog"), "fixtures/apple-answer.sse").readText()
+            stream(": working\n\n" + recorded.replace("\n\ndata: ", "\n\n: working\n\n: working\n\ndata: "))
+
+            repository.ask("How is Apple doing?")
+
+            val exchange = repository.exchanges.first().single()
+            assertEquals("answer-1", exchange.surfaceId)
+            assertEquals(3, exchange.messages.size)
+            assertTrue(exchange.messages.none { "working" in it })
+        }
+
+    @Test
     fun `a tap's answer is stored under the exchange that drew the surface`() =
         runTest {
             replay("apple-answer.sse")

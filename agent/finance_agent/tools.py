@@ -50,6 +50,88 @@ FIELD_FORMATS = {
     **dict.fromkeys(("position52w", "volatility20d", "volatility"), "percent"),
     "windowDays": "number",
 }
+# What each field the tools return means, shown to the model beside each result so that
+# its labels and captions say what the figure is. Field names alone led it to write
+# "52-Week Volatility" over a 20-day figure and the range's first day under the latest close.
+FIELD_MEANINGS = {
+    "start": "the first trading day of the range",
+    "end": "the last trading day of the range; every figure in `latest` is from this day",
+    "asOf": "the trading day the figures are from",
+    "close": "the closing price, in dollars",
+    "changePct": "the change in the close from `start` to `end`, over the whole range",
+    "dailyReturnPct": "the change in the close on `end` alone, from the day before",
+    "high52w": "the highest close in the 52 weeks to `end`",
+    "low52w": "the lowest close in the 52 weeks to `end`",
+    "position52w": "where the close sits between the 52-week low (0) and high (100)",
+    "volatility20d": "annualised volatility over the 20 trading days to `end`",
+    "sma30": "the 30-day moving average of the close",
+    "sma90": "the 90-day moving average of the close",
+    "startClose": "the close on `start`",
+    "endClose": "the close on `end`",
+    "returnPct": "the change in the close from `start` to `end`",
+    "volatility": "annualised volatility over the last `windowDays` trading days",
+    "windowDays": "how many trading days the volatility covers",
+    "value": "the series' value on `asOf`: a rate in percent, except the consumer price index, an index",
+    "series": "the economic series' value (on its own row: which series this is)",
+    "seriesName": "the economic series, in words",
+}
+
+
+# The label a MetricCard gives each figure. A figure in a row of a list is labelled by
+# the row's own name instead; an economic series by its name.
+FIELD_LABELS = {
+    "close": "Close",
+    "changePct": "Change over the range",
+    "dailyReturnPct": "Change on the day",
+    "high52w": "52-week high",
+    "low52w": "52-week low",
+    "position52w": "Place in 52-week range",
+    "volatility20d": "20-day volatility",
+    "windowDays": "Trading days measured",
+}
+# Fields that name a row: a figure in a row with one of these is labelled with it.
+ROW_NAMES = ("name", "ticker")
+# The one figure of a row a card may show, since its label is only the row's name: a
+# return, a volatility, a series' value. A row's start and end closes stay in its ranking.
+ROW_FIGURES = frozenset({"returnPct", "volatility", "value"})
+
+
+def figure_label(data: dict, path: str) -> str | list[str] | None:
+    """How a MetricCard showing the figure at [path] must be labelled: a fixed text, or one
+    of the paths it must bind its label to (the row's name, the series' name); None if not known."""
+    keys = path.strip("/").split("/")
+    node: Any = data
+    nodes = [node]
+    for key in keys[:-1]:
+        node = node.get(key) if isinstance(node, dict) else node[int(key)]
+        nodes.append(node)
+    parent, field = nodes[-1], keys[-1]
+    if isinstance(parent, dict) and keys[-2].isdigit():
+        names = ["/" + "/".join([*keys[:-1], k]) for k in ROW_NAMES if isinstance(parent.get(k), str)]
+        if names:
+            return names if field in ROW_FIGURES else None
+    if field == "series" and isinstance(nodes[1], dict) and isinstance(nodes[1].get("seriesName"), str):
+        return [f"/{keys[0]}/seriesName"]
+    return FIELD_LABELS.get(field)
+
+
+def field_meanings(data: dict) -> dict[str, str]:
+    """The meanings of the fields that appear in [data]."""
+    found: set[str] = set()
+
+    def walk(node) -> None:
+        if isinstance(node, dict):
+            found.update(node)
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node[:1]:
+                walk(v)
+
+    walk(data)
+    return {k: FIELD_MEANINGS[k] for k in FIELD_MEANINGS if k in found}
+
+
 # A macro series' figure (a row's `value`, an overlay's `series`) is a rate in percent,
 # except the consumer price index, which is an index.
 MACRO_FIELDS = frozenset({"value", "series"})

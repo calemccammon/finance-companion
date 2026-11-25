@@ -60,6 +60,9 @@ def test_the_model_sees_where_each_result_is_and_a_short_preview(make_agent):
     assert tool_turn.result["storedAt"] == "/r1"
     points = tool_turn.result["data"]["points"]
     assert points["rows"] > 5 and len(points["first"]) == 3
+    # What each field means, so a label can say what its figure is.
+    assert "20 trading days" in tool_turn.result["fields"]["volatility20d"]
+    assert "sma30" in tool_turn.result["fields"] and "returnPct" not in tool_turn.result["fields"]
 
 
 def test_the_system_prompt_carries_the_rules_and_the_catalog(make_agent):
@@ -292,7 +295,12 @@ def test_a_model_that_follows_a_schema_gathers_with_tools_then_lays_out_under_th
     assert schemas[:2] == (None, None)
     assert schemas[2]["properties"]["updateComponents"]["properties"]["surfaceId"] == {"const": "answer-1"}
     # The layout may only bind to what was fetched.
-    assert "/r1/latest/close" in schemas[2]["$defs"]["CurrencyFigure"]["properties"]["path"]["enum"]
+    cards = [
+        c
+        for c in schemas[2]["properties"]["updateComponents"]["properties"]["components"]["items"]["anyOf"]
+        if c["properties"]["component"]["const"] == "MetricCard"
+    ]
+    assert {"enum": ["/r1/latest/close"]} in [c["properties"]["value"]["properties"]["path"] for c in cards]
     assert model.seen[2][1] == model.seen[1][1]
     assert all("342.56" not in getattr(turn, "text", "") for turn in model.seen[2][1])
 

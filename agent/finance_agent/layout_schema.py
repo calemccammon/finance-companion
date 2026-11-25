@@ -8,8 +8,10 @@ expected.
 
 Given the surface's data, the schema also lists the paths a binding may name:
 lists for charts and rankings, numbers for a MetricCard's value, strings for
-text. A MetricCard's format is tied to its figure, and a RankedBars' format to
-the field it ranks by, so a price can only be drawn as currency. A component
+text. A MetricCard is offered once per figure, with the figure's format and
+label fixed and its caption only the figure's date, so a price is drawn as
+currency and a 20-day volatility cannot be labelled as a 52-week one; a
+RankedBars' format is tied to the field it ranks by. A component
 that needs a kind of path the data does not have is left out, so a question
 answered without data can only be answered in words. The template form of a
 component's children is left out too, since its paths are read from each item
@@ -27,7 +29,7 @@ from a2ui.core.schema import ProtocolVersion
 from a2ui.core.schema.common_types_schema import get_common_types_schema_json
 
 from finance_agent.catalog import CATALOG_PATH, data_properties
-from finance_agent.tools import figure_format
+from finance_agent.tools import figure_format, figure_label
 
 COMMON = "common_types.json#/$defs/"
 
@@ -122,37 +124,52 @@ FORMATS = ("number", "currency", "percent", "change")
 
 
 def _by_format(component: dict, data: dict, numbers: list[str], lists: list[str], defs: dict) -> list[dict]:
-    """A MetricCard or RankedBars as one choice per format, each with only the figures
-    drawn in that format; any other component as it is."""
+    """A MetricCard as one choice per figure, with that figure's format, label and date
+    fixed; a RankedBars as one choice per format, with only the fields ranked in it; any
+    other component as it is."""
     name = component["properties"]["component"].get("const")
     if name == "MetricCard":
-        choices = {f: [p for p in numbers if figure_format(data, p) in (f, None)] for f in FORMATS}
-        prop = "value"
-        for f, found in choices.items():
-            if found:
-                defs[f"{f.title()}Figure"] = _binding(found)
-        allowed = {f: {"$ref": f"#/$defs/{f.title()}Figure"} for f, found in choices.items() if found}
-    elif name == "RankedBars":
-        keys: dict[str, set[str]] = {f: set() for f in FORMATS}
-        for path in lists:
-            rows = _resolve(data, path)
-            for key, value in (rows[0] if rows and isinstance(rows[0], dict) else {}).items():
-                if isinstance(value, int | float) and not isinstance(value, bool):
-                    for f in FORMATS:
-                        if figure_format(data, f"{path}/0/{key}") in (f, None):
-                            keys[f].add(key)
-        prop = "valueKey"
-        allowed = {f: {"enum": sorted(found)} for f, found in keys.items() if found}
-    else:
+        return [card for path in numbers if (card := _card(component, data, path)) is not None]
+    if name != "RankedBars":
         return [component]
+    keys: dict[str, set[str]] = {f: set() for f in FORMATS}
+    for path in lists:
+        rows = _resolve(data, path)
+        for key, value in (rows[0] if rows and isinstance(rows[0], dict) else {}).items():
+            if isinstance(value, int | float) and not isinstance(value, bool):
+                for f in FORMATS:
+                    if figure_format(data, f"{path}/0/{key}") in (f, None):
+                        keys[f].add(key)
     variants = []
-    for f, schema in allowed.items():
-        variant = copy.deepcopy(component)
-        variant["properties"]["format"] = {"const": f}
-        variant["properties"][prop] = schema
-        variant["required"] = [*variant["required"], "format"]
-        variants.append(variant)
+    for f, found in keys.items():
+        if found:
+            variant = copy.deepcopy(component)
+            variant["properties"]["format"] = {"const": f}
+            variant["properties"]["valueKey"] = {"enum": sorted(found)}
+            variant["required"] = [*variant["required"], "format"]
+            variants.append(variant)
     return variants
+
+
+def _card(component: dict, data: dict, path: str) -> dict | None:
+    """The MetricCard that shows the figure at [path]: its format and label are the
+    figure's own, and its caption, if any, the date the figure is from."""
+    label = figure_label(data, path)
+    if label is None:
+        return None
+    card = copy.deepcopy(component)
+    props = card["properties"]
+    props["value"] = _binding([path])
+    props["format"] = {"const": figure_format(data, path) or "number"}
+    props["label"] = {"const": label} if isinstance(label, str) else _binding(label)
+    result = path.strip("/").split("/")[0]
+    dates = [f"/{result}/{k}" for k in ("end", "asOf") if isinstance(_resolve(data, f"/{result}/{k}"), str)]
+    if dates:
+        props["caption"] = _binding(dates)
+    else:
+        props.pop("caption", None)
+    card["required"] = [*card["required"], "format"]
+    return card
 
 
 def _resolve(data, path: str):
