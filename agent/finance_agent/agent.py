@@ -35,7 +35,7 @@ from a2ui.processor.generator import A2uiGenerator
 from finance_agent.checks import SurfaceRejected, check_surface
 from finance_agent.layout_schema import layout_schema
 from finance_agent.model import ModelClient, ModelTurn, ToolTurn, Turn, UserTurn
-from finance_agent.tools import TOOLS, ToolError, run_tool, tool_declarations
+from finance_agent.tools import TOOLS, ToolError, field_meanings, run_tool, tool_declarations
 from finance_agent.warehouse import Warehouse
 
 log = logging.getLogger(__name__)
@@ -62,11 +62,13 @@ How to answer:
    Pct), "percent" for volatility, position52w and economic rates, "number" for the
    consumer price index and counts.
 7. On RankedBars, set rowAction to "open_ticker" so a row can be pressed to ask about it.
-8. Under a PriceChart or OverlayChart from result /rN you may add a Row of Buttons with
+8. Under a PriceChart or OverlayChart from result /rN, add a Row of three Buttons with
    actions {{"event": {{"name": "set_range", "context": {{"result": "/rN", "days": 30}}}}}}, and
    the same with 90 and 180 days, labelled "1 month", "3 months" and "6 months".
 9. Do not state a result's date range in text: the range buttons change it, and text would
-   not follow. Bind a MetricCard's caption to the result's "start" or "end" instead.
+   not follow. Bind a MetricCard's caption to a date instead: "end" under a figure from
+   "latest", which is from that day. Each result comes with what its fields mean: label a
+   figure by its meaning, such as "20-day volatility" for volatility20d.
 10. If the question is not about these stocks or the economy, answer with a short Text saying
     what you can help with.
 
@@ -165,7 +167,7 @@ class Agent:
         path = f"/r{len(surface.results) + 1}"
         surface.data[path[1:]] = result.data
         surface.results[path] = (name, arguments)
-        return {"storedAt": path, "data": _preview(result.data)}
+        return {"storedAt": path, "fields": field_meanings(result.data), "data": _preview(result.data)}
 
     def _lay_out(self, surface: Surface, reply: ModelTurn) -> list[dict]:
         """The components of the model's answer, checked; corrected once if need be."""

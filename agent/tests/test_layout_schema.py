@@ -10,6 +10,7 @@ import pytest
 
 from finance_agent.agent import VERSION
 from finance_agent.layout_schema import layout_schema
+from finance_agent.tools import run_tool
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -39,10 +40,10 @@ def fixture():
 
 
 def test_the_layout_both_halves_draw_passes():
-    update, data = fixture()
-    surface = update["updateComponents"]["surfaceId"]
-    assert validator(surface).is_valid(update)
-    assert validator(surface, data).is_valid(update)
+    # It shows what the app can draw, with hand-written labels, so it is held to the
+    # catalog; a model's layout is also held to its data (below).
+    update, _ = fixture()
+    assert validator(update["updateComponents"]["surfaceId"]).is_valid(update)
 
 
 def test_the_demo_script_s_layouts_pass():
@@ -95,8 +96,18 @@ def test_a_simple_correct_layout_passes():
 DATA = fixture()[1]
 
 
-def metric(path, drawn="currency"):
-    return {"id": "root", "component": "MetricCard", "label": "Close", "value": {"path": path}, "format": drawn}
+# The labels a card must give these figures.
+LABELS = {
+    "/r1/latest/close": "Close",
+    "/r1/latest/changePct": "Change over the range",
+    "/r2/rows/0/returnPct": {"path": "/r2/rows/0/name"},
+    "/r2/rows/1/returnPct": {"path": "/r2/rows/1/ticker"},
+}
+
+
+def metric(path, drawn="currency", label=None):
+    label = label or LABELS.get(path, "Close")
+    return {"id": "root", "component": "MetricCard", "label": label, "value": {"path": path}, "format": drawn}
 
 
 @pytest.mark.parametrize(
@@ -176,7 +187,67 @@ def test_the_consumer_price_index_is_drawn_as_a_number_and_a_rate_as_a_percent()
             ]
         }
     }
-    assert validator(data=data).is_valid(message(metric("/r1/rows/0/value", "number")))
-    assert not validator(data=data).is_valid(message(metric("/r1/rows/0/value", "percent")))
-    assert validator(data=data).is_valid(message(metric("/r1/rows/1/value", "percent")))
-    assert not validator(data=data).is_valid(message(metric("/r1/rows/1/value", "number")))
+
+    def card(index, drawn):
+        return metric(f"/r1/rows/{index}/value", drawn, {"path": f"/r1/rows/{index}/name"})
+
+    assert validator(data=data).is_valid(message(card(0, "number")))
+    assert not validator(data=data).is_valid(message(card(0, "percent")))
+    assert validator(data=data).is_valid(message(card(1, "percent")))
+    assert not validator(data=data).is_valid(message(card(1, "number")))
+
+
+@pytest.fixture(scope="module")
+def apple(warehouse):
+    return {"r1": run_tool(warehouse, "price_history", {"ticker": "AAPL"}).data}
+
+
+@pytest.mark.parametrize(
+    ("path", "label"),
+    [
+        ("/r1/latest/close", "Close"),
+        ("/r1/latest/changePct", "Change over the range"),
+        ("/r1/latest/dailyReturnPct", "Change on the day"),
+        ("/r1/latest/volatility20d", "20-day volatility"),
+        ("/r1/latest/position52w", "Place in 52-week range"),
+    ],
+)
+def test_a_figure_can_only_carry_its_own_label(apple, path, label):
+    from finance_agent.tools import figure_format
+
+    drawn = figure_format(apple, path)
+    assert validator(data=apple).is_valid(message(metric(path, drawn, label)))
+    for wrong in ("52-Week Volatility", "Monthly Change", "Price", "Daily Return"):
+        assert not validator(data=apple).is_valid(message(metric(path, drawn, wrong))), wrong
+
+
+def test_a_latest_figure_s_caption_can_only_be_its_date(apple):
+    card = metric("/r1/latest/close", "currency", "Close")
+    assert validator(data=apple).is_valid(message(card))
+    assert validator(data=apple).is_valid(message(card | {"caption": {"path": "/r1/end"}}))
+    assert not validator(data=apple).is_valid(message(card | {"caption": {"path": "/r1/start"}}))
+    assert not validator(data=apple).is_valid(message(card | {"caption": "20 November"}))
+
+
+def test_a_row_s_card_shows_its_main_figure_under_its_own_name():
+    rows = {
+        "r1": {
+            "end": "2026-11-20",
+            "rows": [{"ticker": "NVDA", "name": "NVIDIA", "startClose": 1.0, "returnPct": 12.5}],
+        }
+    }
+    card = metric("/r1/rows/0/returnPct", "change", {"path": "/r1/rows/0/name"})
+    assert validator(data=rows).is_valid(message(card))
+    assert not validator(data=rows).is_valid(message(card | {"label": "Apple"}))
+    assert not validator(data=rows).is_valid(message(card | {"label": {"path": "/r1/rows/0/startClose"}}))
+    # Its start close would carry the same label as its return, so it has no card.
+    start = metric("/r1/rows/0/startClose", "currency", {"path": "/r1/rows/0/name"})
+    assert not validator(data=rows).is_valid(message(start))
+
+
+def test_a_figure_from_a_result_without_a_date_has_no_caption():
+    overlay = {"r1": {"ticker": "MSFT", "seriesName": "Consumer price index", "latest": {"close": 484.52}}}
+    card = metric("/r1/latest/close", "currency", "Close")
+    assert validator(data=overlay).is_valid(message(card))
+    assert not validator(data=overlay).is_valid(message(card | {"caption": "Today"}))
+    assert not validator(data=overlay).is_valid(message(card | {"caption": {"path": "/r1/ticker"}}))

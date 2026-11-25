@@ -7,7 +7,15 @@ from datetime import date
 
 import pytest
 
-from finance_agent.tools import TOOLS, ToolError, figure_format, run_tool, tool_declarations
+from finance_agent.tools import (
+    FIELD_MEANINGS,
+    TOOLS,
+    ToolError,
+    field_meanings,
+    figure_format,
+    run_tool,
+    tool_declarations,
+)
 from finance_agent.warehouse import Warehouse
 
 
@@ -175,3 +183,29 @@ def test_a_rate_is_a_percent_and_the_consumer_price_index_a_number(wh):
     assert figure_format(overlay, "/r2/latest/close") == "currency"
     rate = {"r1": run_tool(wh, "macro_overlay", {"ticker": "MSFT", "series": "fed_funds_rate"}).data}
     assert figure_format(rate, "/r1/latest/series") == "percent"
+
+
+def test_every_field_a_tool_returns_has_a_meaning(wh):
+    """Except the ones that name a thing rather than measure it."""
+    named = {"ticker", "name", "company_name", "sector", "industry", "market_cap_category", "exchange", "country"}
+    named |= {"date", "rows", "points", "latest", "tool"}
+    results = [
+        run_tool(wh, "price_history", {"ticker": "AAPL"}).data,
+        run_tool(wh, "compare_returns", {"tickers": ["AAPL", "MSFT"]}).data,
+        run_tool(wh, "volatility_rank", {}).data,
+        run_tool(wh, "macro_snapshot", {}).data,
+        run_tool(wh, "macro_overlay", {"ticker": "MSFT", "series": "cpi"}).data,
+    ]
+
+    def keys(node) -> set[str]:
+        if isinstance(node, dict):
+            return set(node).union(*(keys(v) for v in node.values()))
+        if isinstance(node, list):
+            return set().union(*(keys(v) for v in node))
+        return set()
+
+    for data in results:
+        meanings = field_meanings(data)
+        unexplained = keys(data) - named - set(meanings)
+        assert not unexplained, unexplained
+        assert set(meanings) <= set(FIELD_MEANINGS)
