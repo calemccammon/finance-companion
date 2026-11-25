@@ -48,7 +48,8 @@ internal abstract class DataModule {
                 config.baseUrl,
                 OkHttpClient
                     .Builder()
-                    // A model may think for a while before its first message; then the stream flows.
+                    // While a model thinks, the agent sends a comment line every 15 seconds, so a
+                    // silence this long means it has stopped, not that the model is slow.
                     .readTimeout(Duration.ofSeconds(READ_TIMEOUT_SECONDS))
                     .build(),
             )

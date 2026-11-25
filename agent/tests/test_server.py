@@ -1,6 +1,7 @@
 """The HTTP service: a question and an action are answered as Server-Sent Events."""
 
 import json
+import time
 
 import pytest
 from conftest import calls, layout
@@ -58,3 +59,35 @@ def test_an_action_streams_its_answer(client):
     sent = events(client.post("/action", json=action))
 
     assert sent[0]["updateDataModel"]["path"] == "/r1"
+
+
+def slow(messages, pause):
+    for message in messages:
+        time.sleep(pause)
+        yield message
+
+
+def test_while_the_agent_works_a_comment_keeps_the_stream_alive():
+    messages = [{"question": "Hi"}, {"createSurface": {"surfaceId": "answer-1"}}]
+    sent = list(server.sse_events(slow(messages, 0.25), keepalive=0.05))
+
+    assert sent.count(server.KEEPALIVE) >= 4
+    data = [e for e in sent if e != server.KEEPALIVE]
+    assert data == ['event: question\ndata: "Hi"\n\n', 'data: {"createSurface": {"surfaceId": "answer-1"}}\n\n']
+    assert server.KEEPALIVE.startswith(":")  # a comment, which a client skips
+
+
+def test_a_quick_answer_has_no_comments():
+    sent = list(server.sse_events([{"question": "Hi"}], keepalive=5))
+    assert sent == ['event: question\ndata: "Hi"\n\n']
+
+
+def test_an_error_while_answering_still_ends_the_stream_with_it():
+    def failing():
+        yield {"question": "Hi"}
+        raise RuntimeError("the model is gone")
+
+    stream = server.sse_events(failing(), keepalive=5)
+    assert next(stream).startswith("event: question")
+    with pytest.raises(RuntimeError, match="the model is gone"):
+        next(stream)
