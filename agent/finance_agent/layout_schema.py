@@ -8,10 +8,12 @@ expected.
 
 Given the surface's data, the schema also lists the paths a binding may name:
 lists for charts and rankings, numbers for a MetricCard's value, strings for
-text. A component that needs a kind of path the data does not have is left
-out, so a question answered without data can only be answered in words. The
-template form of a component's children is left out too, since its paths are
-read from each item and cannot be listed in advance; RankedBars draws lists.
+text. A MetricCard's format is tied to its figure, and a RankedBars' format to
+the field it ranks by, so a price can only be drawn as currency. A component
+that needs a kind of path the data does not have is left out, so a question
+answered without data can only be answered in words. The template form of a
+component's children is left out too, since its paths are read from each item
+and cannot be listed in advance; RankedBars draws lists.
 
 The agent's own checks still run on what comes back: the schema cannot know
 whether every component is reachable from the root.
@@ -25,6 +27,7 @@ from a2ui.core.schema import ProtocolVersion
 from a2ui.core.schema.common_types_schema import get_common_types_schema_json
 
 from finance_agent.catalog import CATALOG_PATH, data_properties
+from finance_agent.tools import figure_format
 
 COMMON = "common_types.json#/$defs/"
 
@@ -104,6 +107,7 @@ def _bound_to(data: dict, components: list[dict], defs: dict) -> tuple[list[dict
     paths["DataBinding"] = [p for kind in (LIST, NUMBER, STRING) for p in paths[kind]]
     for kind, found in paths.items():
         defs[kind] = _binding(found) if found else None
+    components = [variant for c in components for variant in _by_format(c, data, paths[NUMBER], paths[LIST], defs)]
     if "ChildList" in defs:
         defs["ChildList"]["oneOf"] = [c for c in defs["ChildList"]["oneOf"] if c.get("type") == "array"]
 
@@ -112,6 +116,50 @@ def _bound_to(data: dict, components: list[dict], defs: dict) -> tuple[list[dict
         defs = {name: _without(d, empty) for name, d in defs.items() if d is not None}
         components = [c for c in (_without(c, empty) for c in components) if c is not None]
     return components, _reachable(components, defs)
+
+
+FORMATS = ("number", "currency", "percent", "change")
+
+
+def _by_format(component: dict, data: dict, numbers: list[str], lists: list[str], defs: dict) -> list[dict]:
+    """A MetricCard or RankedBars as one choice per format, each with only the figures
+    drawn in that format; any other component as it is."""
+    name = component["properties"]["component"].get("const")
+    if name == "MetricCard":
+        choices = {f: [p for p in numbers if figure_format(data, p) in (f, None)] for f in FORMATS}
+        prop = "value"
+        for f, found in choices.items():
+            if found:
+                defs[f"{f.title()}Figure"] = _binding(found)
+        allowed = {f: {"$ref": f"#/$defs/{f.title()}Figure"} for f, found in choices.items() if found}
+    elif name == "RankedBars":
+        keys: dict[str, set[str]] = {f: set() for f in FORMATS}
+        for path in lists:
+            rows = _resolve(data, path)
+            for key, value in (rows[0] if rows and isinstance(rows[0], dict) else {}).items():
+                if isinstance(value, int | float) and not isinstance(value, bool):
+                    for f in FORMATS:
+                        if figure_format(data, f"{path}/0/{key}") in (f, None):
+                            keys[f].add(key)
+        prop = "valueKey"
+        allowed = {f: {"enum": sorted(found)} for f, found in keys.items() if found}
+    else:
+        return [component]
+    variants = []
+    for f, schema in allowed.items():
+        variant = copy.deepcopy(component)
+        variant["properties"]["format"] = {"const": f}
+        variant["properties"][prop] = schema
+        variant["required"] = [*variant["required"], "format"]
+        variants.append(variant)
+    return variants
+
+
+def _resolve(data, path: str):
+    node = data
+    for key in path.strip("/").split("/"):
+        node = node.get(key) if isinstance(node, dict) else (node[int(key)] if key.isdigit() else None)
+    return node
 
 
 def _binding(paths: list[str]) -> dict:

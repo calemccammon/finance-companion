@@ -292,7 +292,7 @@ def test_a_model_that_follows_a_schema_gathers_with_tools_then_lays_out_under_th
     assert schemas[:2] == (None, None)
     assert schemas[2]["properties"]["updateComponents"]["properties"]["surfaceId"] == {"const": "answer-1"}
     # The layout may only bind to what was fetched.
-    assert "/r1/latest/close" in schemas[2]["$defs"]["NumberBinding"]["properties"]["path"]["enum"]
+    assert "/r1/latest/close" in schemas[2]["$defs"]["CurrencyFigure"]["properties"]["path"]["enum"]
     assert model.seen[2][1] == model.seen[1][1]
     assert all("342.56" not in getattr(turn, "text", "") for turn in model.seen[2][1])
 

@@ -95,8 +95,8 @@ def test_a_simple_correct_layout_passes():
 DATA = fixture()[1]
 
 
-def metric(path):
-    return {"id": "root", "component": "MetricCard", "label": "Close", "value": {"path": path}}
+def metric(path, drawn="currency"):
+    return {"id": "root", "component": "MetricCard", "label": "Close", "value": {"path": path}, "format": drawn}
 
 
 @pytest.mark.parametrize(
@@ -125,7 +125,7 @@ def test_with_the_data_a_binding_can_only_name_a_path_it_holds(layout):
 
 
 def test_with_the_data_a_row_of_a_short_list_can_be_named():
-    assert validator(data=DATA).is_valid(message(metric("/r2/rows/0/returnPct")))
+    assert validator(data=DATA).is_valid(message(metric("/r2/rows/0/returnPct", "change")))
     assert validator(data=DATA).is_valid(message({"id": "root", "component": "Text", "text": {"path": "/r1/ticker"}}))
 
 
@@ -145,3 +145,38 @@ def test_without_data_an_answer_can_only_be_words():
     assert "Text" in names
     assert validator(data={}).is_valid(message(TEXT))
     assert not validator(data={}).is_valid(message({"id": "root", "component": "Text", "text": {"path": "/r1/ticker"}}))
+
+
+@pytest.mark.parametrize(
+    ("path", "drawn"),
+    [("/r1/latest/close", "currency"), ("/r1/latest/changePct", "change"), ("/r2/rows/1/returnPct", "change")],
+)
+def test_with_the_data_a_figure_can_only_be_drawn_in_its_format(path, drawn):
+    assert validator(data=DATA).is_valid(message(metric(path, drawn)))
+    for other in {"number", "currency", "percent", "change"} - {drawn}:
+        assert not validator(data=DATA).is_valid(message(metric(path, other))), other
+    card = metric(path, drawn)
+    del card["format"]
+    assert not validator(data=DATA).is_valid(message(card))
+
+
+def test_a_ranking_s_format_is_tied_to_the_field_it_ranks_by():
+    bars = {"id": "root", "component": "RankedBars", "rows": {"path": "/r2/rows"}, "valueKey": "returnPct"}
+    assert validator(data=DATA).is_valid(message(bars | {"format": "change"}))
+    assert not validator(data=DATA).is_valid(message(bars | {"format": "number"}))
+    assert not validator(data=DATA).is_valid(message(bars | {"format": "change", "valueKey": "ticker"}))
+
+
+def test_the_consumer_price_index_is_drawn_as_a_number_and_a_rate_as_a_percent():
+    data = {
+        "r1": {
+            "rows": [
+                {"series": "cpi", "name": "Consumer price index", "value": 337.476},
+                {"series": "fed_funds_rate", "name": "Federal funds rate", "value": 3.88},
+            ]
+        }
+    }
+    assert validator(data=data).is_valid(message(metric("/r1/rows/0/value", "number")))
+    assert not validator(data=data).is_valid(message(metric("/r1/rows/0/value", "percent")))
+    assert validator(data=data).is_valid(message(metric("/r1/rows/1/value", "percent")))
+    assert not validator(data=data).is_valid(message(metric("/r1/rows/1/value", "number")))
