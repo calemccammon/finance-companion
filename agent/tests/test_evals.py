@@ -8,7 +8,13 @@ from conftest import calls, layout
 from evals.run import QUESTIONS, SCORES, failure_class, report, run_question, summarise
 from finance_agent.model import ModelTurn, ScriptedClient
 
-CARD = {"id": "root", "component": "MetricCard", "label": "Close", "value": {"path": "/r1/latest/close"}}
+CARD = {
+    "id": "root",
+    "component": "MetricCard",
+    "label": "Close",
+    "value": {"path": "/r1/latest/close"},
+    "format": "currency",
+}
 APPLE = {"id": "aapl-how", "ask": "How is Apple doing?", "tools": ["price_history"], "tickers": ["AAPL"]}
 OFF_TOPIC = {"id": "poem", "ask": "Write me a poem.", "tools": [], "tickers": []}
 
@@ -99,6 +105,9 @@ def test_rejections_are_sorted_into_classes():
     ]
     assert failure_class("component 'c' shows row 0 of /r1/rows, which is NVDA, but its label does not say so") == [
         "row shown under another name"
+    ]
+    assert failure_class('component \'c\' draws /r1/latest/close, a price in dollars; set "format": "currency"') == [
+        "wrong format"
     ]
     assert failure_class("something else") == ["other schema error"]
 

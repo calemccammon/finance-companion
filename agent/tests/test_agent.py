@@ -19,7 +19,13 @@ def answer(agent, question):
     return items[1:]
 
 
-APPLE_CARD = {"id": "c", "component": "MetricCard", "label": "Close", "value": {"path": "/r1/latest/close"}}
+APPLE_CARD = {
+    "id": "c",
+    "component": "MetricCard",
+    "label": "Close",
+    "value": {"path": "/r1/latest/close"},
+    "format": "currency",
+}
 
 
 def test_a_question_becomes_a_surface_bound_to_the_tool_results(make_agent):
@@ -184,6 +190,7 @@ def test_pressing_a_ticker_asks_about_it_on_a_new_surface(make_agent):
                 "component": "RankedBars",
                 "rows": {"path": "/r1/rows"},
                 "valueKey": "volatility",
+                "format": "percent",
                 "rowAction": "open_ticker",
             },
         ),
@@ -285,7 +292,7 @@ def test_a_model_that_follows_a_schema_gathers_with_tools_then_lays_out_under_th
     assert schemas[:2] == (None, None)
     assert schemas[2]["properties"]["updateComponents"]["properties"]["surfaceId"] == {"const": "answer-1"}
     # The layout may only bind to what was fetched.
-    assert "/r1/latest/close" in schemas[2]["$defs"]["NumberBinding"]["properties"]["path"]["enum"]
+    assert "/r1/latest/close" in schemas[2]["$defs"]["CurrencyFigure"]["properties"]["path"]["enum"]
     assert model.seen[2][1] == model.seen[1][1]
     assert all("342.56" not in getattr(turn, "text", "") for turn in model.seen[2][1])
 

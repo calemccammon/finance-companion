@@ -41,6 +41,38 @@ MACRO_NAMES = {
     MacroSeries.real_yield_10y: "10-year real yield",
 }
 
+# How each figure the tools return must be drawn: the `format` of a MetricCard or
+# RankedBars showing it. "percent" is a figure already in percent; "change" a change
+# in percent, drawn with its sign.
+FIELD_FORMATS = {
+    **dict.fromkeys(("close", "startClose", "endClose", "high52w", "low52w", "sma30", "sma90"), "currency"),
+    **dict.fromkeys(("changePct", "dailyReturnPct", "returnPct"), "change"),
+    **dict.fromkeys(("position52w", "volatility20d", "volatility"), "percent"),
+    "windowDays": "number",
+}
+# A macro series' figure (a row's `value`, an overlay's `series`) is a rate in percent,
+# except the consumer price index, which is an index.
+MACRO_FIELDS = frozenset({"value", "series"})
+
+
+def figure_format(data: dict, path: str) -> str | None:
+    """The format the figure at [path] in [data] must be drawn with; None if it is not known."""
+    keys = path.strip("/").split("/")
+    field = keys[-1]
+    if field in MACRO_FIELDS:
+        # The nearest object on the way that names its series: a snapshot's row, an overlay.
+        node, series = data, None
+        for key in [None, *keys[:-1]]:
+            if key is not None:
+                node = node.get(key) if isinstance(node, dict) else (node[int(key)] if key.isdigit() else None)
+            if isinstance(node, dict) and isinstance(node.get("series"), str):
+                series = node["series"]
+        if series is None:
+            return None
+        return "number" if series == MacroSeries.cpi else "percent"
+    return FIELD_FORMATS.get(field)
+
+
 Ticker = Annotated[str, Field(description="A ticker symbol, such as AAPL.")]
 
 
@@ -159,7 +191,8 @@ def price_history(wh: Warehouse, args: PriceHistoryArgs) -> ToolResult:
                 "changePct": _round((last["close_price"] / first["close_price"] - 1) * 100, 2),
                 "high52w": _round(last["high_52w"], 2),
                 "low52w": _round(last["low_52w"], 2),
-                "position52w": _round(last["price_position_52w"], 3),
+                # Where the close sits between the 52-week low (0) and high (100), in percent.
+                "position52w": _round(last["price_position_52w"] * 100, 1),
                 "volatility20d": _round(last["volatility_20d_annualized"], 2),
             },
             "points": [

@@ -18,7 +18,7 @@ fixed query against the dbt marts of
 The screenshots and the recording come from the real agent, tools and app on an
 emulator. The model's turns came from a script (`agent/demo/script.json`), so
 that they show the same thing each time; a local 8B model now writes a screen
-the checks accept for 44 of 50 test questions (see
+the checks accept for 39 of 50 test questions (see
 [Evaluations](#evaluations)).
 
 ## How an answer is made
@@ -51,7 +51,8 @@ the checks accept for 44 of 50 test questions (see
   `updateComponents` message, components referred to by id, no fields a
   component lacks, and every binding one of the paths the data holds, of the
   right kind (a list for a chart or a ranking, a number for a figure, a
-  string for text). With no data, only words can be laid out. Ollama's
+  string for text), with a card's format tied to its figure (a price only as
+  currency). With no data, only words can be laid out. Ollama's
   OpenAI-compatible endpoint enforces it with `response_format`.
 - **Every layout is checked before it is sent.** First the A2UI SDK's
   validation against the app's catalog: unknown components, properties,
@@ -60,9 +61,10 @@ the checks accept for 44 of 50 test questions (see
   chart's points and a ranking's rows must be bound to a list; no figure may
   be written by the model, neither as a literal number in a data property nor
   as a money, percent or decimal figure from the data in text; no path may be
-  written into text, where it would be shown as it is; and a card showing one
+  written into text, where it would be shown as it is; a card showing one
   row of a ranking must name that row, since rankings are sorted by their
-  figure.
+  figure; and a figure must be drawn in its format, a price as currency and
+  a change as a signed percent.
 - **Taps go back to the agent as A2UI actions.** A range button reruns its
   result's tool and rewrites only that part of the data model, with no model
   call. Pressing a stock in a ranking asks about it as a new question. An
@@ -146,7 +148,7 @@ cd android && ./gradlew test testDebugUnitTest verifyRoborazziDebug
 cd android && ./gradlew :app:connectedDebugAndroidTest   # on an emulator or device
 ```
 
-- **The agent (121 tests)**: the tools against values worked out from the raw
+- **The agent (135 tests)**: the tools against values worked out from the raw
   rows; the checks and the layout schema, each with the mistakes a local model made;
   the question-to-surface loop, corrections, fallbacks and
   actions with a scripted model; the model clients' message formats; the HTTP
@@ -185,40 +187,52 @@ uv run python evals/run.py --report evals/results/*.json > evals/REPORT.md
 
 [`agent/evals/REPORT.md`](agent/evals/REPORT.md) holds the scores of two runs
 of the same code with qwen3:8b on Ollama 0.40.17 (16K context, 8-bit context
-cache) on an 8 GB RTX 4060 laptop GPU, each about an hour for the 50
+cache) on an 8 GB RTX 4060 laptop GPU, each a little over an hour for the 50
 questions: one with the layout held to the schema, one without
 (`--no-schema`). Every answer's tools, rejections with their reasons, and
 accepted layout are kept in [`agent/evals/results/`](agent/evals/results/).
 
 | | Without the schema | With the schema |
 |---|---|---|
-| Screens that passed every check | 0 / 50 | 44 / 50 |
-| ...and showed data where the question needed it | 0 | 43 |
-| ...the first time, with no correction | 0 | 28 |
-| Right tools called | 47 | 47 |
-| Attempts that reached the app's own checks | 0 of 100 | 66 of 71 |
+| Screens that passed every check | 2 / 50 | 39 / 50 |
+| ...and showed data where the question needed it | 2 | 38 |
+| ...the first time, with no correction | 0 | 30 |
+| Right tools called | 47 | 46 |
+| Attempts that reached the app's own checks | 2 of 100 | 60 of 67 |
 
 - **Without the schema, the model rarely writes A2UI.** Its rejections were
-  JSON that does not parse (33), components written inside `children`
-  instead of their ids (26), plain text instead of a screen (13) and a broken
-  component tree (10). An earlier run of older code rendered one answer.
+  JSON that does not parse (37), a broken component tree (20), components
+  written inside `children` instead of their ids (17) and plain text instead
+  of a screen (16).
 - **With it, those faults are gone, and the app's own checks do the work.**
   The rejections left are mistakes about meaning: a path written as a plain
-  string where it should be bound (13), and a card labelled with a stock other
-  than the row it shows (11). Each went back to the model with the reason;
-  most were corrected.
-- **What fell back to a plain message:** three company-profile questions,
-  where the model wrote a path such as `"/r1/sector"` as text twice running;
-  two answers whose first layout referred to a component it did not define
-  and whose correction wrote a path or a figure into text; and one question
-  that took longer than the five-minute limit.
-- **What got through and is still wrong.** Reading the 44 accepted layouts:
-  four cards, in two answers, show a closing price formatted as a percent
-  change, so $300 would read +300%. Nothing checks that a format fits its figure yet.
+  string where it should be bound (13), a card labelled with something other
+  than the row it shows (6), and a figure typed into text (4). Each went back
+  to the model with the reason; most were corrected.
+- **What fell back to a plain message (11):** five answers that wrote a path
+  such as `"/r1/sector"` into text twice running, three of them on questions
+  that try to bend the rules (a figure in plain text, a forecast, raw SQL);
+  four whose first layout was malformed (a component it did not define) or
+  broke a rule, and whose correction broke another; and two questions that
+  took longer than the five-minute limit.
+- **Runs vary.** The previous run of this harness, before formats were
+  checked, passed 44; eight questions that passed there failed here and
+  three went the other way, none of them over a format. One run per setting
+  cannot tell those two numbers apart.
+- **What got through and is still wrong.** Reading the 47 cards in the
+  accepted layouts: every format fits its figure, but five labels do not.
+  "90-Day Average" over the 52-week low, "Change Over Period" over the
+  52-week position, "Daily Change" over the change across the whole range
+  (twice), "52w High/Low" over the high alone. Nothing checks that a label
+  describes its figure.
 
-The schema came from reading the first runs' rejections; the two newest
-checks came from reading the layouts a run accepted, which had passed and
-were wrong. A larger model is still to be tried.
+Each step came from reading a run. The schema came from the first runs'
+rejections. The checks for paths in text, unnamed rows and formats came from
+layouts that had passed and were wrong. A run with the format check alone
+passed 34 of 50: 17 layouts were sent back for a format, and the model often
+kept the wrong one when told. Tying each format to its figures in the schema
+made a wrong one impossible instead; this run had no format rejections. A
+larger model is still to be tried.
 
 ## Limits
 
